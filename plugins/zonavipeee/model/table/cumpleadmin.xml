@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tabla>
+    <columna>
+        <nombre>reg</nombre>
+        <tipo>int(10)</tipo>
+        <nulo>NO</nulo>
+    </columna>
+    <columna>
+        <nombre>asunto</nombre>
+        <tipo>varchar(100)</tipo>
+        <nulo>NO</nulo>
+    </columna>
+    <columna>
+        <nombre>enlace</nombre>
+        <tipo>varchar(200)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>mensaje</nombre>
+        <tipo>varchar(5000)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>useredit</nombre>
+        <tipo>varchar(150)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>ultmod</nombre>
+        <tipo>DATETIME</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    
+    <restriccion>
+        <nombre>idistro_pkey</nombre>
+        <consulta>PRIMARY KEY (reg)</consulta>
+    </restriccion>
+</tabla>

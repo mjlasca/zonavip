@@ -1,0 +1,378 @@
+{include="header2"}
+<link rel="stylesheet" href="plugins/zonavipeee/view/css/cursos.css">
+
+<section id="post1" class="container">
+
+    <h2>Cursos Zona Vip 3E</h2>
+    <p>Encuentra diferentes cursos gratuitos y/o de pago con contenido de utilidad en Excel, de la mano de un experto
+        tendrás la posibilidad hacer de Excel un medio o herramienta para Maximizar el desempeño en las actividades
+        diarias.
+        Todos nuestros cursos GRATUITOS o de pago tienen un certificado.</p>
+
+</section>
+
+<section class="cursos ">
+    <div class="container mt-5 pt-5 mb-5">
+        <div class="row">
+            <div class="col-sm-3 d-none d-sm-none d-md-block">
+                <form action="">
+                    <!--
+                    <h5>Tipo</h5>
+
+                        <div class="form-group">
+                            <input type="checkbox">Cursos Pagos
+                        </div>
+                        <div class="form-group">
+                            <input type="checkbox">Cursos Gratuitos
+                        </div>
+                    <hr>
+                    -->
+                    <h5>Categorías</h5>
+
+                    {loop="$fsc->cursos->get_categoriascursos()"}
+                        <div class="form-group">
+                            <input type="checkbox">{$value["catego"]}
+                        </div>
+                    {/loop}
+
+                    <hr>
+                    <!--
+                    <h5>Duración</h5>
+                    <div class="form-group">
+                        <input type="checkbox">Hasta 2 horas
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox">Entre 2 a 10 horas
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox">Entre 10 a 20 horas
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox">Más de 20 horas
+                    </div>
+-->
+                    
+
+                </form>
+
+            </div>
+            <div class="col-sm-9">
+                <div class="d-md-flex">
+                    
+                    {loop="$fsc->cursos->all_carrusel()"}
+                    
+                        <div class="curso col-sm-4 ml-md-3 p-0">
+                            
+                                {if="$fsc->allow == 0  && !$fsc->aprobaracceso($value->idproducto) && $value->abierto == 0 "}
+                                    <a href="#" onclick="alert('Este curso no está disponible')">
+                                {else}
+                                    <a href="index.php?page=contenidocurso&curso={$value->idproducto}">
+                                {/if}
+                                    <div class="carousel-item__open">
+                                    </div>
+                                </a>
+                                <img class="curso_imgcurso" src="{$value->urlimgcurso}" alt="Imagen Curso {$value->idproducto}">
+                                <div class="detalle p-3">
+                                    <h5>{$value->nombre}</h5>
+                                    <!--<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour.</p>-->
+                                    <p><b >Duración : </b> {$value->duracioncurso} Horas<br>
+                                    <b >Tipo : </b> {if="$value->valor>0"} <b style="color: rgb(202, 30, 0);">PREMIUM </b>/ USD${$value->valor} {else} GRATIS {/if} </p>
+                                </div>
+                                {if="$value->actualizando"}
+                                    <div class="alert-warning text-center">
+                                        EN ACTUALIZACIÓN
+                                    </div>
+                                {/if}
+                            
+                        </div>
+                    {/loop}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modalcv" tabindex="-1" role="dialog" aria-labelledby="modalcv" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body  pl-5 pr-5">
+                <h3>CONTENIDO PREMIUM EXCLUSIVO</h3>
+                <p>Éste vídeo hace parte del contenido premium exclusivo, si deseas saber cómo tener acceso a éste
+                    material, clic en el siguiente botón</p>
+
+
+                <a class="btn btn-danger" href="index.php?page=cvzonavip">
+                    <h5> <i class="fas fa-arrow-alt-circle-up"></i> ¡Inscribirme YA! <i
+                            class="fas fa-arrow-alt-circle-up"></i> </h5>
+                </a>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+{include="footerusu"}
+
+<link href="plugins/zonavipeee/view/css/contenido.css" rel="stylesheet" />
+
+<script>
+
+    let side = false;
+    if (localStorage.getItem("sidebar") == "true")
+        side = true;
+
+    mostrarsidebar(side);
+
+    $("#botcancelar").hide();
+    const url = "{$fsc->url()}&post={$fsc->post->reg}";
+    const grupo = "{$fsc->grupo}";
+    const pago = "{$fsc->pago}";
+    var regmensaje = '';
+    var userresponde = '';
+    var usuarioactual = "{$fsc->user->nick}";
+    var adminuser = "{$fsc->user->admin}";
+
+    if (grupo) {
+        $("#grupo").val(grupo);
+    }
+
+    if (pago) {
+        $("#pago").val(pago);
+    }
+
+    function enviarForm() {
+        let error = "";
+        $("#errores").html("");
+        if ($("#idvimeo").val() == "" && $("#idyoutube").val() == "") {
+            error += "Por favor ingrese el idviemo o el idyoutube</br>";
+        }
+        if ($("#idvimeo").val() != "" && $("#idyoutube").val() != "") {
+            error += "Por favor ingrese sólo el idviemo o el idyoutube, NO ambos</br>";
+        }
+
+        if (error != "") {
+            $("#errores").html("<div class='alert alert-warning alert-dismissible hidden-print' role='alert'><p class='text-left'><b>"
+                + error +
+                "</b></p></div>"
+            );
+            return false;
+        }
+        else
+            return true;
+    }
+
+    getcomentarios();
+
+    async function getcomentariosp() {
+        return new Promise(function (resolve) {
+            $.getJSON(url, 'getcomentarios=true', function (json) {
+
+                resolve(
+                    JSON.parse(JSON.stringify(json))
+                );
+            });
+
+        })
+    }
+
+    async function getcomentarios(reg) {
+
+        let mensaje = [];
+
+        let botcerrar = "";
+
+        await getcomentariosp(reg).then(res => {
+
+            return res
+
+        }).then(respuesta => {
+
+            respuesta.forEach(val => {
+
+                if (usuarioactual == val.user || adminuser) {
+                    botcerrar = `<button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="eliminarmensaje(${val.reg})">
+                            <span aria-hidden="true">&times;</span>
+                        </button>`;
+                }
+
+
+                if (val.regmensajeresponde == '' || val.regmensajeresponde == null) {
+                    mensaje.push(`<div class="alert alert-light" role="alert">
+                        ${botcerrar}
+                        <small class="text-success text-right">${val.ultmod} / ${val.nombre}</small>
+                        <p>${val.mensaje}</p> <small><span class='text-warning text-righ' style="cursor:pointer;" onclick="respuestamensaje('${val.reg}','${val.nombre}')">Responder</span></small>
+                    `);
+
+                    mensaje.push(`<div id='respuestas${val.reg}'></div></div>`);
+                }
+
+
+            });
+
+            $("#comentario").html(mensaje);
+
+            respuesta.forEach(val => {
+                if (val.regmensajeresponde != null) {
+                    let mensaje1 = [];
+                    mensaje1.push($("#respuestas" + val.regmensajeresponde).html());
+                    mensaje1.push(`<div class="alert alert-light ml-4" role="alert">
+                        ${botcerrar}
+                        <small class="text-success text-right"><i class="fas fa-angle-right"></i> ${val.ultmod} / ${val.nombre}</small>
+                        <p>${val.mensaje}</p>
+                        
+                        
+                        </div>
+                    `);
+                    $("#respuestas" + val.regmensajeresponde).html(mensaje1);
+                }
+            });
+        }).catch(error => {
+            console.error("Error al traer datos del cliente");
+        });
+    }
+
+    async function newmsgp(msg, user) {
+        return new Promise(function (resolve) {
+            $.getJSON(url, 'insertmsg=' + msg + '&user=' + user + '&regmensaje=' + regmensaje + '&userresponse=' + userresponde, function (json) {
+
+                resolve(
+                    JSON.parse(JSON.stringify(json))
+                );
+            });
+
+        })
+    }
+
+    async function newmsg(msg, user) {
+        let mensaje = [];
+        msg = $("#mensaje").val();
+        mensaje.push($("#comentario").html());
+
+
+        await newmsgp(msg, user).then(res => {
+
+            mensaje.push(`<div class="alert alert-light" role="alert">
+                    
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="eliminarmensaje(${res.reg})">
+                            <span aria-hidden="true">&times;</span>
+                    </button>
+                    <small class="text-success text-right">${res.ultmod} / ${res.user}</small>
+                    <p>${res.mensaje}</p> <small><span class='text-warning text-righ' style="cursor:pointer;" onclick="respuestamensaje('${res.reg}','${res.user}')">Responder</span></small>
+                </div>`);
+            if (regmensaje != '') {
+                $("#respuestas" + regmensaje).append(`<div class="alert alert-light ml-4" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                    </button>
+                    <small class="text-success text-right">${res.ultmod} / ${res.user}</small>
+                    <p>${res.mensaje}</p>
+                </div>`);
+                regmensaje = '';
+                userresponde = '';
+            } else
+                $("#comentario").html(mensaje);
+
+            reset();
+
+        }).catch(error => {
+            console.error("Error al enviar comentario ");
+        });
+    }
+
+    function reset() {
+        regmensaje = '';
+        userresponde = '';
+        $("#mensaje").val("");
+        $("#mensaje").attr("placeholder", "Deja un comentario");
+        $("#botenviarcomentario").text("Enviar Comentario")
+        $("#botcancelar").hide();
+    }
+
+
+    async function eliminarmensaje1(reg) {
+        return new Promise(function (resolve) {
+            $.getJSON(url, 'eliminarcomentario=' + reg, function (json) {
+                resolve(
+                    JSON.parse(JSON.stringify(json))
+                );
+            });
+        })
+    }
+
+    async function eliminarmensaje(reg) {
+        let mensaje = [];
+        msg = $("#mensaje").val();
+        mensaje.push($("#comentario").html());
+
+
+        await eliminarmensaje1(reg).then(res => { }).catch(error => {
+            console.error("Error al enviar comentario");
+        });
+
+        $("#respuestas" + reg).remove();
+
+    }
+
+    async function setvideocurso1(post, tipo) {
+        return new Promise(function (resolve) {
+            $.getJSON(url, 'setvideocurso=' + post + "&tiposetvideo=" + tipo + "&curso={$fsc->curso->idproducto}", function (json) {
+                resolve(
+                    JSON.parse(JSON.stringify(json))
+                );
+            });
+        })
+    }
+
+    async function setvideocurso(post) {
+        let ch = document.getElementById("ch" + post).checked;
+        let savedelete = 1;
+        if (!ch)
+            savedelete = 0;
+        await setvideocurso1(post, savedelete).then(res => { }).catch(error => {
+            console.error("Error al guardar post");
+        });
+    }
+
+    function respuestamensaje(reg, user) {
+        $("#mensaje").focus();
+        $("#mensaje").attr("placeholder", "Escribe la respuesta");
+        $("#botenviarcomentario").text("Enviar Respuesta")
+        $("#botcancelar").show();
+        regmensaje = reg;
+        userresponde = user;
+    }
+
+    function mostrarsidebar(estado) {
+
+        if (estado) {
+            $(".sidebar_arrow").hide();
+            $(".sidebar__content").show();
+            localsidebar(true);
+        } else {
+            $(".sidebar_arrow").show();
+            $(".sidebar__content").hide();
+            localsidebar(false);
+        }
+
+
+    }
+
+    function localsidebar(sidebar) {
+        localStorage.setItem("sidebar", JSON.stringify(sidebar));
+    }
+
+
+</script>

@@ -1,0 +1,585 @@
+{include="header"}
+
+<div class="container-fluid" style="margin-bottom: 10px;">
+    <div class="row">
+       <div class="col-xs-12">
+          <div class="btn-group hidden-xs">
+             <a class="btn btn-sm btn-default" href="{$fsc->url()}" title="Recargar la página">
+                <span class="glyphicon glyphicon-refresh"></span>
+             </a>
+             {if="$fsc->page->is_default()"}
+             <a class="btn btn-sm btn-default active" href="{$fsc->url()}&amp;default_page=FALSE" title="Marcada como página de inicio (pulsa de nuevo para desmarcar)">
+                <i class="fa fa-bookmark" aria-hidden="true"></i>
+             </a>
+             {else}
+             <a class="btn btn-sm btn-default" href="{$fsc->url()}&amp;default_page=TRUE" title="Marcar como página de inicio">
+                <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+             </a>
+             {/if}
+          </div>
+          
+          
+       </div>
+    </div>
+</div>
+
+
+
+
+<div class="container-fluid">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item ">
+        <a class="nav-link" id="estado-tab" data-toggle="tab" href="#estado" role="tab" aria-controls="estado">Clientes</a>
+        </li>
+        <li role="prospecto">
+            <a href="#prospecto" aria-controls="prospecto" role="tab" data-toggle="tab">
+                <span class="hidden-xs">Prospectos</span>
+            </a>
+        </li>
+        <li role="invitaciones">
+            <a href="#invitaciones" aria-controls="invitaciones" role="tab" data-toggle="tab">
+                <span class="hidden-xs">Invitaciones</span>
+            </a>
+        </li>
+        <li role="inactividad">
+            <a href="#inactividad" aria-controls="inactividad" role="tab" data-toggle="tab">
+                <span class="hidden-xs">Inactividad</span>
+            </a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link active" id="active-users-tab" data-toggle="tab" href="#active-users" role="tab" aria-controls="active-users" aria-selected="true">Usuarios activos global</a>
+        </li>
+    </ul>
+    
+    
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane active" id="active-users" role="tabpanel" aria-labelledby="active-users-tab" >
+
+            <a class="btn btn-primary" href="{$fsc->url()}&descarga1">Descargar Datos</a>
+            
+            <table class="table">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Email</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Fecha caducidad</th>
+                    <th scope="col">Activo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {loop="$fsc->active_users()"}
+                        <tr>
+                            <td>{$value['mail']}</td>
+                            <td>{$value['name']}</td>
+                            <td>{$value['product']}</td>
+                            <td>{$value['validity']}</td>
+                            <td>{$value['active']}</td>
+                        </tr>
+                    {/loop}      
+                </tbody>
+            </table>
+
+            
+        </div>
+        <div class="tab-pane" id="estado" role="tabpanel" aria-labelledby="estado-tab" >
+            <a style="float:right;" class="btn btn-primary" href="{$fsc->url()}{$fsc->enlacefiltros}&descarga=clientes">Descargar</a>
+            <form action="{$fsc->url()}" method="post">
+                <input type="hidden" name="formclientes" >
+                <div class="rows">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label for="">Usuario</label>
+                            <input type="text" name="usuario" id="usuario" class="form-control" value="{$fsc->hotmartuser->user}">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="">Fecha por</label>
+                            <select name="tipofecha" id="tipofecha" class="form-control">
+                                {if="$fsc->tipofecha == 1"}
+                                <option value="1" selected>Creación</option>
+                                <option value="2" >Ingreso</option>
+                                {else}
+                                <option value="2" selected>Ingreso</option>
+                                <option value="1" >Creación</option>
+                                {/if}
+
+
+                            </select>
+                            
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="">Estado</label>
+                            <select name="estado" id="estado" class="form-control">
+                                <option value="">---</option>
+                                {loop="$fsc->vecestado()"}
+                                    {if="$value == $fsc->hotmartuser->estado"}
+                                        <option value="{$value}" selected>{$value}</option>
+                                    {else}
+                                        <option value="{$value}">{$value}</option>
+                                    {/if}
+                                {/loop}
+                            </select>
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="">Fecha Inicial</label>
+                            <input type="text" name="fecha1" id="fecha1" class="form-control datepicker" value="{$fsc->fecha1}">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="">Fecha Final</label>
+                            <input type="text" name="fecha2" id="fecha2" class="form-control datepicker" value="{$fsc->fecha2}">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="">Activo</label>
+                            <input type="radio" name="activo" id="activo" value="1"  {if="$fsc->activo==1"} checked {/if} >
+                            <label for="">No Activo</label>
+                            <input type="radio" name="activo" id="activo" value="0" {if="$fsc->activo==0"} checked {/if}>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3 mt-4">
+                        <div class="form-group">
+                            <input type="submit" value="Enviar" class="btn btn-primary">
+                        </div>
+                    </div>
+                </div>
+
+                
+            </form>
+
+            <div class="table table-hover">
+                <table class=" table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Insight</th>
+                            <th></th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td> Nuevos Clientes</td>
+                            <td></td>
+                            <td>{$fsc->hotmartuser->ingresosclientes}</td>
+                        </tr> 
+                        <tr>
+                            <td>Acceso Clientes</td>
+                            <td></td>
+                            <td>{$fsc->hotmartuser->getregistro}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Origen</td>
+                            
+                            
+                        </tr>
+                        {loop="$fsc->hotmartuser->getorigen"}
+                        <tr>
+                            <td></td>
+                            <td>{$value["prevpage"]}</td>
+                            <td>{$value["cant"]}</td>
+                        </tr>
+                        {/loop}
+                        <tr>
+                            <td colspan="3"> Países</td>
+                        </tr>
+                        {loop="$fsc->hotmartuser->getpaises"}
+                        <tr>
+                            <td></td>
+                            <td>{$value["pais"]}</td>
+                            <td>{$value["cant"]}</td>
+                        </tr>
+                        {/loop}
+                        
+                            
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table table-hover">
+                <table class=" table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Producto</th>
+                            <th>Estado</th>
+                            <th>Fecha Registro</th>
+                            <th>Fecha Garantía</th>
+                            <th>Fecha Caducidad</th>
+                            <th>Último Ingreso</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {loop="$fsc->hotmartuser->datoscompletos"}
+                            <tr>
+                                <td>{$value->user}</td>
+                                <td>{$value->nombreproducto}</td>
+                                <td>{$value->estado}</td>
+                                <td>{$value->ultmod}</td>
+                                <td>{$value->fechagarantia}</td>
+                                <td>{$value->fechacaducidad}</td>
+                                <td>{$value->last_login}</td>
+                            </tr>
+                        {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div role="tabpanel" class="tab-pane" id="prospecto">
+
+                <form action="{$fsc->url()}" method="post">
+                    <input type="hidden" name="formprospectos" >
+                    <div class="rows">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label for="">Usuario</label>
+                                <input type="text" name="usuario" id="usuario" class="form-control" value="{$fsc->hotmartuser->user}">
+                            </div>
+                        </div>
+                        <div class="col-sm-1">
+                            <div class="form-group">
+                                <label for="">Ingreso CV >=</label>
+                                <input type="number" name="ingresocv" id="ingresocv" class="form-control" value="{$fsc->ingresocv}">
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label for="">Fecha por</label>
+                                <select name="tipofecha" id="tipofecha" class="form-control">
+                                    {if="$fsc->tipofecha == 1"}
+                                    <option value="1" selected>Creación</option>
+                                    <option value="2" >Ingreso</option>
+                                    {else}
+                                    <option value="2" selected>Ingreso</option>
+                                    <option value="1" >Creación</option>
+                                    {/if}
+
+
+                                </select>
+                                
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label for="">Fecha Inicial</label>
+                                <input type="text"name="fecha1" id="fecha1" class="form-control datepicker" value="{$fsc->fecha1}"  autocomplete="off" >
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label for="">Fecha Final</label>
+                                <input type="text" name="fecha2" id="fecha2" class="form-control datepicker" value="{$fsc->fecha2}"  autocomplete="off" >
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3 mt-4">
+                            <div class="form-group">
+                                <input type="submit" value="Enviar" class="btn btn-primary">
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                </form>
+
+
+                <div class="table table-hover">
+                        <table class=" table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Insight</th>
+                                    <th></th>
+                                    <th>Cantidad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td> Nuevos prospectos</td>
+                                    <td></td>
+                                    <td>{$fsc->usuarios->getnuevosprospectos}</td>
+                                </tr> 
+                                <tr>
+                                    <td>Acceso usuarios</td>
+                                    <td></td>
+                                    <td>{$fsc->usuarios->getingresos}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">Origen</td>
+                                    
+                                    
+                                </tr>
+                                {loop="$fsc->usuarios->getorigen"}
+                                <tr>
+                                    <td></td>
+                                    <td>{$value["prevpage"]}</td>
+                                    <td>{$value["cant"]}</td>
+                                </tr>
+                                {/loop}
+                                <tr>
+                                    <td colspan="3"> Países</td>
+                                </tr>
+                                {loop="$fsc->usuarios->getpaises"}
+                                <tr>
+                                    <td></td>
+                                    <td>{$value["pais"]}</td>
+                                    <td>{$value["cant"]}</td>
+                                </tr>
+                                {/loop}
+                                
+                                    
+                            </tbody>
+                        </table>
+                </div>
+                
+                <div class="table table-hover">
+
+                    
+
+                    <table class=" table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Nombre</th>
+                                <th>Fecha Creado</th>
+                                <th>Último ingreso</th>
+                                <th>País</th>
+                                <th>Activo</th>
+                                <th>Origen</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {loop="$fsc->usuarios->all_prospectos"}
+                                <tr>
+                                    <td>{$value['nick']}</td>
+                                    <td>{$value['nombre']}</td>
+                                    <td>{$value['create_date']}</td>
+                                    <td>{$value['last_login']}</td>
+                                    <td>{$value['pais']}</td>
+                                    <td>{$value['enabled']}</td>
+                                    <td>{$value['prevpage']}</td>
+                                </tr>
+                            {/loop}
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+
+        <div role="tabpanel" class="tab-pane" id="invitaciones">
+
+            <form action="{$fsc->url()}" method="post">
+                <input type="hidden" name="formprospectos" >
+                <div class="rows">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label for="">Usuario</label>
+                            <input type="text" name="usuario" id="usuario" class="form-control" value="{$fsc->hotmartuser->user}">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="conversion">Promotores</label>
+                            <select name="conversion" class="form-control" id="conversion" >
+                                <option value="">---</option>
+                                {if="$fsc->conversion == 1"}
+                                    <option value="1" selected>Conversión</option>
+                                {else}
+                                    <option value="1">Conversión</option>
+                                {/if}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="">Fecha Inicial</label>
+                            <input type="text" name="fecha1" id="fecha1" class="form-control datepicker" value="{$fsc->fecha1}">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="">Fecha Final</label>
+                            <input type="text" name="fecha2" id="fecha2" class="form-control datepicker" value="{$fsc->fecha2}">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3 mt-4">
+                        <div class="form-group">
+                            <input type="submit" value="Enviar" class="btn btn-primary">
+                        </div>
+                    </div>
+                </div>
+
+                
+            </form>
+
+            <div class="table table-hover">
+                <table class=" table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Invitación a</th>
+                            <th>Fecha invitación</th>
+                            <th>Conversión</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {loop="$fsc->invitaciones->all()"}
+                            <tr>
+                                {if="$fsc->conversion == '' || $fsc->conversion == $value->conversion"}
+                                    <td>{$value->usuarioinvita}</td>
+                                    <td>{$value->correoinvitado}</td>
+                                    <td>{$value->ultmod}</td>
+                                    {if="$value->conversion == 1"}
+                                        <td class="bg-success">CONVERSIÓN</td>
+                                    {else}
+                                        <td></td>
+                                    {/if}
+
+                                    {$fsc->contconver()}
+                                {/if}
+                            </tr>
+                        {/loop}
+                    </tbody>
+                </table>
+
+                {if="$fsc->conversion == 1"}
+                <h3>{$fsc->contconversiones} Promotores conversiones efectivas</h3>
+                {/if}
+            </div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="inactividad">
+            <form action="{$fsc->url()}" method="post">
+                
+                <div class="rows">
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="">Meses de inactividad</label>
+                            <input type="text" name="inactividad" id="inactividad" class="form-control" value="{$fsc->inactividad}">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <input type="submit" value="Enviar" class="btn btn-primary">
+                        </div>
+                    </div>
+                </div>
+
+                
+            </form>
+
+            
+            <div class="table table-hover">
+                {if="$fsc->usuarios->all_inactivo($fsc->inactividad)"}
+                    <form action="{$fsc->url()}" method="post">
+                        <input type="hidden" name="enviarcorreosinactivos" value="true">
+                        <input type="hidden" name="inactividad" id="inactividad" value="{$fsc->inactividad}">
+                        <input class="btn btn-primary" type="submit" value="Enviar Email a usuarios inactivos">
+                    </form>
+                {/if}
+                <table class=" table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Nombre</th>
+                            <th>Fecha Creado</th>
+                            <th>Último ingreso</th>
+                            <th>País</th>
+                            <th>Activo</th>
+                            <th>Origen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {loop="$fsc->usuarios->all_inactivo($fsc->inactividad)"}
+                            <tr>
+                                <td>{$value['nick']}</td>
+                                <td>{$value['nombre']}</td>
+                                <td>{$value['create_date']}</td>
+                                <td>{$value['last_login']}</td>
+                                <td>{$value['pais']}</td>
+                                <td>{$value['enabled']}</td>
+                                <td>{$value['prevpage']}</td>
+                            </tr>
+                        {/loop}
+                    </tbody>
+                </table>
+
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLongTitle">Nuevo Producto</h5>
+    </div>
+    <div class="modal-body">
+    <form action="{$fsc->url()}" method="post" onsubmit="return enviarForm()">
+            <input type="hidden" name="reg" id="reg" value="">
+            <label for="">Nombre</label> 
+            <input type="text" class="form-control" name="nombre" id="nombre">
+            <label for="">ID Producto</label> 
+            <input type="text" class="form-control" name="idproducto" id="idproducto">
+            <label for="">Valor</label> 
+            <input type="number" class="form-control" name="valor" id="valor">
+            
+            
+            
+        <div class="modal-footer">
+            <div id="errores">
+            </div>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <input type="submit" value="Guardar" class="btn btn-primary">
+        </div>
+    </form>
+  </div>
+</div>
+</div>
+
+<script>
+
+    
+    function eliminarregistro(id, url){
+        bootbox.confirm({
+            message: '¿Realmente desea eliminar éste registro?',
+            title: '<b>Atención</b>',
+            callback: function(result) {
+                if (result) {
+                    window.location.href = url;
+                }
+            }
+        });
+    }
+
+    function editarregistro(reg,nombre, idproducto,valor){
+        document.getElementById("reg").value = reg;
+        document.getElementById("nombre").value = nombre;
+        document.getElementById("idproducto").value = idproducto;
+        document.getElementById("valor").value = valor;
+    }
+
+    function borrarformulario(){
+        document.getElementById("reg").value = "";
+        document.getElementById("nombre").value = "";
+        document.getElementById("idproducto").value = "";
+        document.getElementById("valor").value = "";
+    }
+
+
+</script>

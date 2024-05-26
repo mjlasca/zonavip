@@ -1,0 +1,180 @@
+{include="header"}
+
+<div class="container-fluid" style="margin-bottom: 10px;">
+    <div class="row">
+       <div class="col-xs-12">
+          <div class="btn-group hidden-xs">
+             <a class="btn btn-sm btn-default" href="{$fsc->url()}" title="Recargar la página">
+                <span class="glyphicon glyphicon-refresh"></span>
+             </a>
+             {if="$fsc->page->is_default()"}
+             <a class="btn btn-sm btn-default active" href="{$fsc->url()}&amp;default_page=FALSE" title="Marcada como página de inicio (pulsa de nuevo para desmarcar)">
+                <i class="fa fa-bookmark" aria-hidden="true"></i>
+             </a>
+             {else}
+             <a class="btn btn-sm btn-default" href="{$fsc->url()}&amp;default_page=TRUE" title="Marcar como página de inicio">
+                <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+             </a>
+             {/if}
+          </div>
+          <div class="btn-group">
+             <a onclick="borrarformulario()" id="b_nuevo_articulo" class="btn btn-sm btn-success" data-toggle="modal" data-target="#exampleModalCenter" href="#">
+                <span class="glyphicon glyphicon-plus"></span>
+                <span class="hidden-xs">&nbsp;Nuevo</span>
+             </a>
+          </div>
+          
+       </div>
+    </div>
+</div>
+
+
+
+
+<div class="container-fluid">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item active">
+        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Transmisiones</a>
+        </li>
+    </ul>
+    
+    
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane  show active" id="home" role="tabpanel" aria-labelledby="home-tab" >
+            </br>
+            <div class="table table-hover">
+                <table class=" table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Enlace</th>
+                            <th>Fecha Transmisión</th>
+                            <th>Fecha notificación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {loop="$fsc->transmisiones->all()"}
+                        <tr>
+                            <td>{$value->nombre}</td>
+                            <td>{$value->link}</td>
+                            <td>{$value->fechainicia} / {$value->hora}</td>
+                            <td>{$value->fechasemuestra}</td>
+                            <td>
+                                <a onclick="editarregistro('{$value->reg}','{$value->nombre}', '{$value->link}','{$value->fechainicia}', '{$value->fechasemuestra}', '{$value->pago}', '{$value->producto}', '{$value->hora}')" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalCenter" href="#">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                 </a>
+                                 <a onclick="eliminarregistro('{$value->reg}', '{$fsc->url()}&deleteregis={$value->reg}')" class="btn btn-sm btn-danger">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </a>
+                            </td>
+                        </tr>
+                        {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLongTitle">Nuevo Registro</h5>
+    </div>
+    <div class="modal-body">
+    <form action="{$fsc->url()}" method="post" onsubmit="return enviarForm()">
+            <input type="hidden" name="reg" id="reg" value="">
+            <label for="">Nombre</label> 
+            <input type="text" class="form-control" name="nombre" id="nombre">
+            <label for="">Enlace</label> 
+            <input type="text" class="form-control" name="link" id="link">
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="">Fecha transmisión</label> 
+                    <input type="text" class="form-control date datepicker" name="fechainicia" id="fechainicia">
+                </div>
+                <div class="col-sm-6">
+                    <label for="">Hora transmisión</label> 
+                    <input type="time" class="form-control" name="hora" id="hora">
+                </div>
+            </div>  
+            
+            <label for="">Fecha Notificación</label> 
+            <input type="text" class="form-control date datepicker" name="fechasemuestra" id="fechasemuestra">
+            
+            <div class="row">
+                <div class="col-sm-2">
+                    <label for="">de pago</label> 
+                    <select class="form-control" name="pago" id="pago">
+                        <option value="0">NO</option>
+                        <option value="1">SI</option>
+                    </select>
+                </div>
+                <div class="col-sm-10">
+                    <label for="">Producto</label> 
+                    <select class="form-control" name="producto" id="producto">
+                        <option value="">---</option>
+                        {loop="$fsc->productos->all()"}
+                            <option value="{$value->idproducto}">{$value->nombre}</option>
+                        {/loop}
+                    </select>
+                </div>
+            </div>
+            
+            
+        <div class="modal-footer">
+            <div id="errores">
+            </div>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <input type="submit" value="Guardar" class="btn btn-primary">
+        </div>
+    </form>
+  </div>
+</div>
+</div>
+
+<script>
+
+    
+    function eliminarregistro(id, url){
+        bootbox.confirm({
+            message: '¿Realmente desea eliminar éste registro?',
+            title: '<b>Atención</b>',
+            callback: function(result) {
+                if (result) {
+                    window.location.href = url;
+                }
+            }
+        });
+    }
+
+    function editarregistro(reg,nombre, link,fechainicia, fechasemuestra,pago,producto,hora){
+        document.getElementById("reg").value = reg;
+        document.getElementById("nombre").value = nombre;
+        document.getElementById("link").value = link;
+        document.getElementById("fechainicia").value = fechainicia;
+        document.getElementById("fechasemuestra").value = fechasemuestra;
+        document.getElementById("pago").value = pago;
+        document.getElementById("producto").value = producto;
+        document.getElementById("hora").value = hora;
+        
+    }
+
+    function borrarformulario(){
+        document.getElementById("reg").value = "";
+        document.getElementById("nombre").value = "";
+        document.getElementById("link").value = "";
+        document.getElementById("fechainicia").value = "";
+        document.getElementById("fechasemuestra").value = "";
+        document.getElementById("pago").value = "";
+        document.getElementById("producto").value = "";
+        document.getElementById("hora").value = "";
+    }
+
+
+</script>

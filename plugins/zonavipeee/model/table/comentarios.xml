@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tabla>
+    <columna>
+        <nombre>reg</nombre>
+        <tipo>serial</tipo>
+        <nulo>NO</nulo>
+        <defecto>nextval('idistro_reg_seq'::idclass)</defecto>
+    </columna>
+    <columna>
+        <nombre>mensaje</nombre>
+        <tipo>VARCHAR(3000)</tipo>
+        <nulo>NO</nulo>
+    </columna>
+    <columna>
+        <nombre>regpost</nombre>
+        <tipo>VARCHAR(50)</tipo>
+        <nulo>NO</nulo>
+    </columna>
+    <columna>
+        <nombre>userresponde</nombre>
+        <tipo>varchar(150)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>regmensajeresponde</nombre>
+        <tipo>varchar(150)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>user</nombre>
+        <tipo>varchar(150)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>ultmod</nombre>
+        <tipo>DATETIME</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <restriccion>
+        <nombre>idistro_pkey</nombre>
+        <consulta>PRIMARY KEY (reg)</consulta>
+    </restriccion>
+</tabla>

@@ -1,0 +1,609 @@
+{include="header2"}
+
+
+
+{if="$fsc->nocontent"}
+<div class="sidebar_arrow" style="width: 30px; position: fixed;padding-top: 10px;z-index: 999;">
+    <a  onclick="mostrarsidebar(true)" style="cursor: pointer;color: #ccc;">
+    <h2><i class="fas fa-chevron-right"></i></h2>
+    </a>
+</div>
+
+
+    <div class="sidebar__leccion">
+        
+        
+        <div  class="sidebar__content">
+            <div class="d-flex bg-primary">
+                <a  onclick="mostrarsidebar(false)">
+                    <h2><i class="fas fa-chevron-left"></i></h2>
+                </a>
+                <h3 class="ml-2">{$fsc->curso->nombre}</h3>
+            </div>
+            
+            <div class="cuerpo mt-3">
+                {loop="$fsc->curso_modulos"}
+                <br>
+                <h5>{if="$value1['nombremodulo'] != '' "} {$value1['nombremodulo']} {else} Módulo {$value1['modulocurso']} {/if}</h5>
+                <br>
+                    
+                        {loop="$fsc->post->modulos_lecciones($value1['modulocurso'],$value1['curso'])"}
+                            <div class="cuerpo__leccion">
+                                {if="$value2['reg'] == $fsc->post->reg"}
+                                <label style="display: flex;" >
+                                    {if="$fsc->aprobaracceso($fsc->post->grupo)"}
+                                    
+                                    <input  id="ch{$value2['reg']}" type="checkbox" {if="$fsc->checkvideo->get_checkcurso($value2['reg'],$fsc->user->nick) > 0"} checked {/if} onchange="setvideocurso({$value2['reg']})" >
+                                    
+                                    {/if}
+                                <a style="margin-left: 10px;" href="{$fsc->url()}&curso={$value1['curso']}&post={$value2['reg']}#leccion{$value2['reg']}"> <div class="bg-primary" id="leccion{$value2['reg']}" >{$value2['leccioncurso']}</div></a>
+                                </label>
+                                    
+                                {else}
+                                    <label style="display: flex;" >
+                                    {if="$fsc->aprobaracceso($fsc->post->grupo)"}
+                                    
+                                    <input  id="ch{$value2['reg']}" type="checkbox" {if="$fsc->checkvideo->get_checkcurso($value2['reg'],$fsc->user->nick) > 0"} checked {/if} onchange="setvideocurso({$value2['reg']})" >
+                                    
+                                    {/if}
+                                <a style="margin-left: 10px;" href="{$fsc->url()}&curso={$value1['curso']}&post={$value2['reg']}#leccion{$value2['reg']}"> <div id="leccion{$value2['reg']}" >{$value2['leccioncurso']}</div></a>
+                                    </label>
+                                    
+                                    
+                                {/if}
+                            </div>
+                        
+                        {/loop}
+                        <br>  
+                {/loop}
+                <br>  <br>  <br>  
+
+                <!-- <h5>Módulo 1</h5>
+                <ul>
+                    
+                    <li class="visto">1.2 Comenzamos</li>
+                </ul> -->
+                
+            </div>
+            
+        </div>
+        
+    </div>
+
+    <div class="sidebarfondo" style="background-color: rgba(255, 255, 255, 0.014); margin-left: 280px; width: 80%;height: 100%;position: fixed ;z-index: 99;" onclick="mostrarsidebar(false)">
+    </div>
+
+{/if}
+
+
+<section id="post" class="container">
+    
+{if="$fsc->nocontent"}
+
+    <div class="row">
+
+        <div class="col-4 text-left">
+            {if="$fsc->previewpost"}
+                <h1 ><a style="text-align: right;" href="{$fsc->url()}&curso={$fsc->curso->idproducto}&post={$fsc->previewpost['reg']}#leccion{$fsc->previewpost['reg']}"><i class="fas fa-caret-square-left text-primary"></i></a></h1>
+            {/if}
+        </div>
+        <div class="col-4 text-center">
+        <!--    <h1 ><a href="index.php?page=zonavip"><i class="fas fa-home"></i></a></h1>-->
+        </div>
+        
+        <div class="col-4" style="text-align: right;">
+            {if="$fsc->nextpost"}
+                <h1 ><a style="text-align: right;" href="{$fsc->url()}&curso={$fsc->curso->idproducto}&post={$fsc->nextpost['reg']}#leccion{$fsc->nextpost['reg']}"><i class="fas fa-caret-square-right text-primary"></i></a></h1>
+            {/if}
+        </div>
+        
+        
+    </div>
+    
+    <div class="contenido-post-pago">
+        <div class="pantalla" >
+            
+                {if="$fsc->accessscontent() == 1"}
+                
+                    {if="$fsc->post->idvimeo != '' || $fsc->post->idyoutube != '' "}
+                        {if="$fsc->post->idvimeo != '' "}
+                            <iframe width="100%" height="100%" src="https://player.vimeo.com/video/{$fsc->post->idvimeo}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        {/if}
+                        {if="$fsc->post->idyoutube != '' "}
+                            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/{$fsc->post->idyoutube}?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        {/if}
+                    {else}
+                        {if="$fsc->post->urlminiatura != '' "}
+                            <img  width="100%" src="{$fsc->post->urlminiatura}">
+                        {/if}
+                    {/if}
+                {else}
+                    <a  onclick="mostrarproducto('{$fsc->post->grupo}','{$fsc->post->nombreproducto}','{$fsc->post->linkpago}')" href="#">
+                    <div class="bloqueado"></div></a>
+                    <img  width="100%" src="{$fsc->post->urlminiatura}">
+                {/if}
+            
+            
+        </div>
+
+        <div class="etiquetas" >
+            <div class="row">
+                <div class="col-sm-8">
+                    <a href="index.php?page=contenidofiltrado&categoria={$fsc->post->categoria}"><h5><span class="badge bg-dark text-white">{$fsc->post->categoria}</span></h5></a>
+                </div>
+                {if="$fsc->post->idyoutube != '' "}
+                <div class="col-4" style="text-align: right;">
+                    <a  href="https://www.youtube.com/watch?v={$fsc->post->idyoutube}&sub_confirmation=1" target="_blank"><h5><span class="badge bg-primary text-white">Ir a youtube</span></h5></a>
+                </div>
+                {/if}
+            </div>
+            
+            
+        </div>
+
+        <div class="descripcion">
+            <h3>{$fsc->post->nombrevideo}</h3>
+
+            {if="$fsc->accessscontent() == 1"}
+            
+                <div class="row pb-4">
+                    {if="$fsc->post->archivodescarga != '' "}
+                    <div class="col-sm-4">
+                        <p>Descargar el archivo utilizado en el vídeo</p>
+                        <a type="button" class="btn btn-primary" href="{$fsc->post->archivodescarga}" target="_blank" >
+                            Archivo a descargar <span class="badge bg-secondary">Clic Aquí</span>
+                        </a>
+                    </div>
+                    {/if}
+                    {if="$fsc->post->pdf != '' "}
+                    <div class="col-sm-4">
+                        <p>Archivo PDF</p>
+                        <a type="button" class="btn btn-primary" href="{$fsc->post->pdf}" target="_blank" >
+                            Clic para descargar archivo <span class="badge bg-secondary">.pdf</span>
+                        </a>
+                    </div>
+                    {/if}
+
+                    <div class="col-sm-4">
+                        {if="$fsc->post->upload != '' "}
+                            <form enctype="multipart/form-data" action="{$fsc->url()}" method="post" id="formfile" onchange="this.submit()">
+                                <input type="hidden" name="curso" value="{$fsc->curso->idproducto}">
+                                <input type="hidden" name="filet" value="true">
+                                <input type="hidden" name="post" value="{$fsc->post->reg}">
+                                <div class="form-group">
+                                    <label for="">Clic en el siguiente botón para cargar archivo
+
+                                        {if="$fsc->post->detalleupload == '.xlsx,.xls,.xlsm'"}
+                                            <b>Tipo de archivo Hoja de cálculo : {$fsc->post->detalleupload}</b>
+                                        {/if}
+                                        {if="$fsc->post->detalleupload == '.doc,.docx,.pdf,.txt'"}
+                                            <b>Tipo de archivo Documento de texto : {$fsc->post->detalleupload}</b>
+                                        {/if}
+                                        {if="$fsc->post->detalleupload == '.jpeg,.jpg,.png,.gif'"}
+                                            <b>Tipo de archivo Imagen : {$fsc->post->detalleupload}</b>
+                                        {/if}
+
+                                        {if="$fsc->post->detalleupload == '.zip,.rar'"}
+                                            <b>Tipo de archivo Comprimido : {$fsc->post->detalleupload}</b>
+                                        {/if}
+
+                                    </label>
+                                    <input class="bg-primary p-2" type="file" name="leccionfile" id="leccionfile" accept="{$fsc->post->detalleupload}">
+                                </div>
+                            </form>
+                            {if="$fsc->checkfile()"}
+                                <div class="alert bg-primary p-1 text-white"><small><b>YA SUBISTE LA ACTIVIDAD</b> </small></div>
+                                <small>Si subes nuevamente un archivo se reemplazará el anterior</small>
+                            {else}
+                                <div class="alert bg-warning p-1"><small>Todavía no subes la actividad </small></div>
+                            {/if}
+                        {/if}
+                        
+                    </div>
+                </div>
+
+            {/if}
+            
+        </div>
+
+        <!-- Your share button code -->
+        {if="$fsc->post->idyoutube != '' "}
+        <div class="fb-share-button" style="float: right;font-size: 20px;" 
+        data-href="https://www.youtube.com/watch?v={$fsc->post->idyoutube}" 
+        data-layout="button_count">
+        </div>
+        {/if}
+
+    </div>
+
+    
+    
+
+    <!--{if="$fsc->recomendaciones"}
+    <div class="recomendaciones">
+        <h3 >También te puede interesar</h3>
+        <div class="row">
+            {loop="$fsc->recomendaciones"}
+                <div class="col-sm-4 recomendaciones-cuadro mt-3">
+                    <div class="contenido-post">
+
+                        {if="$value->pago == 'SI' && $fsc->allow == 0  && !$fsc->aprobaracceso($value->grupo)"}
+                        <a  onclick="mostrarproducto('{$fsc->post->grupo}','{$fsc->post->nombreproducto}','{$fsc->post->linkpago}')" href="#"><div class="bloqueado">
+                        </div></a>
+                        {else}
+                        <a href="index.php?page=contenidocurso&curso={$fsc->curso->idproducto}&post={$value->reg}" ><div class="abrirventana">
+                        </div></a>
+                        {/if}
+
+                        {if="$value->idvimeo != '' "}
+                        <iframe class="mt-3" width="100%" height="100%" src="https://player.vimeo.com/video/{$value->idvimeo}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        {/if}
+    
+                        {if="$value->idyoutube != '' "}
+                            <iframe class="mt-3" width="100%" height="100%" src="https://www.youtube.com/embed/{$value->idyoutube}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        {/if}
+                    </div>
+                    <p>{$value->nombrevideo}</p>
+                </div>
+            {/loop}
+        </div>
+    </div>
+    {/if}-->
+
+
+    {if="$fsc->accessscontent() == 1"}
+        <h2 class="mt-5">Comentarios</h2>
+        <div class="comentarios-pago ">
+            <div id="comentario">
+            </div>
+            <div class="form-group">
+                <textarea class="form-control" name="" id="mensaje" rows="3" placeholder="Deja un comentario"></textarea>
+                <button class="btn btn-primary" id="botenviarcomentario" onclick="newmsg('','{$fsc->user->nick}')">Enviar Comentario</button>
+                <button id="botcancelar"  class="btn btn-danger" onclick="reset()">Cancelar</button>
+            </div>
+        </div>
+    {/if}
+
+{else}
+
+        <h1>El {$fsc->curso->nombre} está en preventa</h1>
+
+{/if}
+
+
+</section>
+        
+
+<!-- Modal -->
+<div class="modal fade" id="modalcv" tabindex="-1" role="dialog" aria-labelledby="modalcv" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body  pl-5 pr-5">
+            <h3>CONTENIDO PREMIUM</h3>
+            <h3 id="titleproduct"></h3>
+            <p id="descproduct"></p>
+
+            
+            <a id="botpago" class="btn btn-danger" href="index.php?page=cvzonavip" target="_blank" > 
+                <h5> <i class="fas fa-arrow-alt-circle-up"></i> ¡Inscribirme YA! <i class="fas fa-arrow-alt-circle-up"></i> </h5>
+            </a>
+
+        </div>
+    </div>
+    </div>
+</div>
+
+
+        
+    
+
+{include="footerusu"}
+
+
+
+<link href="plugins/zonavipeee/view/css/contenido.css" rel="stylesheet" />
+
+<script>
+    
+
+    {if="$fsc->accessscontent() == 0 &&  $fsc->curso->abierto == 0 "}
+        $("#modalcv").modal("hide");
+        alert("Éste curso no está disponible");
+        location.href = "index.php";
+    {/if}
+
+    let side = false;
+    if(localStorage.getItem("sidebar") == "true")
+        side = true;
+
+    mostrarsidebar(side);
+
+    $("#botcancelar").hide();
+    const url = "{$fsc->url()}&post={$fsc->post->reg}";
+    const grupo = "{$fsc->grupo}";
+    const pago = "{$fsc->pago}";
+    var regmensaje = '';
+    var userresponde = '';
+    var usuarioactual = "{$fsc->user->nick}";
+    var adminuser = "{$fsc->user->admin}";
+
+    if(grupo){
+        $("#grupo").val(grupo);
+    }
+
+    if(pago){
+        $("#pago").val(pago);
+    }
+
+    function mostrarproducto(idproducto,nomproducto, linkpago){
+
+        {if="$fsc->post->pago == 'SI' && $fsc->allow == 0  && $fsc->aprobaracceso($fsc->post->grupo) == false && $fsc->curso->abierto == 0"}
+            $("#modalcv").modal("hide");
+            alert("Éste curso no está disponible");
+            location.href = "index.php";
+        {/if}
+
+        document.getElementById("titleproduct").innerHTML  = nomproducto;
+        document.getElementById("descproduct").innerHTML  = "Éste es un contenido premium exclusivo de nuestro producto "+nomproducto+", si deseas saber cómo tener acceso a éste material, clic en el siguiente botón";
+        if(linkpago != "")
+            $("#botpago").attr("href",linkpago)
+            
+        $("#modalcv").modal("show");
+
+    }
+
+    function enviarForm(){
+        let error = "";
+        $("#errores").html("");
+        if($("#idvimeo").val() == "" && $("#idyoutube").val() == ""){
+            error += "Por favor ingrese el idviemo o el idyoutube</br>";
+        }
+        if($("#idvimeo").val() != "" && $("#idyoutube").val() != ""){
+            error += "Por favor ingrese sólo el idviemo o el idyoutube, NO ambos</br>";
+        }
+
+        if(error != ""){
+            $("#errores").html("<div class='alert alert-warning alert-dismissible hidden-print' role='alert'><p class='text-left'><b>"
+                +error+
+                "</b></p></div>"
+            );
+            return false;
+        }
+        else
+            return true;
+    }
+
+    getcomentarios();
+
+    async function getcomentariosp() {
+        return new Promise(function(resolve) {
+            $.getJSON(url, 'getcomentarios=true', function (json) {
+                
+                resolve(
+                    JSON.parse( JSON.stringify( json ) )
+                );
+            });
+
+        })
+    }
+
+    async function getcomentarios(reg){
+
+        let mensaje = [];
+        
+        let botcerrar = "";
+
+        await getcomentariosp(reg).then(res =>{
+            
+            return res
+            
+        }).then(respuesta => {
+            
+            respuesta.forEach(val => {
+                
+                if(usuarioactual == val.user || adminuser){
+                    botcerrar = `<button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="eliminarmensaje(${val.reg})">
+                            <span aria-hidden="true">&times;</span>
+                        </button>`;
+                }
+
+
+                if(val.regmensajeresponde == '' || val.regmensajeresponde == null){
+                    mensaje.push(`<div class="alert alert-light" role="alert">
+                        ${botcerrar}
+                        <small class="text-success text-right">${val.ultmod} / ${val.nombre}</small>
+                        <p>${val.mensaje.replace(/¶/g,"<br>")}</p> <small><span class='text-warning text-righ' style="cursor:pointer;" onclick="respuestamensaje('${val.reg}','${val.nombre}')">Responder</span></small>
+                    `); 
+                    
+                    mensaje.push(`<div id='respuestas${val.reg}'></div></div>`);
+                }
+
+               
+            });
+
+            $("#comentario").html(mensaje);
+
+            botcerrar = "";
+            
+            respuesta.forEach(val => {
+
+
+                if(usuarioactual == val.user || adminuser){
+                    botcerrar = `<button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="eliminarmensaje(${val.reg})">
+                            <span aria-hidden="true">&times;</span>
+                        </button>`;
+                }
+
+                if(val.regmensajeresponde != null){
+                    let mensaje1 = [];
+                    mensaje1.push($("#respuestas"+val.regmensajeresponde).html());
+                    mensaje1.push(`<div class="alert alert-light ml-4" role="alert">
+                        ${botcerrar}
+                        <small class="text-success text-right"><i class="fas fa-angle-right"></i> ${val.ultmod} / ${val.nombre}</small>
+                        <p>${val.mensaje}</p>
+                        
+                        
+                        </div>
+                    `); 
+                    $("#respuestas"+val.regmensajeresponde).html(mensaje1);        
+                }
+            });
+        } ).catch(error => {
+        console.error("Error al traer datos del cliente");
+        });
+    }
+
+    async function newmsgp(msg,user) {
+        return new Promise(function(resolve) {
+            $.getJSON(url, 'insertmsg='+msg+'&user='+user+'&regmensaje='+regmensaje+'&userresponse='+userresponde, function (json) {
+                
+                resolve(
+                    JSON.parse( JSON.stringify( json ) )
+                );
+            });
+
+        })
+    }
+
+    async function newmsg(msg,user){
+        let mensaje = [];
+        msg =$("#mensaje").val();
+        msg = msg.replace(/\n/g,"¶");
+        mensaje.push($("#comentario").html());
+
+        await newmsgp(msg,user).then(res =>{
+            
+                mensaje.push(`<div class="alert alert-light" role="alert">
+                    
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="eliminarmensaje(${res.reg})">
+                            <span aria-hidden="true">&times;</span>
+                    </button>
+                    <small class="text-success text-right">${res.ultmod} / ${res.user}</small>
+                    <p>${res.mensaje.replace(/¶/g,"<br>")}</p> <small><span class='text-warning text-righ' style="cursor:pointer;" onclick="respuestamensaje('${res.reg}','${res.user}')">Responder</span></small>
+                </div>`);    
+            if(regmensaje != ''){
+                $("#respuestas"+regmensaje).append(`<div class="alert alert-light ml-4" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                    </button>
+                    <small class="text-success text-right">${res.ultmod} / ${res.user}</small>
+                    <p>${res.mensaje}</p>
+                </div>`);
+                regmensaje = '';
+                userresponde = '';
+            }else
+                $("#comentario").html(mensaje);
+
+            reset();
+
+        }).catch(error => {
+        console.error("Error al enviar comentario ");
+        });
+    }
+
+    function reset(){
+        regmensaje = '';
+        userresponde = '';
+        $("#mensaje").val("");
+        $("#mensaje").attr("placeholder","Deja un comentario");
+        $("#botenviarcomentario").text("Enviar Comentario")
+        $("#botcancelar").hide();
+    }
+
+
+    async function eliminarmensaje1(reg) {
+        return new Promise(function(resolve) {
+            $.getJSON(url, 'eliminarcomentario='+reg, function (json) {
+                resolve(
+                    JSON.parse( JSON.stringify( json ) )
+                );
+            });
+        })
+    }
+
+    async function eliminarmensaje(reg){
+        let mensaje = [];
+        msg =$("#mensaje").val();
+        mensaje.push($("#comentario").html());
+        
+
+        await eliminarmensaje1(reg).then(res =>{}).catch(error => {
+        console.error("Error al enviar comentario");
+        });
+
+        $("#respuestas"+reg).remove();
+
+    }
+
+    
+
+    async function sendfile(f){
+        console.log(new FormData(f));
+        return new Promise(function(resolve) {
+            $.getJSON(url, new FormData(f), function (json) {
+                console.log(JSON.stringify( json ) );
+                resolve(
+                    JSON.parse( JSON.stringify( json ) )
+                );
+            });
+        })
+    }
+
+    async function setvideocurso1(post,tipo){
+        return new Promise(function(resolve) {
+            $.getJSON(url, 'setvideocurso='+post+"&tiposetvideo="+tipo+"&curso={$fsc->curso->idproducto}", function (json) {
+                resolve(
+                    JSON.parse( JSON.stringify( json ) )
+                );
+            });
+        })
+    }
+
+    async function setvideocurso(post){
+        let ch = document.getElementById("ch"+post).checked;
+        let savedelete = 1;
+        if(!ch)
+            savedelete = 0;
+        await setvideocurso1(post,savedelete).then(res =>{}).catch(error => {
+            console.error("Error al guardar post");
+        });
+    }
+
+    function respuestamensaje(reg,user){
+        $("#mensaje").focus();
+        $("#mensaje").attr("placeholder","Escribe la respuesta");
+        $("#botenviarcomentario").text("Enviar Respuesta")
+        $("#botcancelar").show();
+        regmensaje = reg;
+        userresponde = user;
+    }
+
+    function mostrarsidebar(estado){
+        
+        if (estado){
+            $(".sidebar_arrow").hide();
+            $(".sidebar__content").show();
+            $(".sidebarfondo").show();
+            localsidebar(true);
+        }else{
+            $(".sidebar_arrow").show();
+            $(".sidebar__content").hide();
+            $(".sidebarfondo").hide();
+            localsidebar(false);
+        }
+
+        
+   }
+
+   function localsidebar(sidebar){
+     localStorage.setItem("sidebar", JSON.stringify(sidebar));
+   }
+
+
+</script>
+

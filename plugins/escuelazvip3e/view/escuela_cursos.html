@@ -1,0 +1,86 @@
+{include="header"}
+
+<div class="container-fluid" style="margin-bottom: 10px;">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="btn-group hidden-xs">
+                <a class="btn btn-sm btn-default" href="{$fsc->url()}" title="Recargar la página">
+                    <span class="glyphicon glyphicon-refresh"></span>
+                </a>
+                {if="$fsc->page->is_default()"}
+                <a class="btn btn-sm btn-default active" href="{$fsc->url()}&amp;default_page=FALSE"
+                    title="Marcada como página de inicio (pulsa de nuevo para desmarcar)">
+                    <i class="fa fa-bookmark" aria-hidden="true"></i>
+                </a>
+                {else}
+                <a class="btn btn-sm btn-default" href="{$fsc->url()}&amp;default_page=TRUE"
+                    title="Marcar como página de inicio">
+                    <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+                </a>
+                {/if}
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-4">
+            <form action="" method="post">
+                <label for="">Cursos</label>
+                <select name="curso" id="curso" class="form-control">
+                    <option value=""></option>
+                    {loop="$fsc->cursos->all_carrusel()"}
+                        {if="$value->idproducto == $fsc->curso_se"}
+                            <option value="{$value->idproducto}" selected> {$value->nombre}</option>
+                        {else}
+                            <option value="{$value->idproducto}">{$value->nombre}</option>
+                        {/if}
+                    {/loop}
+                </select>
+                <input class="btn btn-primary" type="submit" value="Enviar">
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <h3 class="">{$fsc->curso->nombre}</h3>
+        </div>
+        {if="$fsc->estudiantes->all_estudiante()"}
+        <div class="col-sm-12">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Estudiante</th>
+                        <th>Correo</th>
+                        {loop="$fsc->actividades->get_actividades_cursos($fsc->curso->idproducto)"}
+                            <th width="100">
+                                <a href="index.php?page=contenidocurso&curso={$value['curso']}&post={$value['reg']}" target="_blank">
+                                    {$value["nombrevideo"]}
+                                </a>
+                            </th>
+                        {/loop}
+                    </tr>
+                </thead>
+                <tbody>
+                {loop="$fsc->estudiantes->all_estudiante()"}
+                <tr>
+                    <td>{$value1[nombre]}</td>
+                    <td>{$value1[user]}</td>
+                    {loop="$fsc->actividades->get_actividades_cursos($fsc->curso->idproducto)"}
+                        <td>{$fsc->activitysearch($value2['curso'].'-'.$value2['reg'],$value1[user],$value2['detalleupload'])}</td>
+                    {/loop}
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+        {/if}
+        
+    </div>
+
+</div>

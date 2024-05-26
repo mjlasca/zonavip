@@ -1,0 +1,15 @@
+.nameuser{
+    margin-left: 40px;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 60px;
+    font-style: italic;
+    color: #1B4872;
+}
+
+.datecertificate{
+    margin-left: 35px;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 16px;
+    font-style: italic;
+    color: #000;
+}

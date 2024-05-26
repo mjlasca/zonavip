@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tabla>
+    <columna>
+        <nombre>reg</nombre>
+        <tipo>serial</tipo>
+        <nulo>NO</nulo>
+        <defecto>nextval('idistro_reg_seq'::idclass)</defecto>
+    </columna>
+    <columna>
+        <nombre>date</nombre>
+        <tipo>DATE</tipo>
+        <nulo>NO</nulo>
+    </columna>
+    <columna>
+        <nombre>usercumple</nombre>
+        <tipo>varchar(150)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>useredit</nombre>
+        <tipo>varchar(150)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>ultmod</nombre>
+        <tipo>DATETIME</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>ultenvio</nombre>
+        <tipo>int(5)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <restriccion>
+        <nombre>idistro_pkey</nombre>
+        <consulta>PRIMARY KEY (reg)</consulta>
+    </restriccion>
+</tabla>

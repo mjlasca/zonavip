@@ -1,0 +1,41 @@
+{include="header2"}
+<section style="margin-top: 100px;min-height: 700px;" class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <h3>Mis Productos Premium</h3>
+        </div>
+    </div>
+    <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Vigente</th>
+            <th scope="col">Certificado</th>
+          </tr>
+        </thead>
+        <tbody>
+          {if="$fsc->productos->get_user_final()"}
+            {loop="$fsc->productos->get_user_final()"}
+            <tr>
+              <td>{$value->nombreproducto}</td>
+              <td>DESDE : <b>{$value->ultmod}</b> <br> HASTA : <b>{$value->fechacaducidad}</b></td>
+              <td>
+                  <a href="{$fsc->url()}&pdf={$value->idproducto}"><i class="fas fa-certificate"></i>Generar</a>
+              </td>
+            </tr>
+            {/loop}
+          {else}
+            <td colspan="3"><h5>No tienes productos premium, <b>qué esperas!</b></h5><a class="btn btn-primary" href="index.php?page=cvzonavip"> ¡COMIENZA YA!</a></td>
+          {/if}
+
+          
+          
+        </tbody>
+      </table>
+
+</section>
+
+
+{include="footerusu"}
+    
+    

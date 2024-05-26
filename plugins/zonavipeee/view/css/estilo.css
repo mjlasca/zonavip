@@ -1,0 +1,110 @@
+@charset "UTF-8";
+
+
+.contenido{
+  padding: 10px;
+  background-color: #ccf1fa ;
+  position: relative;
+}
+
+.contenido-post{
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: #ccf1fa ;
+  position: relative;
+}
+
+.contenido-post-pago{
+  padding-top: 10px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  position:relative;
+  background-color: #ccf1fa ;
+}
+
+.bloqueado{
+  padding: 10px;
+  background-color: rgba(2, 66, 82, 0.7);
+  background-image: url("../assets/img/candado.png");
+  background-repeat: no-repeat;
+  background-position: 5% 5%;
+  /*background-size: 50%;*/
+  position: absolute;
+  top:0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  border-radius: 20px;
+}
+
+.abrirventana{
+  padding: 10px;
+  background-color: rgba(2, 66, 82, 0.1);
+  background-image: url("../assets/img/transparente.png");
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: 50%;
+  position: absolute;
+  top:0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+#bloqueblanco{
+  height: 300px;
+}
+
+
+
+.img-logo img{
+  width: 100px;
+  padding: 0px;
+}
+.menosespacio{
+  height: 100px;
+}
+
+
+/* Use a media query to add a breakpoint at 800px: */
+@media screen and (min-width: 800px) {
+  .menosespacio{
+    height: 80px;
+  }
+}
+
+
+.navbar-nav .dropdown{
+  padding: 10px;
+}
+
+#post{
+  margin-top: 120px;
+  margin-bottom: 120px;
+}
+
+.pantalla{
+  height: 600px;
+}
+
+.descripcion{
+  height: auto;
+}
+
+.recomendaciones-cuadro{
+  height: 230px;
+}
+
+@media only screen and (max-width: 600px) {
+  .pantalla{
+    height: 250px;
+  }
+  .slide{
+    display: inline-flex;
+  }
+}
+
+
+  

@@ -1,0 +1,270 @@
+{include="header"}
+
+<div class="container-fluid" style="margin-bottom: 10px;">
+    <div class="row">
+       <div class="col-xs-12">
+          <div class="btn-group hidden-xs">
+             <a class="btn btn-sm btn-default" href="{$fsc->url()}" title="Recargar la página">
+                <span class="glyphicon glyphicon-refresh"></span>
+             </a>
+             {if="$fsc->page->is_default()"}
+             <a class="btn btn-sm btn-default active" href="{$fsc->url()}&amp;default_page=FALSE" title="Marcada como página de inicio (pulsa de nuevo para desmarcar)">
+                <i class="fa fa-bookmark" aria-hidden="true"></i>
+             </a>
+             {else}
+             <a class="btn btn-sm btn-default" href="{$fsc->url()}&amp;default_page=TRUE" title="Marcar como página de inicio">
+                <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+             </a>
+             {/if}
+          </div>
+          
+          
+       </div>
+    </div>
+</div>
+
+
+
+
+<div class="container-fluid">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item active">
+        <a class="nav-link active" id="sinresp-tab" data-toggle="tab" href="#sinresp" role="tab" aria-controls="sinresp" aria-selected="true">Sin respuesta</a>
+        </li>
+        <li role="respondidos">
+         <a href="#respondidos" aria-controls="respondidos" role="tab" data-toggle="tab">
+             <span class="hidden-xs">Respuestas</span>
+         </a>
+     </li>
+    </ul>
+    
+    
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane active" id="sinresp" role="tabpanel" aria-labelledby="sinresp-tab" >
+            <div class="table table-hover">
+                <table class=" table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Post</th>
+                            <th>Usuario</th>
+                            <th>Mensaje</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {loop="$fsc->comentarios->all_sinrespuesta()"}
+                            <tr id="fil{$value->reg}">
+                                <td>
+                                    <a href="index.php?page=contenido&post={$value->regpost}" alt="{$value->regpost}" target="_blank">{$value->regpost}
+                                    </a>
+                                </td>
+                                <td>{$value->user}</td>
+                                <td>{$value->mensaje}</td>
+                                <td>{$value->ultmod}</td>
+                                <td>
+                                    <a onclick="respondermensaje('{$value->regpost}','{$value->reg}')" id="b_nuevo_articulo" class="btn btn-sm btn-success" data-toggle="modal" data-target="#exampleModalCenter" href="#" >
+                                        Responder
+                                     </a>
+                                    <a href="" class="btn" onclick="if(confirm('Está segur@ de eliminar comentario')) eliminarmensaje('{$value->reg}')">Eliminar</a>
+                                </td>
+                            </tr>
+                        {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="tab-pane" id="respondidos" role="tabpanel" aria-labelledby="respondidos-tab" >
+            <div class="table table-hover">
+                <table class=" table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Post</th>
+                            <th>Usuario</th>
+                            <th>Mensaje</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {loop="$fsc->comentarios1->all_respondidos()"}
+                            <tr id="fil{$value['reg']}">
+                                <td>
+                                    <a href="index.php?page=contenido&post={$value['regpost']}" alt="{$value['regpost']}" target="_blank">{$value['regpost']}
+                                    </a>
+                                </td>
+                                <td>{$value['user']}</td>
+                                <td>{$value['mensaje']} 
+                                    <div class="text-success" >
+                                    <br>>Respuesta de:<br>{$value['responde']}</bt>
+                                    </div>
+                                </td>
+                                <td>{$value['ultmod']}</td>
+                                <td>
+                                    <a href="" class="btn" onclick="if(confirm('Está segur@ de eliminar comentario')) eliminarmensaje('{$value['reg']}')">Eliminar</a>
+                                </td>
+                            </tr>
+                        {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Respuesta a mensaje</h5>
+        </div>
+        <div class="modal-body">
+        <form action="{$fsc->url()}" method="post" onsubmit="return enviarForm()">
+                <input type="hidden" name="regpost" id="regpost" value="">
+                <input type="hidden" name="usuario" id="usuario" value="{$fsc->user->nick}">
+                <input type="hidden" name="regmensaje" id="regmensaje" value="">
+                
+                <div class="form-group">
+                    <textarea name="mensaje" id="mensaje" cols="30" rows="5" class="form-control"></textarea>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <div id="errores">
+                </div>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <input type="submit" value="Enviar" onclick="" class="btn btn-primary">
+            </div>
+        </form>
+      </div>
+    </div>
+    </div>
+    
+    <script>
+
+        const url = "{$fsc->url()}";
+    
+        function enviarForm(){
+            let error = "";
+            $("#errores").html("");
+            if($("#mensaje").val() == ""){
+                error += "Debe colocar una respuesta</br>";
+            }
+            
+    
+            if(error != ""){
+                $("#errores").html("<div class='alert alert-warning alert-dismissible hidden-print' role='alert'><p class='text-left'><b>"
+                    +error+
+                    "</b></p></div>"
+                );
+                return false;
+            }
+            else{
+                newmsg();
+                $("#mensaje").val("");
+                $("#fil"+$("#regmensaje").val()).remove();
+                $("#exampleModalCenter").modal("hide");
+                return false;   
+            }
+                
+        }
+        function eliminarregistro(id, url){
+            bootbox.confirm({
+                message: '¿Realmente desea eliminar éste registro?',
+                title: '<b>Atención</b>',
+                callback: function(result) {
+                    if (result) {
+                        window.location.href = url;
+                    }
+                }
+            });
+        }
+    
+        function editarregistro(reg,id, nombre, idyoutube,archivo, pdf, pago,idvimeo,grupo,categoria,urlminiatura){
+            document.getElementById("reg").value = reg;
+            document.getElementById("id").value = id;
+            document.getElementById("nombre").value = nombre;
+            document.getElementById("idyoutube").value = idyoutube;
+            document.getElementById("archivo").value = archivo;
+            document.getElementById("pdf").value = pdf;
+            document.getElementById("idvimeo").value = idvimeo;
+            document.getElementById("pago").value = pago;
+            document.getElementById("grupo").value = grupo;
+            document.getElementById("categoria").value = categoria;
+            document.getElementById("urlminiatura").value = urlminiatura;
+        }
+    
+        function borrarformulario(){
+            document.getElementById("reg").value = "";
+            document.getElementById("id").value = "";
+            document.getElementById("nombre").value = "";
+            document.getElementById("idyoutube").value = "";
+            document.getElementById("archivo").value = "";
+            document.getElementById("pdf").value = "";
+            document.getElementById("idvimeo").value = "";
+            document.getElementById("pago").value = "";
+            document.getElementById("grupo").value = "";
+            document.getElementById("categoria").value = "";
+            document.getElementById("urlminiatura").value = "";
+        }
+
+        async function newmsgp(msg,post,user,regmensaje) {
+            
+        return new Promise(function(resolve) {
+            $.getJSON(url, 'insertmsg='+msg+'&user='+user+'&regmensaje='+regmensaje+'&post='+post, function (json) {
+                
+                resolve(
+                    JSON.parse( JSON.stringify( json ) )
+                );
+            });
+
+        })
+    }
+
+    async function newmsg(){
+        const  msg = $("#mensaje").val();
+        const  post = $("#regpost").val();
+        const user =  $("#usuario").val();
+        const regmensaje =  $("#regmensaje").val();
+        
+        await newmsgp(msg,post,user,regmensaje).then(res =>{}).catch(error => {
+            console.error("Error al enviar comentario ");
+        });
+    }
+
+   
+
+    function respondermensaje(reg,regmensaje){
+        $("#regpost").val(reg);
+        $("#regmensaje").val(regmensaje);
+    }
+    
+    function seleccioncategoria(texto){
+        document.getElementById("categoria").value = texto;
+    }
+
+
+    async function eliminarmensaje1(reg) {
+        return new Promise(function(resolve) {
+            $.getJSON(url, 'eliminarcomentario='+reg, function (json) {
+                resolve(
+                    JSON.parse( JSON.stringify( json ) )
+                );
+            });
+        })
+    }
+
+    async function eliminarmensaje(reg){
+        
+        await eliminarmensaje1(reg).then(res =>{}).catch(error => {
+        console.error("Error al enviar comentario");
+        });
+        $("#fil"+reg.val()).remove();
+    }
+    
+    
+    </script>

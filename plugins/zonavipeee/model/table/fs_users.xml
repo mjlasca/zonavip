@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : fs_users.xml
+    Author     : Carlos Garcia Gomez
+    Description:
+        Estructura de la tabla fs_users.
+-->
+<tabla>
+    <columna>
+        <nombre>nick</nombre>
+        <tipo>character varying(12)</tipo>
+        <nulo>NO</nulo>
+    </columna>
+    <columna>
+        <nombre>password</nombre>
+        <tipo>character varying(100)</tipo>
+        <nulo>NO</nulo>
+    </columna>
+    <columna>
+        <nombre>log_key</nombre>
+        <tipo>character varying(100)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>admin</nombre>
+        <tipo>boolean</tipo>
+        <nulo>NO</nulo>
+        <defecto>false</defecto>
+    </columna>
+    <columna>
+        <nombre>enabled</nombre>
+        <tipo>boolean</tipo>
+        <nulo>NO</nulo>
+        <defecto>true</defecto>
+    </columna>   
+    <columna>
+        <nombre>codagente</nombre>
+        <tipo>character varying(10)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>last_login</nombre>
+        <tipo>date</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>last_login_time</nombre>
+        <tipo>time</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>last_ip</nombre>
+        <tipo>character varying(40)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>last_browser</nombre>
+        <tipo>character varying(255)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>fs_page</nombre>
+        <tipo>character varying(30)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>css</nombre>
+        <tipo>character varying(255)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>email</nombre>
+        <tipo>character varying(100)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>codverificacion</nombre>
+        <tipo>varchar(20)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>create_date</nombre>
+        <tipo>DATE</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>update_date</nombre>
+        <tipo>DATE</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>expire_date</nombre>
+        <tipo>DATE</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>subsyoutube</nombre>
+        <tipo>int(1)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>activo</nombre>
+        <tipo>int(1)</tipo>
+        <nulo>YES</nulo>
+        <defecto>0</defecto>
+    </columna>
+    <columna>
+        <nombre>nombre</nombre>
+        <tipo>varchar(150)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>estadocrm</nombre>
+        <tipo>varchar(150)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>pais</nombre>
+        <tipo>varchar(100)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>prevpage</nombre>
+        <tipo>varchar(300)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <restriccion>
+        <nombre>fs_users_pkey</nombre>
+        <consulta>PRIMARY KEY (nick)</consulta>
+    </restriccion>
+    <restriccion>
+        <nombre>ca_fs_users_pages</nombre>
+        <consulta>FOREIGN KEY (fs_page) REFERENCES fs_pages (name) ON DELETE SET NULL ON UPDATE CASCADE</consulta>
+    </restriccion>
+</tabla>

@@ -1,0 +1,119 @@
+{include="header2"}
+<link rel="stylesheet" href="plugins/club3e/view/css/cursos.css">
+
+<section id="post1" class="container">
+
+    <h2>Cursos Zona Vip 3E</h2>
+    <p>Encuentra diferentes cursos gratuitos y/o de pago con contenido de utilidad en Excel, de la mano de un experto
+        tendrás la posibilidad hacer de Excel un medio o herramienta para Maximizar el desempeño en las actividades
+        diarias.
+        Todos nuestros cursos GRATUITOS o de pago tienen un certificado.</p>
+
+</section>
+
+<section class="cursos ">
+    <div class="container ">
+        <div class="show-filter" onclick="showfilter()">
+            Filtros
+            <svg  version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                viewBox="0 0 47.255 47.255" style="enable-background:new 0 0 47.255 47.255;" xml:space="preserve">
+                <g>
+                    <path d="M46.255,35.941c-0.256,0-0.512-0.098-0.707-0.293l-21.921-21.92l-21.92,21.92c-0.391,0.391-1.023,0.391-1.414,0
+                        c-0.391-0.391-0.391-1.023,0-1.414L22.92,11.607c0.391-0.391,1.023-0.391,1.414,0l22.627,22.627c0.391,0.391,0.391,1.023,0,1.414
+                        C46.767,35.844,46.511,35.941,46.255,35.941z"/>
+                </g>
+            </svg>
+        </div>
+        <div class="row mt-5 pt-5 mb-5">
+            <div class="col-sm-3 filtercursos">
+                <form action="{$fsc->url()}" method="post" id="formFilter">
+                    
+                    <h5>Categorías</h5>
+
+                    {loop="$fsc->cursos->get_categoriascursos()"}
+                        <div class="form-group">
+                            <input onchange="this.form.submit()" {if="$fsc->chselected[$key1]"} checked {/if} type="checkbox" name="chcategoria{$key1}" value="{$value['catego']}">{$value["catego"]}
+                        </div>
+                    {/loop}
+
+                    <hr>
+
+                    <div class="form-group">
+                        <h5><input onchange="this.form.submit()" {if="$fsc->cursos->miscursos"} checked {/if} type="checkbox" name="ch_miscursos" id="ch_miscursos" >Mis Cursos</h5>
+                    </div>
+                                      
+
+                </form>
+
+            </div>
+            <div class="col-sm-9">
+                <div class="row">
+                    
+                    {loop="$fsc->cursos->all_carrusel($fsc->user->nick)"}
+                    
+                        <div class="curso col-sm-4 p-0">
+                            
+                                {if="$fsc->accessscontent($value->curso) == 0 && $value->abierto == 0 "} 
+                                    <a href="#" onclick="alert('Este curso no está disponible')">
+                                {else}
+                                    <a href="index.php?page=contenidocurso&curso={$value->idproducto}">
+                                {/if}
+                                    <div class="carousel-item__open">
+                                    </div>
+                                </a>
+                                <img class="curso_imgcurso" src="{$value->urlimgcurso}" alt="Imagen Curso {$value->idproducto}">
+                                <div class="detalle p-3">
+                                    <h5>{$value->nombre}</h5>
+                                    <!--<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour.</p>-->
+                                    <p><b >Duración : </b> {$value->duracioncurso} Horas<br>
+                                    <b >Tipo : </b> {if="$value->valor>0"} <b style="color: rgb(202, 30, 0);">PREMIUM </b>/ USD${$value->valor} {else} GRATIS {/if} </p>
+                                </div>
+                                {if="$value->actualizando"}
+                                    <div class="alert-warning text-center">
+                                        EN ACTUALIZACIÓN
+                                    </div>
+                                {/if}
+                            
+                        </div>
+                    {/loop}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modalcv" tabindex="-1" role="dialog" aria-labelledby="modalcv" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body  pl-5 pr-5">
+                <h3>CONTENIDO PREMIUM EXCLUSIVO</h3>
+                <p>Éste vídeo hace parte del contenido premium exclusivo, si deseas saber cómo tener acceso a éste
+                    material, clic en el siguiente botón</p>
+
+
+                <a class="btn btn-danger" href="index.php?page=cvzonavip">
+                    <h5> <i class="fas fa-arrow-alt-circle-up"></i> ¡Inscribirme YA! <i
+                            class="fas fa-arrow-alt-circle-up"></i> </h5>
+                </a>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+{include="footerusu"}
+
+<script type="text/javascript" src="plugins/club3e/view/js/cursos.js?v=1"></script>

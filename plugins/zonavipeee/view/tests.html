@@ -1,0 +1,258 @@
+{include="header"}
+
+<div class="container-fluid" style="margin-bottom: 10px;">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="btn-group hidden-xs">
+                <a class="btn btn-sm btn-default" href="{$fsc->url()}" title="Recargar la página">
+                    <span class="glyphicon glyphicon-refresh"></span>
+                </a>
+                {if="$fsc->page->is_default()"}
+                <a class="btn btn-sm btn-default active" href="{$fsc->url()}&amp;default_page=FALSE"
+                    title="Marcada como página de inicio (pulsa de nuevo para desmarcar)">
+                    <i class="fa fa-bookmark" aria-hidden="true"></i>
+                </a>
+                {else}
+                <a class="btn btn-sm btn-default" href="{$fsc->url()}&amp;default_page=TRUE"
+                    title="Marcar como página de inicio">
+                    <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+                </a>
+                {/if}
+            </div>
+
+            <div class="btn-group">
+                <a id="b_nuevo_articulo" class="btn btn-sm btn-success" onclick="nuevoregistro()" data-toggle="modal"
+                    data-target="#exampleModalCenter" href="#">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span class="hidden-xs">&nbsp;Nuevo</span>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="container-fluid">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item active">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+                aria-selected="true">Test's</a>
+        </li>
+    </ul>
+
+
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane  show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            </br>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Curso</th>
+                        <th style="width: 200px;">Curso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop="$fsc->testcurso->all()"}
+                    <tr>
+                        <td>{$value->nombre}</td>
+                        <td>
+                            <!-- <a href="" class="btn btn-primary" onclick="return getpreguntas('{$value->idcurso}')"><span
+                                    class="glyphicon glyphicon-edit"></span></a> -->
+                            <a href="{$fsc->url()}&delete={$value->idcurso}"
+                                onclick="return confirm('Está segur@ de eliminar el test')" class="btn btn-danger"><span
+                                    class="glyphicon glyphicon-trash"></span></a>
+                        </td>
+                    </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Nuevo Producto</h5>
+            </div>
+            <div class="modal-body">
+                <form action="{$fsc->url()}" method="post" onsubmit="return enviarForm()">
+
+                    <input type="hidden" name="reg" id="reg" value="">
+                    <input type="hidden" name="contpreguntas" id="contpreguntas" value="1">
+
+                    <label for="">Curso</label>
+                    <select class="form-control" name="idcurso" id="idcurso">
+                        {loop="$fsc->productos->all_carrusel()"}
+                        <option value="{$value->idproducto}">{$value->nombre}</option>
+                        {/loop}
+                    </select>
+
+
+
+                    <div class="pregunta1">
+                        <label for="">Pregunta 1</label>
+                        <input type="text" class="form-control" name="pregunta1" id="pregunta1" required>
+
+                        <input type="radio" name="correcta1" value="1" required>
+                        <label for="">Respuesta 1</label>
+                        <input type="text" class="form-control" name="respuesta11" id="respuesta11">
+
+                        <input type="radio" name="correcta1" value="2" required>
+                        <label for="">Respuesta 2</label>
+                        <input type="text" class="form-control" name="respuesta12" id="respuesta12">
+
+                        <input type="radio" name="correcta1" value="3" required>
+                        <label for="">Respuesta 3</label>
+                        <input type="text" class="form-control" name="respuesta13" id="respuesta13">
+
+                        <input type="radio" name="correcta1" value="4" required>
+                        <label for="">Respuesta 4</label>
+                        <input type="text" class="form-control" name="respuesta14" id="respuesta14">
+                    </div>
+                    <hr />
+                    <div class="preguntas">
+
+                    </div>
+                    <div class="agregar">
+
+                        <a class="btn btn-primary" onclick="agregarrespuesta()">+</a>
+                    </div>
+
+
+
+
+                    <div class="modal-footer">
+                        <div id="errores">
+                        </div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <input type="submit" value="Guardar" class="btn btn-primary">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        var datosya = "";
+
+        var contpreguntas = 1;
+
+
+        function agregarrespuesta() {
+
+            contpreguntas++;
+            $("#contpreguntas").val(contpreguntas);
+
+            const html = `
+                <div class="pregunta${contpreguntas}">
+                    <label for="">Pregunta ${contpreguntas}</label> 
+                    <input type="text" class="form-control" name="pregunta${contpreguntas}" id="pregunta${contpreguntas}" required>
+    
+                    <input type="radio" name="correcta${contpreguntas}"  value="1" required>
+                    <label for="">Respuesta 1</label> 
+                    <input type="text" class="form-control" name="respuesta${contpreguntas}1" id="respuesta${contpreguntas}1">
+    
+                    <input type="radio" name="correcta${contpreguntas}"  value="2" required>
+                    <label for="">Respuesta 2</label> 
+                    <input type="text" class="form-control" name="respuesta${contpreguntas}2" id="respuesta${contpreguntas}2">
+    
+                    <input type="radio" name="correcta${contpreguntas}"  value="3" required>
+                    <label for="">Respuesta 3</label> 
+                    <input type="text" class="form-control" name="respuesta${contpreguntas}3" id="respuesta${contpreguntas}3">
+    
+                    <input type="radio" name="correcta${contpreguntas}"  value="4" required>
+                    <label for="">Respuesta 4</label> 
+                    <input type="text" class="form-control" name="respuesta${contpreguntas}4" id="respuesta${contpreguntas}4">
+                </div>
+                <hr/>
+                    `;
+
+            $(".preguntas").append(html);
+        }
+
+        function nuevoregistro() {
+            datosya = "";
+            $(".preguntas").html("");
+            contpreguntas = 1;
+        }
+
+        const pregunta = (preg, cont) => `
+                    <div class="pregunta${cont}">
+                    <label for="">Pregunta ${cont}</label> 
+                    <input type="text" class="form-control" name="pregunta${cont}" id="pregunta${cont}" value="${preg}" required>
+                    
+                    `;
+
+        const respuesta = (cont,resp,orden,ch) => `
+                    <input type="radio" name="correcta${cont}"  value="${orden}" ${ch} required >
+                    <label for="">Respuesta ${orden}</label> 
+                    <input type="text" class="form-control" name="respuesta${cont}${orden}" id="respuesta${cont}${orden}" value="${resp}">
+        `;
+
+
+
+        function getpreguntas(idcurso) {
+
+            $(".preguntas").html("");
+
+            fetch('{$fsc->url()}&getpreguntas=' + idcurso)
+                .then(response => response.json())
+                .then(
+                     data => {
+                        if (datosya !== idcurso) {
+                             data.map(d => {
+                                if (contpreguntas > 1){
+                                    $(".preguntas").append(pregunta(d.pregunta, contpreguntas));
+                                     getrespuestas(idcurso,d.reg);
+                                }
+                                    
+                                contpreguntas++;
+                            });
+                            datosya = idcurso;
+                            contpreguntas = 1;
+                        }
+                        $("#exampleModalCenter").modal("show");
+                    }
+                );
+            return false;
+        }
+
+
+        function getrespuestas(idcurso,idpregunta,cont){
+            
+            fetch('{$fsc->url()}&getrespuestas=' +idcurso+"&idpregunta="+idpregunta)
+            .then(response => response.json())
+            .then( 
+                data => {
+                    data.map( res => {
+                            let corr = "";
+                            if(res.correcta == 1)
+                                corr = "checked"
+                            $(".preguntas").append(respuesta(cont,res.respuesta,res.orden,corr));
+                        }
+                    )
+                } 
+            ).catch(err => {
+                console.log("Error Reading data " + err);
+            });
+
+            return true;
+
+        }
+
+
+
+
+
+
+    </script>

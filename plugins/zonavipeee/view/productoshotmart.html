@@ -1,0 +1,189 @@
+{include="header"}
+
+<div class="container-fluid" style="margin-bottom: 10px;">
+    <div class="row">
+       <div class="col-xs-12">
+          <div class="btn-group hidden-xs">
+             <a class="btn btn-sm btn-default" href="{$fsc->url()}" title="Recargar la página">
+                <span class="glyphicon glyphicon-refresh"></span>
+             </a>
+             {if="$fsc->page->is_default()"}
+             <a class="btn btn-sm btn-default active" href="{$fsc->url()}&amp;default_page=FALSE" title="Marcada como página de inicio (pulsa de nuevo para desmarcar)">
+                <i class="fa fa-bookmark" aria-hidden="true"></i>
+             </a>
+             {else}
+             <a class="btn btn-sm btn-default" href="{$fsc->url()}&amp;default_page=TRUE" title="Marcar como página de inicio">
+                <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+             </a>
+             {/if}
+          </div>
+
+          <div class="btn-group">
+             <a onclick="borrarformulario()" id="b_nuevo_articulo" class="btn btn-sm btn-success" data-toggle="modal" data-target="#exampleModalCenter" href="#">
+                <span class="glyphicon glyphicon-plus"></span>
+                <span class="hidden-xs">&nbsp;Nuevo</span>
+             </a>
+          </div>
+          
+       </div>
+    </div>
+</div>
+
+
+
+
+<div class="container-fluid">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item active">
+        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Productos</a>
+        </li>
+    </ul>
+    
+    
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane  show active" id="home" role="tabpanel" aria-labelledby="home-tab" >
+            </br>
+            <div class="table table-hover">
+                <table class=" table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>idproducto</th>
+                            <th>Valor</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {loop="$fsc->productos->all()"}
+                        <tr>
+                            <td>{$value->nombre}</td>
+                            <td>{$value->idproducto}</td>
+                            <td>{$value->valor}</td>
+                            <td>
+                                <a onclick="editarregistro('{$value->reg}','{$value->nombre}', '{$value->idproducto}','{$value->valor}','{$value->vigencia}','{$value->curso}','{$value->urlimgcurso}','{$value->linkpago}','{$value->categoriacurso}','{$value->duracioncurso}','{$value->abierto}','{$value->actualizando}')" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalCenter" href="#">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </a>
+                                <a onclick="eliminarregistro('{$value->reg}', '{$fsc->url()}&deleteregis={$value->reg}')" class="btn btn-sm btn-danger">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </a>
+                            </td>
+                        
+                        </tr>
+                        {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLongTitle">Nuevo Producto</h5>
+    </div>
+    <div class="modal-body">
+    <form action="{$fsc->url()}" method="post" onsubmit="return enviarForm()">
+            <input type="hidden" name="reg" id="reg" value="">
+            <label for="">Nombre</label> 
+            <input type="text" class="form-control" name="nombre" id="nombre">
+            <label for="">ID Producto</label> 
+            <input type="text" class="form-control" name="idproducto" id="idproducto">
+            <label for="">Valor del producto </label> 
+            <input type="number" class="form-control" name="valor" id="valor">
+            <label for="">
+                Vigencia de acceso (DÍAS) 
+                <small>(Al pagar cuánto tiempo tiene el usuario antes de volver a hacerlo)</small> 
+            </label> 
+            <input type="number" class="form-control" name="vigencia" id="vigencia">
+            
+            <div class="classcurso">
+                <label for="">Código Curso <span style="font-size: smaller;">(éste será el mismo número de producto en hotmart)</span></label> 
+                <input type="text" class="form-control" name="curso" id="curso">
+                <label for="">Url IMG Curso</label> 
+                <input type="text" class="form-control" name="urlimg" id="urlimg">
+                <label for="">Enlace de pago <span style="font-size: smaller;">(Puede ser un formulario o una web)</span></label>
+                <textarea class="form-control" name="linkpago" id="linkpago" cols="30" rows="2"></textarea>
+                <label for="">Categoría Curso</label> 
+                <input type="text" class="form-control" name="categoriacurso" id="categoriacurso">
+                <label for="">Duración Curso</label> 
+                <input type="text" class="form-control" name="duracioncurso" id="duracioncurso">
+                
+                <label for="">
+                    <input type="checkbox" name="abierto" id="abierto" value="1" > Abierto
+                </label>
+                <label for="">
+                    <input type="checkbox" name="actualizando" id="actualizando" value="1" > En actualización
+                </label>
+                
+            </div>
+            
+            
+        <div class="modal-footer">
+            <div id="errores">
+            </div>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <input type="submit" value="Guardar" class="btn btn-primary">
+        </div>
+    </form>
+  </div> 
+</div>
+</div>
+
+<script>
+
+    
+    function eliminarregistro(id, url){
+        bootbox.confirm({
+            message: '¿Realmente desea eliminar éste registro?',
+            title: '<b>Atención</b>',
+            callback: function(result) {
+                if (result) {
+                    window.location.href = url;
+                }
+            }
+        });
+    }
+
+    function editarregistro(reg,nombre, idproducto,valor,vigencia,curso,urlimg,linkpago,categoriacurso,duracioncurso,abierto,actualizando){
+        document.getElementById("reg").value = reg;
+        document.getElementById("nombre").value = nombre;
+        document.getElementById("idproducto").value = idproducto;
+        document.getElementById("valor").value = valor;
+        document.getElementById("vigencia").value = vigencia;
+        document.getElementById("curso").value = curso;
+        document.getElementById("urlimg").value = urlimg;
+        document.getElementById("linkpago").value = linkpago;
+        document.getElementById("categoriacurso").value = categoriacurso;
+        document.getElementById("duracioncurso").value = duracioncurso;
+        
+        document.getElementById("abierto").checked = false;
+        if(abierto == 1)
+            document.getElementById("abierto").checked = true;
+
+        document.getElementById("actualizando").checked = false;
+        if(actualizando == 1)
+            document.getElementById("actualizando").checked = true;
+    }
+
+    function borrarformulario(){
+        document.getElementById("reg").value = "";
+        document.getElementById("nombre").value = "";
+        document.getElementById("idproducto").value = "";
+        document.getElementById("valor").value = "";
+        document.getElementById("vigencia").value = "";
+        document.getElementById("curso").value = "";
+        document.getElementById("urlimg").value = "";
+        document.getElementById("linkpago").value = "";
+        document.getElementById("categoriacurso").value = "";
+        document.getElementById("duracioncurso").value = "";
+        document.getElementById("abierto").checked = false;
+        document.getElementById("actualizando").checked = false;
+    }
+
+
+</script>

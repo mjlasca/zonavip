@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tabla>
+    <columna>
+        <nombre>reg</nombre>
+        <tipo>serial</tipo>
+        <nulo>NO</nulo>
+        <defecto>nextval('idistro_reg_seq'::idclass)</defecto>
+    </columna>
+    <columna>
+        <nombre>user</nombre>
+        <tipo>VARCHAR(150)</tipo>
+        <nulo>NO</nulo>
+    </columna>
+    <columna>
+        <nombre>idproducto</nombre>
+        <tipo>varchar(100)</tipo>
+        <nulo>NO</nulo>
+    </columna>
+    <columna>
+        <nombre>nombreproducto</nombre>
+        <tipo>varchar(300)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>estado</nombre>
+        <tipo>VARCHAR(100)</tipo>
+        <nulo>NO</nulo>
+    </columna>
+    <columna>
+        <nombre>periocidad</nombre>
+        <tipo>int(5)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>fechagarantia</nombre>
+        <tipo>DATETIME</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>fechacaducidad</nombre>
+        <tipo>DATETIME</tipo>
+        <nulo>NO</nulo>
+    </columna>
+    <columna>
+        <nombre>ultmod</nombre>
+        <tipo>DATETIME</tipo>
+        <nulo>YES</nulo>
+    </columna>
+   
+    <restriccion>
+        <nombre>idistro_pkey</nombre>
+        <consulta>PRIMARY KEY (reg)</consulta>
+    </restriccion>
+</tabla>

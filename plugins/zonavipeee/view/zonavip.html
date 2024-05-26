@@ -1,0 +1,666 @@
+{include="header2"}
+    <link rel="stylesheet" href="plugins/zonavipeee/view/css/cursos.css">
+
+
+    
+
+    <section id="post1" class="container">
+
+        <h2>Bienvenid@ a la Zona Vip de la automatización</h2>
+        <p>La plataforma de la Zona Vip de la automatización es pionera en contener material de Excel en diferentes categorías en un sólo lugar, en ésta plataforma podrás disfrutar, y aprender contenido gratuito y de pago en Excel para aplicar en tu día a día.</p>
+    
+    </section>
+    
+    <section class="cursos ">
+        
+        <div class="cursos_menu ">
+            <a onclick="mostrardiv('nuevocontenido')">
+                <div class="menu_item"> 
+                    <img src="plugins/zonavipeee/view/assets/img/new.svg" alt="Nuevo contenido">
+                    <h5 class="ml-2 d-none d-sm-none d-md-block"> Nuevo <br>Contenido </h5>
+                </div>
+            </a>
+            <a onclick="mostrardiv('seguirviendo')">
+                <div class="menu_item"> 
+                    <img src="plugins/zonavipeee/view/assets/img/next.svg" alt="Seguir viendo">
+                    <h5 class="ml-2 d-none d-sm-none d-md-block"> Seguir  <br>Viendo </h5>
+                </div>
+            </a>
+            <a  onclick="mostrardiv('lomasvisto')">
+                <div class="menu_item"> 
+                    <img src="plugins/zonavipeee/view/assets/img/star.svg" alt="Lo más visto">
+                    <h5 class="ml-2 d-none d-sm-none d-md-block"> Lo Más <br>Visto </h5>
+                </div>
+            </a>
+            <a  onclick="mostrardiv('contenidovariado')">
+                <div class="menu_item"> 
+                    <img src="plugins/zonavipeee/view/assets/img/navigation.svg" alt="Contenido variado">
+                    <h5 class="ml-2 d-none d-sm-none d-md-block"> Contenido <br>Variado </h5>
+                </div>
+            </a>
+            <a  href="index.php?page=cursos" >
+                <div class="menu_item"> 
+                    <img  src="plugins/zonavipeee/view/assets/img/cursos.svg" alt="Cursos 3E">
+                    <h5 class="ml-2 d-none d-sm-none d-md-block "> Cursos <br> 3E </h5>
+                </div>
+            </a>
+            <a  href="index.php?page=contenidofiltrado&pago=SI">
+                <div class="menu_item"> 
+                    <img src="plugins/zonavipeee/view/assets/img/premium.svg" alt="Contenido premium">
+                    <h5 class="ml-2 d-none d-sm-none d-md-block"> Contenido <br>Premium </h5>
+                </div>
+            </a>
+        </div>
+        
+        
+        <div id="nuevocontenido" class="container  pt-4 mb-5">
+            <h3 class="text-center text-sm-left text-primary">Nuevo contenido</h3>
+            <div class="row">
+                {loop="$fsc->zonavip_registros->all_nuevos()"}
+                    <div class="filtro  col-sm-4 p-0"> 
+
+                        {if="$value->pago == 'SI' && $fsc->allow == 0 && !$fsc->aprobaracceso($value->grupo) "}
+                            <a href="#" data-toggle="modal" data-target="#modalcv"><div class="bloqueado">
+                            </div></a>
+                        {else}
+                            <a href="index.php?page=contenido&post={$value->reg}" ><div class="abrirventana" style="border-radius: 20px;">
+                            </div></a>
+                        {/if}    
+                        {if="$value->urlminiatura != '' "}
+                        <img  width="100%" height="200px" src="{$value->urlminiatura}">
+                        {else}
+                            {if="$value->idyoutube"}
+                                <iframe  src="https://www.youtube.com/embed/{$value->idyoutube}" class="carousel-item__iframe" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            {else}
+                                <iframe  src="https://player.vimeo.com/video/{$value->idvimeo}"  class="carousel-item__iframe" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+                            {/if}
+                        {/if}
+                        <div class="detalle p-3">
+                            <h5>{$value->nombrevideo}</h5>
+                        </div>        
+                            
+                    </div>
+                    
+                {/loop}
+            </div>
+        </div>
+
+        <div id="seguirviendo" class="container  pt-4 mb-5">
+            <h3 class="text-center text-sm-left text-primary">Seguir viendo</h3>
+            <div class="row">
+                {loop="$fsc->historial->all_vistos()"}
+                    <div class="filtro  col-sm-4 p-0"> 
+
+                        {if="$value['pago'] == 'SI' && $fsc->allow == 0  && !$fsc->aprobaracceso($value['grupo']) "}
+                            <a href="#" data-toggle="modal" data-target="#modalcv"><div class="bloqueado">
+                            </div></a>
+                        {else}
+                            <a href="index.php?page=contenido&post={$value['reg']}" ><div class="abrirventana" style="border-radius: 20px;">
+                            </div></a>
+                        {/if}
+                        {if="$value['urlminiatura'] != '' "}
+                        <img  width="100%" height="200px" src="{$value->urlminiatura}">
+                        {else}
+                            {if="$value['idyoutube']"}
+                                <iframe  src="https://www.youtube.com/embed/{$value['idyoutube']}" class="carousel-item__iframe" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            {else}
+                                <iframe  src="https://player.vimeo.com/video/{$value['idvimeo']}"  class="carousel-item__iframe" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+                            {/if}
+                        {/if}
+                        <div class="detalle p-3">
+                            <h5>{$value['nombrevideo']}</h5>
+                        </div>  
+                            
+                    </div>
+                {/loop}
+                              
+                 
+            </div>
+        </div>
+
+        <div id="lomasvisto" class="container  pt-4 mb-5">
+            <h3 class="text-center text-sm-left text-primary">Lo más visto</h3>
+            <div class="row">
+                {loop="$fsc->historial->populares()"}
+                    <div class="filtro  col-sm-4 p-0"> 
+
+                        {if="$value['pago'] == 'SI' && $fsc->allow == 0  && !$fsc->aprobaracceso($value['grupo']) "}
+                            <a href="#" data-toggle="modal" data-target="#modalcv"><div class="bloqueado">
+                            </div></a>
+                        {else}
+                            <a href="index.php?page=contenido&post={$value['reg']}" ><div class="abrirventana" style="border-radius: 20px;">
+                            </div></a>
+                        {/if}
+                        {if="$value['urlminiatura'] != '' "}
+                            <img  width="100%" height="200px" src="{$value->urlminiatura}">
+                        {else}
+                            {if="$value['idyoutube']"}
+                                <iframe  src="https://www.youtube.com/embed/{$value['idyoutube']}" class="carousel-item__iframe" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            {else}
+                                <iframe  src="https://player.vimeo.com/video/{$value['idvimeo']}"  class="carousel-item__iframe" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+                            {/if}
+                        {/if}
+                        <div class="detalle p-3">
+                            <h5>{$value['nombrevideo']}</h5>
+                        </div>  
+                            
+                    </div>
+                {/loop}
+                              
+                 
+            </div>
+        </div>
+
+
+        <div id="contenidovariado" class="container  pt-4 mb-5">
+            <h3 class="text-center text-sm-left text-primary">Contenido variado</h3>
+            <div class="row">
+                {loop="$fsc->zonavip_registros->all_aleatorio()"}
+                    <div class="filtro  col-sm-4 p-0"> 
+
+                        {if="$value->pago == 'SI' && $fsc->allow == 0 && !$fsc->aprobaracceso($value->grupo) "}
+                            <a href="#" data-toggle="modal" data-target="#modalcv"><div class="bloqueado">
+                            </div></a>
+                        {else}
+                            <a href="index.php?page=contenido&post={$value->reg}" ><div class="abrirventana" style="border-radius: 20px;">
+                            </div></a>
+                        {/if} 
+
+                        {if="$value->urlminiatura != '' "}
+                        <img  width="100%" height="200px" src="{$value->urlminiatura}">
+                        {else}
+                            {if="$value->idyoutube"}
+                                <iframe  src="https://www.youtube.com/embed/{$value->idyoutube}" class="carousel-item__iframe" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            {else}
+                                <iframe  src="https://player.vimeo.com/video/{$value->idvimeo}"  class="carousel-item__iframe" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+                            {/if}
+                        {/if}
+                        <div class="detalle p-3">
+                            <h5>{$value->nombrevideo}</h5>
+                        </div>        
+                            
+                    </div>
+                    
+                {/loop}
+                <div class="col-sm-4">
+                    <div class="text-center mt-5">
+                        <a href="index.php?page=contenidofiltrado" class="btn btn-primary">
+                            <h4 >¡Ver mucho más contenido!</h4>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </section>
+
+
+        <!--<section class="mt-5">
+            
+                <div class="exclusivo d-flex mt-5">
+                    <a href="index.php?page=contenidofiltrado&pago=SI">
+                        <h4><i class="fas fa-angle-double-right"></i>CONTENIDO PREMIUM EXCLUSIVO<i class="fas fa-angle-double-left"></i></h4>
+                    </a>
+                </div>
+                {if="$fsc->transmision"}
+                <div class="exclusivo  mt-5 bg-primary">
+                    <a  href="#" data-toggle="modal" data-target="#modalwebinar">
+                        <h4 class="bg-primary">Próximos webinars, ¡clic aquí!</h4>
+                    </a>
+                </div>
+                {/if}
+
+                <div class="carousel">
+                    <h3 >Nuevo contenido</h3>
+                    <div class="carousel__container">
+                        
+                        {loop="$fsc->zonavip_registros->all_nuevos()"}
+                        <div class="carousel__item"> 
+
+                            {if="$value->pago == 'SI' && $fsc->allow == 0 && !$fsc->aprobaracceso($value->grupo) "}
+                                <a href="#" data-toggle="modal" data-target="#modalcv"><div class="carousel-item__bloqued">
+                                </div></a>
+                            {else}
+                                <a href="index.php?page=contenido&post={$value->reg}" ><div class="carousel-item__open">
+                                </div></a>
+                            {/if}    
+
+                            {if="$value->idyoutube"}
+                                <iframe  src="https://www.youtube.com/embed/{$value->idyoutube}" class="carousel-item__iframe" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            {else}
+                                <iframe  src="https://player.vimeo.com/video/{$value->idvimeo}"  class="carousel-item__iframe" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+                            {/if}
+                                
+                                
+                        </div>
+                       {/loop}
+                    </div>
+                </div>
+
+
+                <div class="carousel">
+                    <h3 >Seguir viendo</h3>
+                    <div class="carousel__container">
+                        
+                        {loop="$fsc->historial->all_vistos()"}
+                        <div class="carousel__item"> 
+
+                            {if="$value['pago'] == 'SI' && $fsc->allow == 0  && !$fsc->aprobaracceso($value['grupo']) "}
+                                <a href="#" data-toggle="modal" data-target="#modalcv"><div class="carousel-item__bloqued">
+                                </div></a>
+                            {else}
+                                <a href="index.php?page=contenido&post={$value['reg']}" ><div class="carousel-item__open">
+                                </div></a>
+                            {/if}
+
+                            {if="$value['idyoutube']"}
+                                <iframe  src="https://www.youtube.com/embed/{$value['idyoutube']}" class="carousel-item__iframe" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            {else}
+                                <iframe  src="https://player.vimeo.com/video/{$value['idvimeo']}"  class="carousel-item__iframe" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+                            {/if}
+
+                                
+                        </div>
+                       {/loop}
+                    </div>
+                </div>
+
+                <div class="carousel">
+                    <h3 >Lo más visto</h3>
+                    <div class="carousel__container">
+                        
+                        {loop="$fsc->historial->populares()"}
+                        <div class="carousel__item"> 
+
+                            {if="$value['pago'] == 'SI' && $fsc->allow == 0  && !$fsc->aprobaracceso($value['grupo']) "}
+                                <a href="#" data-toggle="modal" data-target="#modalcv"><div class="carousel-item__bloqued">
+                                </div></a>
+                            {else}
+                                <a href="index.php?page=contenido&post={$value['reg']}" ><div class="carousel-item__open">
+                                </div></a>
+                            {/if}
+
+                            {if="$value['idyoutube']"}
+                                <iframe  src="https://www.youtube.com/embed/{$value['idyoutube']}" class="carousel-item__iframe" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            {else}
+                                <iframe  src="https://player.vimeo.com/video/{$value['idvimeo']}"  class="carousel-item__iframe" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+                            {/if}
+                                
+                                
+                        </div>
+                       {/loop}
+                    </div>
+                </div>
+
+                <div class="carousel">
+                    <h3 >Cursos Premium 3E</h3>
+                    <div class="carousel__container">
+                        
+                        {loop="$fsc->cursos->all_carrusel()"}
+                        <div class="carousel__item"> 
+                                <a href="index.php?page=contenidocurso&curso={$value->idproducto}" ><div class="carousel-item__open">
+                                </div></a>
+                                <img class="item-imgcurso" src="{$value->urlimgcurso}" alt="Imagen Curso {$value->idproducto}">
+                        </div>
+                       {/loop}
+                    </div>
+                </div>
+
+                <div class="carousel">
+                    <h3 class="mt-3">Contenido variado<a href="index.php?page=contenidofiltrado"> <i class="fas fa-search"></i></a></h3>
+                    <div class="carousel__container">
+                        {loop="$fsc->zonavip_registros->all_aleatorio()"}
+                        <div class="carousel__item"> 
+
+                            {if="$value->pago == 'SI' && $fsc->allow == 0 && !$fsc->aprobaracceso($value->grupo) "}
+                                <a href="#" data-toggle="modal" data-target="#modalcv"><div class="carousel-item__bloqued">
+                                </div></a>
+                            {else}
+                                <a href="index.php?page=contenido&post={$value->reg}" ><div class="carousel-item__open">
+                                </div></a>
+                            {/if}    
+
+                            {if="$value->idyoutube"}
+                                <iframe  src="https://www.youtube.com/embed/{$value->idyoutube}" class="carousel-item__iframe" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            {else}
+                                <iframe  src="https://player.vimeo.com/video/{$value->idvimeo}"  class="carousel-item__iframe" frameborder="0" allow="autoplay" allowfullscreen></iframe>
+                            {/if}
+                                
+                                
+                        </div>
+                       {/loop}
+                    </div>
+                </div>
+                
+            <div class="text-center mt-5">
+                <a href="index.php?page=contenidofiltrado" class="btn btn-primary">
+                    <h4 >¡Ver mucho más contenido!</h4>
+                </a>
+            </div>
+
+        </section>
+        -->
+
+        <!-- Modal -->
+        <div class="modal" id="modalsubs" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.199);">
+            <div class="modal-dialog modal-dialog-centered" role="document" >
+            <div class="modal-content">
+                <h4 class="text-right pr-3"> <a href="#" onclick="ocultarsub()"> x </a></h4>
+                <h5 class="p-3">Haz parte de la comunidad de Especialistas En Excel en YouTube</h5>
+                <div class="modal-header">
+                <a class="btn btn-danger btn-block" href="https://www.youtube.com/user/especialistasenexcel?sub_confirmation=1" target="_blank"> 
+                    <h4> <i class="fab fa-youtube"></i> Quiero ser parte</h4>
+                </a>
+                </div>
+
+                <div class="modal-body text-center">
+                    
+                        <h4>Tutorial Introductorio Zona VIP</h4>
+                        <iframe width="100%" height="300" src="https://www.youtube.com/embed/n-n2RVVEuCc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    
+                </div>
+
+                
+            </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal" id="modalwebinar" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.199);">
+            <div class="modal-dialog modal-dialog-centered" role="document" >
+            <div class="modal-content text-center">
+                
+                    
+                <button style="float: right; width: 50px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                
+                <div class="modal-body">    
+                    <span style="font-size: 40px;" >Próximos webinars</span>
+                    <table class="table">
+                        <thead style="font-weight: bold;color: #fff;background-color: #1abc9c ;">
+                            <tr>
+                                <th>
+                                    Haz clic en el webinar que desees participar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {loop="$fsc->transmision"}
+                            <tr class="text-left">
+                                
+                                {if="$value->pago == '0'"}
+                                <td> 
+                                    <p><b> {$value->nombre}</b> <span style="float: right;background-color: orange;padding: 2px;font-size:medium;color: #fff;">¡GRATIS!</span> </p>
+                                    <div class="">
+                                        <small> Fecha : {$value->fechainicia} | Hora Colombia {$value->hora}</small>
+                                        <a class="btn btn-primary" style="float: right;" href="{$value->link}" target="_blank">¡Inscribirme!</a>
+                                    </div>
+                                    
+                                </td>
+                                {else}
+                                <td> 
+                                    <p><b> {$value->nombre}</b> <span style="float: right;background-color: red;padding: 2px;font-size:medium;color: #fff;">¡PREMIUM!</span> </p>
+                                    <div class="">
+                                        <small> Fecha : {$value->fechainicia} | Hora Colombia {$value->hora}</small>
+                                    </br><span style="font-size: smaller;background-color: #1abc9c ;">{$value->descripcion}</span>
+                                        {if="($value->producto != '' && $fsc->allow == 0 && !$fsc->aprobaracceso($value->producto)) || ( !$value->producto && $fsc->pagogeneral != 1)"}
+                                        <a class="btn btn-primary" style="float: right;" href="#" data-toggle="modal" data-target="#modalcv">¡Inscribirme!</a>
+                                        {else}
+                                        <a class="btn btn-primary" style="float: right;" href="{$value->link}" target="_blank">¡Inscribirme!</a>
+                                        {/if}
+                                    </div>
+                                    
+                                </td>
+                                {/if}
+                                
+                            </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            </div>
+        </div>
+
+         <!-- Modal -->
+         <div id="modalmailerlite">
+            <div class="modal-content">
+                
+                <h3>Te has dado de baja de la lista de correos</h3>
+                <p>Para ser parte de la zona VIP debes tener tu email inscrito en la lista de correos</p>
+                <a class="btn btn-danger" href="{$fsc->url()}&devuelta={$fsc->user->nick}" > 
+                    <h5>Seguir en la zona vip y registrarme en la lista de correos</h5>
+                </a>
+                <a class="btn btn-default text-center" href="{$fsc->url()}&debaja={$fsc->user->nick}" > 
+                    <h6>  Darme de baja también en la Zona Vip  </h6>
+                </a>
+                
+            </div>
+        </div>
+
+        
+
+        <!-- Modal -->
+        <div class="modal fade" id="modalcv" tabindex="-1" role="dialog" aria-labelledby="modalcv" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <button type="button" class="close bg-danger" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body  pl-5 pr-5">
+                <h3>CONTENIDO PREMIUM EXCLUSIVO</h3>
+                <p>Éste vídeo hace parte del contenido premium exclusivo, si deseas saber cómo tener acceso a éste material, clic en el siguiente botón</p>
+
+                
+                <a class="btn btn-danger" href="index.php?page=cvzonavip" > 
+                    <h5> <i class="fas fa-arrow-alt-circle-up"></i> ¡Inscribirme YA! <i class="fas fa-arrow-alt-circle-up"></i> </h5>
+                </a>
+
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modalinvita" tabindex="-1" role="dialog" aria-labelledby="modalinvita" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <button type="button" class="close bg-danger" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body  pl-5 pr-5">
+                    <h5>Invita a un conocido o conocida!</h5>
+                <p>Puedes ayudar a que tus conocidos también aprendan más de Excel uniéndose a esta plataforma gratuitamente, solo ingresa el correo de quien desees compartirle este material y le llegará una invitación de tu parte</p>
+                <p><b>Importante:</b> Si deseas invitar a varias personas, debes enviar la invitación un correo a la vez</p>
+                <form action="" method="post" id="forminvi" onsubmit="return enviarcorreo();">
+                    <input type="mail" name="" id="correoinvita" style="text-transform:lowercase;" placeholder="ejemplo@correo.com" class="form-control" required>
+                    <input type="submit"  class="btn btn-danger" value="Enviar Invitación" >
+                </form>
+                <div class="errorcorreo alert alert-warning">
+                </div>
+                
+                </div>
+            </div>
+            </div>
+        </div>
+
+        
+
+    <div class="menubotton">
+        
+        <div class="invi corazon">
+            <a href="#" data-toggle="modal" data-target="#modalinvita">
+                <h4 class="text-center"><i class="fas fa-user-plus"></i></h4>
+            </a>
+            
+        </div>
+
+        {if="$fsc->transmision"}
+        <div class="ml-2 bg-danger">
+            <a  href="#" data-toggle="modal" data-target="#modalwebinar">
+                <h5 style="color: #fff;padding: 5px 10px;">Próximos webinars</h5>
+            </a>
+        </div>
+        {/if}
+
+    </div>
+
+    <!--
+    <div class="chatbot" id="idchat">
+
+        <div class="chat corazon">
+            <a  onclick="mostrarchat()" href="#">
+                <h4 class="text-center"><i class="fas fa-paper-plane"></i></h4>
+            </a>
+        </div>
+    
+        <h3 class="chatbot__mensajes-close"> <a  onclick="mostrarchat()" href="#"> <i class="far fa-times-circle"></i></a></h3>
+        <div class="chatbot__mensajes" id="msgbots">
+            <div class="mensajes__bot">
+                Hola {$fsc->user->nombre}, ¿en qué podemos ayudarte?
+            </div>
+            
+        </div>
+        <div class="chatbot__envio">
+            <textarea name="" class="form-control" id="msgbot" cols="30" rows="10"></textarea>
+            <button class="btn btn-primary" onclick="nuevomensaje()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+        
+    </div>
+    -->
+
+    
+
+{include="footerusu"}
+
+
+
+<script src="plugins/zonavipeee/view/js/zonavip.js" ></script>
+
+<script >
+
+    $("#seguirviendo").hide();  
+    $("#lomasvisto").hide();  
+    $("#contenidovariado").hide();  
+
+    function mostrardiv(id){
+        $("#nuevocontenido").hide();  
+        $("#seguirviendo").hide();  
+        $("#lomasvisto").hide();  
+        $("#contenidovariado").hide();  
+
+        $("#"+id).show();
+    }
+
+    
+    $("#modalmailerlite").hide();
+    const avisosub = "{$fsc->subs}";
+    const grupo = "{$fsc->grupo}";
+    const pago = "{$fsc->pago}";
+    const url =  "{$fsc->url()}";
+
+    {if="$fsc->allow == 0"}
+        const activomailerlite = "{$fsc->usuarioactivomailerlite}";
+        if(activomailerlite == "NO"){
+            $("#modalmailerlite").show();
+        }
+    {/if}
+
+
+   if(avisosub == "0"){
+        $("#modalsubs").show();
+   }
+
+    
+   function ocultarsub(){
+        $("#modalsubs").remove();
+   }
+
+
+   
+
+
+    $(".errorcorreo").hide();
+
+    if(grupo){
+        $("#grupo").val(grupo);
+    }
+
+    if(pago){
+        $("#pago").val(pago);
+    }
+
+    function enviarForm(){
+        let error = "";
+        $("#errores").html("");
+        if($("#idvimeo").val() == "" && $("#idyoutube").val() == ""){
+            error += "Por favor ingrese el idviemo o el idyoutube</br>";
+        }
+        if($("#idvimeo").val() != "" && $("#idyoutube").val() != ""){
+            error += "Por favor ingrese sólo el idviemo o el idyoutube, NO ambos</br>";
+        }
+
+        if(error != ""){
+            $("#errores").html("<div class='alert alert-warning alert-dismissible hidden-print' role='alert'><p class='text-left'><b>"
+                +error+
+                "</b></p></div>"
+            );
+            return false;
+        }
+        else
+            return true;
+    }
+
+    async function sendcorreo1(mail) {
+        return new Promise(function(resolve) {
+            $.getJSON(url, 'enviarcorreo='+mail, function (json) {
+                resolve(
+                    JSON.parse( JSON.stringify( json ) )
+                );
+            });
+        })
+    }
+
+    async function sendcorreo(mail){
+
+        await sendcorreo1(mail).then(res =>{}).catch(error => {
+            console.error("Error al enviar correo");
+        });
+
+        
+
+    }
+
+    function enviarcorreo(){
+        $("#correoinvita").val($("#correoinvita").val().toLowerCase());
+        $(".errorcorreo").html("");
+        $(".errorcorreo").hide();
+        if($("#correoinvita").val() != ""){
+            const regex = /^([\da-z_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
+            if(regex.test( $("#correoinvita").val().trim())){
+                sendcorreo($("#correoinvita").val().trim());
+                $("#correoinvita").val("");
+                $(".errorcorreo").html("<p>Correo enviado con éxito</p>");
+                $(".errorcorreo").show();
+            }else
+                $(".errorcorreo").html("Correo mal escrito");
+                $(".errorcorreo").show();
+        }
+
+        return false;
+    }
+
+
+
+
+    
+    
+
+</script>
+
+<link href="plugins/zonavipeee/view/css/zonavip.css" rel="stylesheet" />

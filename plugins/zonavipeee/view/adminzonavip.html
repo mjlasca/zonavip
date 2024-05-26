@@ -1,0 +1,484 @@
+{include="header"}
+
+<div class="container-fluid" style="margin-bottom: 10px;">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="btn-group hidden-xs">
+                <a class="btn btn-sm btn-default" href="{$fsc->url()}" title="Recargar la página">
+                    <span class="glyphicon glyphicon-refresh"></span>
+                </a>
+                {if="$fsc->page->is_default()"}
+                <a class="btn btn-sm btn-default active" href="{$fsc->url()}&amp;default_page=FALSE"
+                    title="Marcada como página de inicio (pulsa de nuevo para desmarcar)">
+                    <i class="fa fa-bookmark" aria-hidden="true"></i>
+                </a>
+                {else}
+                <a class="btn btn-sm btn-default" href="{$fsc->url()}&amp;default_page=TRUE"
+                    title="Marcar como página de inicio">
+                    <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+                </a>
+                {/if}
+            </div>
+            <div class="btn-group">
+                <a onclick="borrarformulario()" id="b_nuevo_articulo" class="btn btn-sm btn-success" data-toggle="modal"
+                    data-target="#exampleModalCenter" href="#">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span class="hidden-xs">&nbsp;Nuevo</span>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="container-fluid">
+
+    <div>
+        <form action="{$fsc->url()}" method="POST"  >
+            <div class="row">
+                <div class="col-sm-4">
+                    <label for="">Buscar por nombre o id </label>
+                    <input type="text" name="buscar" id="buscar" class="form-control" placeholder="Búsqueda" value="{$fsc->registros->busqueda}">
+                    
+                    <input type="submit" value="Enviar" class="btn btn-primary">
+                </div>
+                <div class="col-sm-1">
+                    <label for="">Cant. Filas </label>
+                    <input type="text" name="cantfilas" id="cantfilas" class="form-control" placeholder="Cantidad Registros" value="{$fsc->limit}">
+                </div>
+                <div class="col-sm-1">
+                    <input type="checkbox" name="paga" id="paga"  {if="$fsc->registros->pagoFiltro == 'SI'"} checked  {/if} value="true">
+                    <label for="">Paga </label><br>
+                    <input type="checkbox" name="gratis" id="gratis" {if="$fsc->registros->pagoFiltro == 'NO'"} checked {/if} value="true">
+                    <label for="">Gratis </label><br>
+                    <input type="checkbox" name="miniatura" id="miniatura" {if="$fsc->registros->urlminiatura != '' "} checked {/if} value="true">
+                    <label for="">Sin Miniatura </label>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label for="">Producto</label>
+                        <select class="form-control" name="grupofiltro" id="grupofiltro">
+                            <option value="">---</option>
+                            {loop="$fsc->productos->all()"}
+                            <option value="{$value->idproducto}">{$value->nombre}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+    <br><br>
+
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item active">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+                aria-selected="true">Registros</a>
+        </li>
+    </ul>
+
+
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane  show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            </br>
+            <div class="table table-hover">
+                <table class=" table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Miniatura</th>
+                            <th>Nombre vídeo</th>
+                            <th>Detalle</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {loop="$fsc->registros->all_admin($fsc->limit,$fsc->offset)"}
+                        <tr>
+                            <td>
+                                {$value->id}
+                            </td>
+                            <td>
+                                {if="$value->idyoutube"}
+                                <iframe width="330" height="150" src="https://www.youtube.com/embed/{$value->idyoutube}"
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen></iframe>
+                                {else}
+                                <iframe src="https://player.vimeo.com/video/{$value->idvimeo}" width="330" height="150"
+                                    frameborder="0" allow="autoplay"></iframe>
+                                {/if}
+                            </td>
+                            <td>
+                                {$value->nombrevideo}
+                            </td>
+                            <td>
+                                <b>Url Miniatura</b><br>
+                                {$value->urlminiatura}<br>
+                                <b>Archivo Descarga</b><br>
+                                {$value->archivodescarga}<br>
+                                <b>Archivo PDF</b><br>
+                                {$value->pdf}<br>
+                            </td>
+                            
+                            <td>
+                                <a onclick="editarregistro('{$value->reg}','{$value->id}', '{$value->nombrevideo}','','{$value->idyoutube}', '{$value->archivodescarga}', '{$value->pdf}', '{$value->pago}', '{$value->idvimeo}', '{$value->grupo}', '{$value->categoria}', '{$value->urlminiatura}', '{$value->curso}', '{$value->modulocurso}', '{$value->leccioncurso}', '{$value->codestado}', '{$value->numeroleccion}', '{$value->nombremodulo}', '{$value->upload}', '{$value->detalleupload}')"
+                                    class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalCenter"
+                                    href="#">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </a>
+                                <a onclick="eliminarregistro('{$value->reg}', '{$fsc->url()}&deleteregis={$value->reg}')"
+                                    class="btn btn-sm btn-danger">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </a>
+                            </td>
+                        </tr>
+                        {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog" style="width: 60%;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Nuevo Registro</h5>
+            </div>
+            <div class="modal-body">
+                <form action="{$fsc->url()}" method="post" onsubmit="return enviarForm()">
+                    <input type="hidden" name="reg" id="reg" value="">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="">ID Vídeo</label>
+                                <input class="form-control" type="text" name="id" id="id" readonly>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="">¿Contenido de pago?</label>
+                                <select class="form-control" name="pago" id="pago">
+                                    <option value="NO">NO</option>
+                                    <option value="SI">SI</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="">Nombre vídeo</label>
+                        <input class="form-control" type="text" name="nombre" id="nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Detalle</label> <a onclick="procesar_seleccion_html1()"> <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
+                        <textarea name="detalle" id="detalle" cols="30" rows="10" class="form-control" ></textarea>
+                        <a class="btn btn-secondary" onclick="procesar_seleccion_html()">Link</a>
+                        <p id="resultado" style="background-color: antiquewhite;padding: 10px;"></p>
+                    </div>
+                    
+                    
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p>Si se desea sólo mostrar una imagen se debe colocar la URL de la miniatura y NO colocar ni idvimeo ni idyoutube</p>
+                        </div>
+                        
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="">ID Youtube</label>
+                                <input class="form-control" type="text" name="idyoutube" id="idyoutube">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="">ID Vimeo</label>
+                                <input class="form-control" type="text" name="idvimeo" id="idvimeo">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="">URL Miniatura (https://drive.google.com/uc?id=)</label>
+                        <input class="form-control" type="text" name="urlminiatura" id="urlminiatura"  placeholder="https://drive.google.com/uc?id=">
+                        
+                    </div>
+                    <div class="form-group">
+                        <label for="">Url Archivo</label>
+                        <textarea class="form-control" name="archivo" id="archivo"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Url PDF</label>
+                        <textarea class="form-control" name="pdf" id="pdf"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="">Grupo de contenido</label>
+                                <select class="form-control" name="grupo" id="grupo" onchange="selectgrupo(this.value)">
+                                    <option value="">---</option>
+                                    {loop="$fsc->productos->all()"}
+                                    <option value="{$value->idproducto}">{$value->nombre}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="">Categorías</label>
+                                <select class="form-control" name="cat" id="cat"
+                                    onchange="seleccioncategoria(this.value)">
+                                    <option value="">---</option>
+                                    {loop="$fsc->registros->get_categorias()"}
+                                    <option value="{$value['categoria']}">{$value['categoria']}</option>
+                                    {/loop}
+                                </select>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="">Otra Categoría</label>
+                                <input class="form-control" type="text" name="categoria" id="categoria" required>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label for="">Curso</label>
+                                <select class="form-control" name="curso" id="curso">
+                                    <option value="">---</option>
+                                    {loop="$fsc->productos->all_carrusel()"}
+                                    <option value="{$value->idproducto}">{$value->nombre}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label for="">Num. Módulo</label>
+                                <input class="form-control" type="number" name="modulocurso" id="modulocurso">
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label for="">Num. lección <b><a href="#" title="El número de lección determina el orden en que se muestran las lecciones en todo el curso">?</a></b> </label>
+                                <input class="form-control" type="number" name="numeroleccion" id="numeroleccion">
+                                
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="">Nombre Módulo</label>
+                                <input class="form-control" type="text" name="nombremodulo" id="nombremodulo">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <input   type="checkbox" value="1" name="upload" id="upload" >
+                                <label for="">Solicitar actividad (cargar Archivo)</label>
+                            </div>                            
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="">Tipo de archivo</label>
+                                <select name="detalleupload" id="detalleupload" class="form-control">
+                                    <option value=".xlsx,.xls,.xlsm">Hoja de cálculo .xlsx|.xls|.xlsm</option>
+                                    <option value=".doc,.docx,.pdf,.txt">Documento de Texto .doc|.docx|.pdf|.txt</option>
+                                    <option value=".jpeg,.jpg,.png,.gif">Imagen .jpg|.png|.gif</option>
+                                    <option value=".zip,.rar">Comprimido .zip|.rar</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="form-group">
+                        <label for="">Lección</label>
+                        <input class="form-control" type="text" name="leccioncurso" id="leccioncurso" onclick="nomleccion()">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Publicar</label>
+                        <input type="checkbox" name="publicar" id="publicar" value="1" >
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <div id="errores">
+                </div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <input type="submit" value="Guardar" class="btn btn-primary">
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function obtener_textarea() {
+        return document.getElementById("detalle")
+    }
+    function obtener_area_resultado() {
+        return document.getElementById("resultado")
+    }
+    function procesar_seleccion(texto, inicio_selección, fin_selección) {
+        var fin_texto = texto.length
+
+        var inicio = texto.slice(0, inicio_selección)
+        var centro = texto.slice(inicio_selección, fin_selección)
+        var fin = texto.slice(fin_selección, fin_texto)
+
+        var enlace = prompt("Colocar enlace");
+
+        centro = "<a href='"+enlace+"' target='_blank'>" + centro + "</a>"
+
+        return inicio + centro + fin
+    }
+    function procesar_seleccion_html() {
+        var área_texto = obtener_textarea()
+
+        var texto = área_texto.value
+        var inicio = área_texto.selectionStart
+        var fin = área_texto.selectionEnd
+
+        obtener_textarea().value = procesar_seleccion(texto, inicio, fin);
+        obtener_textarea().value = obtener_textarea().value.replace("\n","<br>");
+        procesar_seleccion_html1();
+    }
+
+    function procesar_seleccion_html1() {
+        obtener_textarea().value = obtener_textarea().value.replace("\n","<br>");
+        obtener_area_resultado().innerHTML = obtener_textarea().value;
+    }
+    function agregar_eventos(elemento_html) {
+        var eventos = ["keyup", "keydown", "mouseup"]
+        for (var i in eventos) {
+            elemento_html.addEventListener(eventos[i], procesar_seleccion_html)
+        }
+    }
+
+    
+    
+    //agregar_eventos(obtener_textarea())
+
+    function enviarForm() {
+        let error = "";
+        $("#errores").html("");
+        if ($("#idvimeo").val() == "" && $("#idyoutube").val() == "" && $("#urlminiatura").val() == "") {
+            error += "Por favor ingrese el idviemo o el idyoutube o la url de la miniatura</br>";
+        }
+        if ($("#idvimeo").val() != "" && $("#idyoutube").val() != "") {
+            error += "Por favor ingrese sólo el idviemo o el idyoutube, NO ambos</br>";
+        }
+
+        if (error != "") {
+            $("#errores").html("<div class='alert alert-warning alert-dismissible hidden-print' role='alert'><p class='text-left'><b>"
+                + error +
+                "</b></p></div>"
+            );
+            return false;
+        }
+        else
+            return true;
+    }
+    function eliminarregistro(id, url) {
+        bootbox.confirm({
+            message: '¿Realmente desea eliminar éste registro?',
+            title: '<b>Atención</b>',
+            callback: function (result) {
+                if (result) {
+                    window.location.href = url;
+                }
+            }
+        });
+    }
+
+    function editarregistro(reg, id, nombre, detalle, idyoutube, archivo, pdf, pago, idvimeo, grupo, categoria, urlminiatura, curso, modulocurso, leccioncurso, estado,numeroleccion,nombremodulo,upload,detalleupload) {
+        document.getElementById("reg").value = reg;
+        document.getElementById("id").value = id;
+        document.getElementById("nombre").value = nombre;
+        document.getElementById("detalle").value = detalle;
+        document.getElementById("idyoutube").value = idyoutube;
+        document.getElementById("archivo").value = archivo;
+        document.getElementById("pdf").value = pdf;
+        document.getElementById("idvimeo").value = idvimeo;
+        document.getElementById("pago").value = pago;
+        document.getElementById("grupo").value = grupo;
+        document.getElementById("categoria").value = categoria;
+        document.getElementById("urlminiatura").value = urlminiatura;
+        document.getElementById("curso").value = curso;
+        document.getElementById("modulocurso").value = modulocurso;
+        document.getElementById("leccioncurso").value = leccioncurso;
+        document.getElementById("numeroleccion").value = numeroleccion;
+        document.getElementById("nombremodulo").value = nombremodulo;
+        
+        document.getElementById("detalleupload").value = detalleupload;
+        if(estado == 1)
+            document.getElementById("publicar").checked = true;
+        else
+            document.getElementById("publicar").checked = false;
+        if(upload == 1)
+            document.getElementById("upload").checked = true;
+        else
+            document.getElementById("upload").checked = false;
+        
+    }
+
+    function borrarformulario() {
+        document.getElementById("reg").value = "";
+        document.getElementById("id").value = "";
+        document.getElementById("nombre").value = "";
+        document.getElementById("detalle").value = "";
+        document.getElementById("idyoutube").value = "";
+        document.getElementById("archivo").value = "";
+        document.getElementById("pdf").value = "";
+        document.getElementById("idvimeo").value = "";
+        document.getElementById("pago").value = "";
+        document.getElementById("grupo").value = "";
+        document.getElementById("categoria").value = "";
+        document.getElementById("urlminiatura").value = "";
+        document.getElementById("curso").value = "";
+        document.getElementById("modulocurso").value = "";
+        document.getElementById("leccioncurso").value = "";
+        document.getElementById("resultado").innerHTML = "";
+        //document.getElementById("publicar").checked = false;
+        document.getElementById("numeroleccion").value = "";
+        document.getElementById("nombremodulo").value = "";
+        //document.getElementById("upload").checked = false;
+        document.getElementById("detalleupload").value = "";
+    }
+
+    function selectgrupo(dat){
+        document.getElementById("curso").value = dat;
+    }
+
+    function seleccioncategoria(texto) {
+        document.getElementById("categoria").value = texto;
+    }
+
+    function nomleccion(){
+        if( document.getElementById("curso").value  != '' &&  document.getElementById("leccioncurso").value  == '')
+            document.getElementById("leccioncurso").value = document.getElementById("nombre").value;
+    }
+
+
+</script>
