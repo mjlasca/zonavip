@@ -62,7 +62,8 @@ class productoshotmart extends fs_controller
         $prod->ultmod = date("Y-m-d H:i:s");
         $prod->curso = $_POST["curso"];
         $prod->urlimgcurso = $_POST["urlimg"];
-
+        if(isset($_POST['view']))
+            $prod->view = $_POST['view'];
         if($prod->urlimgcurso != ""){ 
             $pos = strpos($prod->urlimgcurso, "d/");    
             if($pos){

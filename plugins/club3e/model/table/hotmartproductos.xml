@@ -87,6 +87,11 @@
         <defecto>0</defecto>
     </columna>
     <columna>
+        <nombre>view</nombre>
+        <tipo>VARCHAR(30)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
         <nombre>fechapublicacion</nombre>
         <tipo>DATE</tipo>
         <nulo>YES</nulo>

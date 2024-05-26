@@ -60,7 +60,7 @@
                             <td>{$value->idproducto}</td>
                             <td>{$value->valor}</td>
                             <td>
-                                <a onclick="editarregistro('{$value->reg}','{$value->nombre}', '{$value->idproducto}','{$value->valor}','{$value->vigencia}','{$value->curso}','{$value->urlimgcurso}','{$value->linkpago}','{$value->categoriacurso}','{$value->duracioncurso}','{$value->abierto}','{$value->actualizando}','{$value->cursobaseclub3e}','{$value->fechapublicacion}','{$value->verencursos}')" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalCenter" href="#">
+                                <a onclick="editarregistro('{$value->reg}','{$value->nombre}', '{$value->idproducto}','{$value->valor}','{$value->vigencia}','{$value->curso}','{$value->urlimgcurso}','{$value->linkpago}','{$value->categoriacurso}','{$value->duracioncurso}','{$value->abierto}','{$value->actualizando}','{$value->cursobaseclub3e}','{$value->fechapublicacion}','{$value->verencursos}','{$value->view}')" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalCenter" href="#">
                                     <span class="glyphicon glyphicon-edit"></span>
                                 </a>
                                 <a onclick="eliminarregistro('{$value->reg}', '{$fsc->url()}&deleteregis={$value->reg}')" class="btn btn-sm btn-danger">
@@ -124,9 +124,13 @@
                 <label for="">
                     <input type="checkbox" name="cursobaseclub3e" id="cursobaseclub3e" value="1" > Curso base club de la automatización
                 </label>
-                <label for="">
-                    <input type="checkbox" name="verencursos" id="verencursos" value="1" > Ver en cursos
-                </label>
+                <label for="">Seleccione dónde quiere ver éste curso</label>
+                <select class="form-control" name="view" id="view">
+                    <option value="" selected>Seleccione una opción</option>
+                    <option value="cursos">Sólo en cursos</option>
+                    <option value="club">Sólo en el club</option>
+                    <option value="todos">En ambos</option>
+                </select>
             </div>
             
             
@@ -156,7 +160,7 @@
         });
     }
 
-    function editarregistro(reg,nombre, idproducto,valor,vigencia,curso,urlimg,linkpago,categoriacurso,duracioncurso,abierto,actualizando,cursobaseclub3e,fechapublicacion,verencursos){
+    function editarregistro(reg,nombre, idproducto,valor,vigencia,curso,urlimg,linkpago,categoriacurso,duracioncurso,abierto,actualizando,cursobaseclub3e,fechapublicacion,verencursos,view){
         document.getElementById("reg").value = reg;
         document.getElementById("nombre").value = nombre;
         document.getElementById("idproducto").value = idproducto;
@@ -184,8 +188,8 @@
         document.getElementById("cursobaseclub3e").checked = false;
         if(cursobaseclub3e == 1)
             document.getElementById("cursobaseclub3e").checked = true;
-        if(verencursos == 1)
-            document.getElementById("verencursos").checked = true;
+        
+        document.getElementById("view").value = view;
     }
 
     function borrarformulario(){
@@ -203,7 +207,9 @@
         document.getElementById("abierto").checked = false;
         document.getElementById("actualizando").checked = false;
         document.getElementById("cursoclub3e").checked = false;
+        document.getElementById("view").value = "";
         document.getElementById("verencursos").checked = false;
+        
     }
 
 

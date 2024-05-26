@@ -29,7 +29,8 @@ class cursos extends fs_controller
     public $allow;
     public $productoshotmart;
     public $chselected;
-  
+    public $chmiscursos;
+    public $post;
 
     public function __construct()
     {
@@ -84,7 +85,7 @@ class cursos extends fs_controller
         
         if(  $this->accesoclub3e($content) == 1 )
             return 1;
-        if( $this->post->pago == 'SI' && $this->allow != 0  || $this->aprobaracceso($content) )
+        if( $this->allow != 0  || $this->aprobaracceso($content) )
             return 1;
             
         return 0;

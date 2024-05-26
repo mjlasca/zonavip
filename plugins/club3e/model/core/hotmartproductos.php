@@ -127,6 +127,8 @@ class hotmartproductos extends \fs_model
 
     public $miscursos;
 
+    public $view;
+
 
     public function __construct($data = FALSE)
     {
@@ -155,7 +157,8 @@ class hotmartproductos extends \fs_model
                 $this->fechapublicacion = $data['fechapublicacion'];
             if(isset($data['miscursos']))
                 $this->miscursos = $data['miscursos'];
-            
+            if(isset($data['view']))
+                $this->view = $data['view'];
         } else {
             $this->reg = null;
             $this->nombre = null;
@@ -175,6 +178,7 @@ class hotmartproductos extends \fs_model
             $this->fechapublicacion = null;
             $this->miscursos = false;
             $this->fecpubli_1 = date("Y-m-03");
+            $this->view;
         }
     }
 
@@ -384,11 +388,11 @@ class hotmartproductos extends \fs_model
             }
             
             
-            $sql = "SELECT t1.* FROM " . $this->table_name . " t1 WHERE ".$sql_add." t1.curso != '' AND t1.curso IS NOT NULL AND verencursos = 1  ORDER BY t1.nombre ASC ";
+            $sql = "SELECT t1.* FROM " . $this->table_name . " t1 WHERE ".$sql_add." t1.curso != '' AND t1.curso IS NOT NULL AND (view = 'cursos' || view = 'todos')  ORDER BY t1.nombre ASC ";
 
             if($this->miscursos)
                 $sql = "SELECT t1.* FROM " . $this->table_name . " t1 INNER JOIN hotmartuser t2 ON t1.idproducto = t2.idproducto WHERE ".
-                " ".$sql_add." t2.user LIKE '".$user_."' AND t2.fechacaducidad >= NOW() AND t1.curso != '' AND t1.curso IS NOT NULL AND verencursos = 1  ORDER BY nombre ";
+                " ".$sql_add." t2.user LIKE '".$user_."' AND t2.fechacaducidad >= NOW() AND t1.curso != '' AND t1.curso IS NOT NULL AND (view = 'cursos' || view = 'todos')  ORDER BY nombre ";
             
             $data = $this->db->select($sql);
 
@@ -442,11 +446,11 @@ class hotmartproductos extends \fs_model
                 $sql_add .= " ( t1.fechapublicacion <= '".$this->fecpubli_2."' ) AND ";
             }
             
-            $sql = "SELECT t1.* FROM " . $this->table_name . " t1 WHERE ".$sql_add." t1.curso != '' AND t1.curso IS NOT NULL  AND t1.cursobaseclub3e = 0 AND t1.idproducto != '02020202' AND t1.idproducto != '098789'  ORDER BY t1.nombre DESC ";
+            $sql = "SELECT t1.* FROM " . $this->table_name . " t1 WHERE ".$sql_add." t1.curso != '' AND t1.curso IS NOT NULL  AND t1.cursobaseclub3e = 0 AND (t1.view = 'club' || t1.view = 'todos' )  ORDER BY t1.nombre DESC ";
 
             if($this->miscursos)
                 $sql = "SELECT t1.* FROM " . $this->table_name . " t1 INNER JOIN hotmartuser t2 ON t1.idproducto = t2.idproducto WHERE ".
-                " ".$sql_add." t2.user LIKE '".$user_."' AND t2.fechacaducidad >= NOW() AND t1.curso != '' AND t1.curso IS NOT NULL  AND t1.cursobaseclub3e = 0 AND t1.idproducto != '02020202' AND t1.idproducto != '098789'  ORDER BY nombre DESC ";
+                " ".$sql_add." t2.user LIKE '".$user_."' AND t2.fechacaducidad >= NOW() AND t1.curso != '' AND t1.curso IS NOT NULL  AND t1.cursobaseclub3e = 0 AND (t1.view = 'club' || t1.view = 'todos' )  ORDER BY nombre DESC ";
 
                 
             
@@ -567,10 +571,11 @@ class hotmartproductos extends \fs_model
                     . ", cursobaseclub3e = " . $this->var2str($this->cursobaseclub3e)
                     . ", verencursos = " . $this->var2str($this->verencursos)
                     . ", fechapublicacion = " . $this->var2str($this->fechapublicacion)
+                    . ", view = " . $this->var2str($this->view)
                     . "  WHERE reg = " . $this->var2str($this->reg) . ";";
 
                 }else{
-                    $sql = "INSERT INTO " . $this->table_name . " (nombre,idproducto,valor,useredit,ultmod,curso,urlimgcurso,linkpago,duracioncurso,abierto,actualizando,vigencia,cursobaseclub3e,fechapublicacion,verencursos,categoriacurso) VALUES(" . $this->var2str($this->nombre)
+                    $sql = "INSERT INTO " . $this->table_name . " (nombre,idproducto,valor,useredit,ultmod,curso,urlimgcurso,linkpago,duracioncurso,abierto,actualizando,vigencia,cursobaseclub3e,fechapublicacion,verencursos,categoriacurso,view) VALUES(" . $this->var2str($this->nombre)
                     . "," . $this->var2str($this->idproducto) 
                     . "," . $this->var2str($this->valor) 
                     . "," . $this->var2str($this->useredit) 
@@ -585,7 +590,8 @@ class hotmartproductos extends \fs_model
                     . "," . $this->var2str($this->cursobaseclub3e)
                     . "," . $this->var2str($this->fechapublicacion)
                     . "," . $this->var2str($this->verencursos)
-                    . ",UPPER('".$this->categoriacurso . "'));";
+                    . "," . ",UPPER('".$this->categoriacurso . "')"
+                    . ",".$this->var2str($this->view). " );";
                 }
                
                 
