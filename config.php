@@ -2,9 +2,9 @@
 define('FS_DB_TYPE', 'MYSQL');
 define('FS_DB_HOST', 'localhost');
 define('FS_DB_PORT', '3306');
-define('FS_DB_NAME', 'u748408316_zonavip');
-define('FS_DB_USER', 'u748408316_zonavip');
-define('FS_DB_PASS', 'zon4v1pdosMil24');
+define('FS_DB_NAME', 'zonavip');
+define('FS_DB_USER', 'root');
+define('FS_DB_PASS', '');
 define('FS_CACHE_HOST', 'localhost');
 define('FS_CACHE_PORT', '11211');
 define('FS_CACHE_PREFIX', '27RagiYu_');
