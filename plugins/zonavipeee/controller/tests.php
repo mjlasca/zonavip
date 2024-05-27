@@ -31,7 +31,7 @@ class tests extends fs_controller
 
     public function __construct()
     {
-        parent::__construct(__CLASS__, 'Tests Cursos', 'Zona Vip', true, true);
+        parent::__construct(__CLASS__, 'Tests Cursos', 'Zona Vip', false, false);
     }
 
     public function private_core()

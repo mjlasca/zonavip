@@ -1,0 +1,207 @@
+{include="header"}
+<style>
+    .certi{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .certi-content{
+        position: relative;
+        width: 100vh;
+        height: 60vh;
+        background: url('{$fsc->prev["bg"]}');
+    }
+   .content-body{
+        position: absolute;
+        left: 10%;
+        top: 30%;
+        max-width: 70%;
+   }
+</style>
+<script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+
+<div class="container-fluid" style="margin-bottom: 10px;">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="btn-group hidden-xs">
+                <a class="btn btn-sm btn-default" href="{$fsc->url()}" title="Recargar la página">
+                    <span class="glyphicon glyphicon-refresh"></span>
+                </a>
+                {if="$fsc->page->is_default()"}
+                <a class="btn btn-sm btn-default active" href="{$fsc->url()}&amp;default_page=FALSE"
+                    title="Marcada como página de inicio (pulsa de nuevo para desmarcar)">
+                    <i class="fa fa-bookmark" aria-hidden="true"></i>
+                </a>
+                {else}
+                <a class="btn btn-sm btn-default" href="{$fsc->url()}&amp;default_page=TRUE"
+                    title="Marcar como página de inicio">
+                    <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+                </a>
+                {/if}
+            </div>
+            {if="$fsc->preview == 0"}
+                <div class="btn-group">
+                    <a onclick="borrarformulario()" id="b_nuevo_articulo" class="btn btn-sm btn-success" data-toggle="modal"
+                        data-target="#exampleModalCenter" href="#">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        <span class="hidden-xs">&nbsp;Nuevo</span>
+                    </a>
+                </div>
+            {/if}
+
+        </div>
+    </div>
+</div>
+
+{if="$fsc->preview == 0"}
+
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane  show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+        </br>
+        <div class="table table-hover">
+            <table class=" table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Cuerpo del certificado</th>
+                        <th>Fecha creacións</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop="$fsc->certificates->get_all()"}
+                        <tr>
+                            <td>{$value->name}</td>
+                            <td>{$value->body}</td>
+                            <td>{$value->ultmod}</td>
+                            <td>
+                                <a onclick="editarregistro('{$value->reg}','{$value->name}', '{$value->body}','{$value->img_bg}')" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalCenter" href="#">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </a>
+                                <a class="btn btn-sm btn-primary"  href="{$fsc->url()}&preview={$value->reg}">
+                                    <span class="glyphicon glyphicon-blackboard"></span>
+                                </a>
+                                <a onclick="eliminarregistro('{$value->reg}', '{$fsc->url()}&deleteregis={$value->reg}')" class="btn btn-sm btn-danger">    
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </a>
+                                
+                            </td>
+                        </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog" style="width: 60%;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Nuevo Registro</h5>
+            </div>
+            <div class="modal-body">
+                <form action="{$fsc->url()}" method="post" onsubmit="return enviarForm()">
+                    <input type="hidden" name="reg" id="reg">
+                    <div class="form-group">
+                        <label for="">Nombre descriptivo del certificado</label>
+                        <input class="form-control" type="text" name="name" id="name" required>
+                    </div>
+                    <div>
+                        <label for="">Cuerpo del certificado</label>
+                        <div id="editor"></div>
+                    </div>
+                    <input type="hidden" name="body" id="body">
+                    <div class="form-group">
+                        <label for="">Imagen certificado</label>
+                        <input class="form-control" type="text" name="img_bg" id="img_bg" required>
+                        <span class="error-img_bg"></span>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <div id="errores">
+                </div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <input type="submit" value="Guardar" class="btn btn-primary">
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    const reg_ = document.querySelector('#reg');
+    const name_ = document.querySelector('#name');
+    const body_ = document.querySelector('#body');
+    const ck = document.querySelector('.ck-content');
+    const url_ = document.querySelector('#img_bg');
+
+
+    ClassicEditor
+    .create(document.querySelector('#editor'), {
+        toolbar: {
+            items: [
+                'heading','bold', 'italic', 'underline', 'strikethrough', 'code'
+            ]
+        },
+        language: 'es',
+    })
+    .then(editor => {
+        editorInstance = editor;
+    })
+    .catch(error => {
+        console.error(error);
+    });
+
+    function enviarForm(){
+        const ck = document.querySelector('.ck-content');
+        const body = document.querySelector('#body');
+        body.value = ck.innerHTML;
+
+        if(body.value != "")
+            return true;
+        return false;
+    }
+
+    function editarregistro(reg,name,body,url) {
+        reg_.value = reg;
+        name_.value = name;
+        body_.value = body;
+        editorInstance.setData(body);
+        url_.value = url;
+    }
+
+    function borrarformulario() {
+        reg_.value = "";
+        name_.value = "";
+        body_.value = "";
+        editorInstance.setData('<p><br data-cke-filler="true"></p>');
+        url_.value = "";
+    }
+
+    function eliminarregistro(reg,url) {
+        let resultado = confirm("¿Está segur@ de eliminar el certificado?");
+        if(resultado){
+            window.location = url;
+        }
+    }
+
+</script>
+
+{else}
+
+<div class="certi">
+    <div class="certi-content">
+        <div class="content-body">
+            {$fsc->prev['body']}
+        </div>
+    </div>
+</div>
+
+{/if}
