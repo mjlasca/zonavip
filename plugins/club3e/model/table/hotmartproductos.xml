@@ -96,6 +96,12 @@
         <tipo>DATE</tipo>
         <nulo>YES</nulo>
     </columna>
+    <columna>
+        <nombre>limit_lessons</nombre>
+        <tipo>int(1)</tipo>
+        <nulo>NO</nulo>
+        <defecto>0</defecto>
+    </columna>
     <restriccion>
         <nombre>idistro_pkey</nombre>
         <consulta>PRIMARY KEY (reg)</consulta>

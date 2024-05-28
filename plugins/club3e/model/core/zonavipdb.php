@@ -145,6 +145,7 @@ class zonavipdb extends \fs_model
     public $linkpago;
     public $nombremodulo;
     public $numeroleccion;
+    public $limit_date;
 
     public function __construct($data = FALSE)
     {
@@ -177,6 +178,7 @@ class zonavipdb extends \fs_model
             $this->numeroleccion = $data['numeroleccion'];
             $this->upload = $data['upload'];
             $this->detalleupload = $data['detalleupload'];
+            $this->limit_date = $data['limit_date'] ?? null;
             
         } else {
             $this->reg = null;
@@ -203,6 +205,7 @@ class zonavipdb extends \fs_model
             $this->numeroleccion = null;
             $this->upload = null;
             $this->detalleupload = null;
+            $this->limit_date = null;
         }
     }
 
@@ -458,6 +461,7 @@ class zonavipdb extends \fs_model
                     . ", numeroleccion = " . $this->var2str($this->numeroleccion)
                     . ", upload = " . $this->var2str($this->upload)
                     . ", detalleupload = " . $this->var2str($this->detalleupload)
+                    . ", limit_date = " . $this->var2str($this->limit_date)
                     . "  WHERE reg = " . $this->var2str($this->reg) . ";";
             } else {
                 $sql = "INSERT INTO " . $this->table_name . " (id,nombrevideo,archivodescarga,pdf,idyoutube,useredit,ultmod,codestado,pago,idvimeo,grupo,categoria,urlminiatura,curso,modulocurso,leccioncurso,nombremodulo,numeroleccion,detalle,upload,detalleupload) VALUES
@@ -481,7 +485,8 @@ class zonavipdb extends \fs_model
                       . "," . $this->var2str($this->numeroleccion) 
                       . "," . $this->var2str($this->detalle) 
                       . "," . $this->var2str($this->upload) 
-                    . "," . $this->var2str($this->detalleupload) . ");";
+                      . "," . $this->var2str($this->detalleupload) 
+                    . "," . $this->var2str($this->limit_date) . ");";
             }
 
 

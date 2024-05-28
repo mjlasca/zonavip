@@ -128,6 +128,7 @@ class hotmartproductos extends \fs_model
     public $miscursos;
 
     public $view;
+    public $limit_lessons;
 
 
     public function __construct($data = FALSE)
@@ -159,6 +160,7 @@ class hotmartproductos extends \fs_model
                 $this->miscursos = $data['miscursos'];
             if(isset($data['view']))
                 $this->view = $data['view'];
+            $this->limit_lessons = $data['limit_lessons'] ?? null;
         } else {
             $this->reg = null;
             $this->nombre = null;
@@ -178,7 +180,8 @@ class hotmartproductos extends \fs_model
             $this->fechapublicacion = null;
             $this->miscursos = false;
             $this->fecpubli_1 = date("Y-m-03");
-            $this->view;
+            $this->view = null;
+            $this->limit_lessons = null;
         }
     }
 
@@ -572,10 +575,11 @@ class hotmartproductos extends \fs_model
                     . ", verencursos = " . $this->var2str($this->verencursos)
                     . ", fechapublicacion = " . $this->var2str($this->fechapublicacion)
                     . ", view = " . $this->var2str($this->view)
+                    . ", limit_lessons = " . $this->var2str($this->limit_lessons)
                     . "  WHERE reg = " . $this->var2str($this->reg) . ";";
 
                 }else{
-                    $sql = "INSERT INTO " . $this->table_name . " (nombre,idproducto,valor,useredit,ultmod,curso,urlimgcurso,linkpago,duracioncurso,abierto,actualizando,vigencia,cursobaseclub3e,fechapublicacion,verencursos,categoriacurso,view) VALUES(" . $this->var2str($this->nombre)
+                    $sql = "INSERT INTO " . $this->table_name . " (nombre,idproducto,valor,useredit,ultmod,curso,urlimgcurso,linkpago,duracioncurso,abierto,actualizando,vigencia,cursobaseclub3e,fechapublicacion,verencursos,categoriacurso,view,limit_lessons) VALUES(" . $this->var2str($this->nombre)
                     . "," . $this->var2str($this->idproducto) 
                     . "," . $this->var2str($this->valor) 
                     . "," . $this->var2str($this->useredit) 
@@ -591,7 +595,8 @@ class hotmartproductos extends \fs_model
                     . "," . $this->var2str($this->fechapublicacion)
                     . "," . $this->var2str($this->verencursos)
                     . "," . ",UPPER('".$this->categoriacurso . "')"
-                    . ",".$this->var2str($this->view). " );";
+                    . "," . $this->var2str($this->view)
+                    . ",".$this->var2str($this->limit_lessons). " );";
                 }
                
                 

@@ -374,35 +374,59 @@ class contenidocurso extends fs_controller
     }
 
     public function accessscontent(){
+
+        $limit_lesson = ($this->curso->limit_lessons == 1 && $this->post->limit_date != null);
         
-        if(  $this->accesoclub3e() == 1 )
+        if(  $this->accesoclub3e($limit_lesson) == 1 )
             return 1;
-        if( $this->post->pago == 'SI' && $this->allow != 0  || $this->aprobaracceso($this->post->grupo) )
+        
+        
+        if( $this->post->pago == 'SI' && $this->allow != 0  || $this->aprobaracceso($this->post->grupo,$limit_lesson) )
             return 1;
             
         return 0;
     }
 
 
-    public function accesoclub3e(){
+    public function accesoclub3e($limit_lesson = false){
 
         $club3e = new coreclub3e();
 
         $fecnow = date("Y-m-d");
-        if( $club3e->get_user_curse_access($this->user->nick, $this->productoshotmart->idproducto) )
+        $result = $club3e->get_user_curse_access($this->user->nick, $this->productoshotmart->idproducto,$limit_lesson) ;
+        if( $result ){
+            if($limit_lesson){
+                $date1 = new DateTime($this->post->limit_date);
+                $date2 = new DateTime($result[0]['fecha_inicia']);
+                if($date1 < $date2)
+                    return 0;
+            }
             return 1;
+        }
+            
         return 0;
          
     }
 
-    public function aprobaracceso($producto){
+    public function aprobaracceso($producto,$limit_lesson = false){
 
         if($producto == "Club de Macros")
             $producto = "1125293";
         if($producto == "Descargas")
             $producto = "1125294";
         $this->productoshotmart->idproducto = $producto;
-        return $this->productoshotmart->all_user_producto();
+        $result = $this->productoshotmart->all_user_producto();
+        if($result){
+            if($limit_lesson){
+                $date1 = new DateTime($this->post->limit_date);
+                $date2 = new DateTime($result[0]->ultmod);
+                if($date1 < $date2)
+                    return false;
+            }
+            return $result;
+        }
+
+        return $result;
         
     }
 }

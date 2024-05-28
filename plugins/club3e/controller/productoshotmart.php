@@ -96,6 +96,8 @@ class productoshotmart extends fs_controller
             $prod->cursobaseclub3e = $_POST["cursobaseclub3e"];
         if(isset($_POST["verencursos"]))
             $prod->verencursos = $_POST["verencursos"];
+        if(isset($_POST["limit_lessons"]))
+            $prod->limit_lessons = $_POST["limit_lessons"];
 
         if($prod->save()){
             $this->new_message("Registro guardado con éxito");

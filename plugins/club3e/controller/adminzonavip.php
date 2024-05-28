@@ -95,7 +95,9 @@ class adminzonavip extends fs_controller
         $registro->idvimeo =  $_POST["idvimeo"];
         
         $registro->urlminiatura =  $_POST["urlminiatura"];
-
+        if(isset($_POST['limit_date'])){
+            $registro->limit_date = $_POST['limit_date'];
+        }
         if($registro->urlminiatura != ""){ 
             $pos = strpos($registro->urlminiatura, "d/");    
             if($pos){

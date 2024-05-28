@@ -150,18 +150,24 @@ class coreclub3e extends \fs_model
      * @param int $reg
      * @return \coreclub3e|boolean
      */
-    public function get_user_curse_access($user, $idcurso)
+    public function get_user_curse_access($user, $idcurso, $limit_lesson)
     {
         $sum = 0;
         $fec = date("Y-m-d");
-        $sql = "SELECT * FROM " . $this->table_name . " WHERE estado = 1 AND fecha_inicia <= '".$fec."' AND fecha_expira >= '".$fec."' AND  usuario = ". $this->var2str($user)." ORDER BY nombre DESC ";
 
+        $sql = "SELECT * FROM " . $this->table_name . " WHERE estado = 1 AND fecha_inicia <= '".$fec."' AND fecha_expira >= '".$fec."' AND  usuario = ". $this->var2str($user)." ORDER BY nombre DESC ";
+        
         $cclub = $this->db->select($sql);
         if( $cclub ){
-            $sql = "SELECT * FROM hotmartproductos WHERE curso = '".$idcurso."' AND ( ( date(fechapublicacion) <= date('".$cclub[0]["fecha_expira"]."') AND  date(fechapublicacion) >= date('".$cclub[0]["fecha_inicia"]."') ) OR cursobaseclub3e = 1 ) ";
+
+            if($limit_lesson){
+                return $cclub;
+            }else{
+                $sql = "SELECT * FROM hotmartproductos WHERE curso = '".$idcurso."' AND ( ( date(fechapublicacion) <= date('".$cclub[0]["fecha_expira"]."') AND  date(fechapublicacion) >= date('".$cclub[0]["fecha_inicia"]."') ) OR cursobaseclub3e = 1 ) ";
             
-            if( $this->db->select($sql) ){
-                return true;
+                if( $this->db->select($sql) ){
+                    return true;
+                }
             }
         }
 
