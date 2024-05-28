@@ -150,7 +150,7 @@ class coreclub3e extends \fs_model
      * @param int $reg
      * @return \coreclub3e|boolean
      */
-    public function get_user_curse_access($user, $idcurso, $limit_lesson)
+    public function get_user_curse_access($user, $idcurso, $limit_lesson = false)
     {
         $sum = 0;
         $fec = date("Y-m-d");
