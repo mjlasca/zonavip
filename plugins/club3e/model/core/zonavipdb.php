@@ -464,7 +464,7 @@ class zonavipdb extends \fs_model
                     . ", limit_date = " . $this->var2str($this->limit_date)
                     . "  WHERE reg = " . $this->var2str($this->reg) . ";";
             } else {
-                $sql = "INSERT INTO " . $this->table_name . " (id,nombrevideo,archivodescarga,pdf,idyoutube,useredit,ultmod,codestado,pago,idvimeo,grupo,categoria,urlminiatura,curso,modulocurso,leccioncurso,nombremodulo,numeroleccion,detalle,upload,detalleupload) VALUES
+                $sql = "INSERT INTO " . $this->table_name . " (id,nombrevideo,archivodescarga,pdf,idyoutube,useredit,ultmod,codestado,pago,idvimeo,grupo,categoria,urlminiatura,curso,modulocurso,leccioncurso,nombremodulo,numeroleccion,detalle,upload,detalleupload,limit_date) VALUES
                       (" . $this->var2str($this->get_consecutivo_id())
                       . "," . $this->var2str($this->nombrevideo) 
                       . "," . $this->var2str($this->archivodescarga) 
