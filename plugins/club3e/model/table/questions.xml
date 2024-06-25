@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tabla>
+    <columna>
+        <nombre>reg</nombre>
+        <tipo>serial</tipo>
+        <nulo>NO</nulo>
+        <defecto>nextval('idistro_reg_seq'::idclass)</defecto>
+    </columna>
+    <columna>
+        <nombre>question</nombre>
+        <tipo>VARCHAR(500)</tipo>
+        <nulo>NO</nulo>
+    </columna>
+    <columna>
+        <nombre>recommendation</nombre>
+        <tipo>VARCHAR(1000)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>correct_answer</nombre>
+        <tipo>int(1)</tipo>
+        <nulo>NO</nulo>
+    </columna>
+    <columna>
+        <nombre>quiz_id</nombre>
+        <tipo>int(10)</tipo>
+        <nulo>NO</nulo>
+    </columna>
+    <columna>
+        <nombre>ultmod</nombre>
+        <tipo>DATETIME</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>estado</nombre>
+        <tipo>int(2)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <restriccion>
+        <nombre>idistro_pkey</nombre>
+        <consulta>PRIMARY KEY (reg)</consulta>
+    </restriccion>
+    <restriccion>
+        <nombre>question_quiz</nombre>
+        <consulta>FOREIGN KEY (quiz_id) REFERENCES quizzes (reg) ON DELETE CASCADE ON UPDATE CASCADE</consulta>
+    </restriccion>
+</tabla>

@@ -1,0 +1,128 @@
+{include="header"}
+<link rel="stylesheet" href="plugins/club3e/view/css/quizzes.css?v=3">
+<div class="container-fluid" style="margin-bottom: 10px;">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="btn-group hidden-xs">
+                <a class="btn btn-sm btn-default" href="{$fsc->url()}" title="Recargar la página">
+                    <span class="glyphicon glyphicon-refresh"></span>
+                </a>
+                {if="$fsc->page->is_default()"}
+                <a class="btn btn-sm btn-default active" href="{$fsc->url()}&amp;default_page=FALSE"
+                    title="Marcada como página de inicio (pulsa de nuevo para desmarcar)">
+                    <i class="fa fa-bookmark" aria-hidden="true"></i>
+                </a>
+                {else}
+                <a class="btn btn-sm btn-default" href="{$fsc->url()}&amp;default_page=TRUE"
+                    title="Marcar como página de inicio">
+                    <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+                </a>
+                {/if}
+            </div>
+            
+            <div class="btn-group">
+                <a onclick="resetInputs()" id="b_nuevo_articulo" class="btn btn-sm btn-success" data-toggle="modal"
+                    data-target="#exampleModalCenter" href="#">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span class="hidden-xs">&nbsp;Nuevo</span>
+                </a>
+            </div>
+            
+
+        </div>
+    </div>
+</div>
+
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane  show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+        </br>
+        <div class="table table-hover">
+            <table class=" table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Detalle</th>
+                        <th>Tiempo límite</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop="$fsc->quizzes->get_all()"}
+                        <tr>
+                            <td>{$value->name}</td>
+                            <td>{$value->detail}</td>
+                            <td>{$value->limit_time}</td>
+                            <td>
+                                <a onclick="getQuiz('{$value->reg}')" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalCenter" href="#">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </a>
+                                <a onclick="confirmDelete('{$value->reg}','{$fsc->url()}')" class="btn btn-sm btn-danger">    
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </a>
+                                
+                            </td>
+                        </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog" style="width: 60%;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Nuevo Registro</h5>
+            </div>
+            <div class="modal-body">
+                <form id="quizForm">
+
+                    <div class="quiz-section">
+                        <input class="form-control" type="hidden" name="reg"  id="reg" value="">
+                        <label for="">Nombre quiz</label>
+                        <input class="form-control" type="text" name="name"  id="name" required>
+                        <label for="">Detalle</label>
+                        <textarea class="form-control" name="detail" id="detail" required>
+                        </textarea>
+                        <div class="param">
+                            <div>
+                                <label for="">Tiempo(minutos)</label><br>
+                                <input class="form-control" type="number" name="time" id="time" min="10" max="20" required>
+                            </div>
+                            <div>
+                                <label for="">#Preguntas</label><br>
+                                <input class="form-control" type="number" name="question_number" id="question_number"  min="3" max="10" id="" required>
+                            </div>
+                            <div>
+                                <label for="">#Visibles</label><br>
+                                <input class="form-control" type="number" name="question_visible" id="question_visible" min="3" max="10" id="" required>
+                            </div>
+                            <div>
+                                <label for="">Para aprobar</label><br>
+                                <input class="form-control" type="number" name="question_pass" id="question_pass" min="3" max="10" id="" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="questionsContainer"></div>
+                    <a href="#" class="question-plus" onclick="addQuestion(null)">+</a>
+            </div>
+            <div class="modal-footer">
+                <div id="errores">
+                </div>
+                <div class="quiz-actions">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <input type="submit" value="Guardar" class="btn btn-primary">
+                </div>
+            </div>
+            </form>
+            
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="plugins/club3e/view/js/quizzes.js?v=3"></script>

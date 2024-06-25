@@ -1,0 +1,52 @@
+.quiz-section{
+    display: grid;
+    margin-bottom: 20px;
+}
+.quiz-section .param{
+    display: flex;
+}
+
+.quiz-section .param > div,input{
+    width: 100%;
+    min-width: 100px;
+    padding: 5px;
+}
+.modal-footer{
+    display: flex;
+    width: 100%;
+    justify-content: space-between; 
+}
+.modal-footer::after{
+    content: none;
+}
+.quiz-actions{
+    display: flex;
+    width: 300px;
+}
+
+.answer-select{
+    max-width: 200px;
+}
+.question{
+    margin: 20px 0;
+}
+.question-remove {
+    position: absolute;
+    padding: 1px 5px;
+    background-color: red;
+    color: white;
+    right: 20px;
+}
+
+.question-plus{
+    margin-top: 20px;
+    background-color: #43ac6a;
+    font-size: large;
+    font-weight: 600;
+    padding: 5px 10px;
+    color: white;
+}
+
+.question-plus a{
+    text-decoration: none;
+}
