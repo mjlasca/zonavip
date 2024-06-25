@@ -145,9 +145,7 @@ quizForm.addEventListener("submit", function (event) {
   }
 });
 
-//getQuiz(42);
-
-async function getQuiz(reg) {
+async function getQuiz(reg, quizuser = false) {
   const rawResponse = fetch("index.php?page=quizzes&reg_quiz=" + reg, {
     method: "GET",
   });
@@ -155,18 +153,21 @@ async function getQuiz(reg) {
     return response.json();
   });
   if (result) {
-    buildQuiz(result);
+    buildQuiz(result, quizuser);
   }
 }
 
-function buildQuiz(json) {
-  regQuiz.value = json.quiz.reg;
-  nameQuiz.value = json.quiz.name;
-  detailQuiz.value = json.quiz.detail;
-  timeQuiz.value = json.quiz.limit_time;
-  questionNumberQuiz.value = json.quiz.question_number;
-  questionVisibleQuiz.value = json.quiz.question_visible;
-  questionPassQuiz.value = json.quiz.question_pass;
+function buildQuiz(json, quizuser = false) {
+    if(quizuser === false){
+        regQuiz.value = json.quiz.reg;
+        nameQuiz.value = json.quiz.name;
+        detailQuiz.value = json.quiz.detail;
+        timeQuiz.value = json.quiz.limit_time;
+        questionNumberQuiz.value = json.quiz.question_number;
+        questionVisibleQuiz.value = json.quiz.question_visible;
+        questionPassQuiz.value = json.quiz.question_pass;
+    }
+  
   if (questionsContainer) {
     questionsContainer.innerHTML = "";
   }
@@ -216,4 +217,18 @@ async function sendQuestions(questions) {
   }
 }
 
+function questionStart() {
+    const startButton = document.querySelector('.start-btn');
+    startButton.classList.add('hide');
+    const questionStartContent = document.querySelector('.question-start');
+    questionStartContent.classList.remove('hide');
+    
+    getQuiz(getParam('quiz_id'),true);
+}
 
+
+function getParam(parametro) {
+    const url = new URL(window.location.href);
+    const valorParametro = url.searchParams.get(parametro);
+    return valorParametro;
+}

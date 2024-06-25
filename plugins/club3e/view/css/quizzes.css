@@ -46,7 +46,25 @@
     padding: 5px 10px;
     color: white;
 }
-
 .question-plus a{
     text-decoration: none;
+}
+.question-detail{
+    background-color: #00ff1110;
+    padding: 10px 10px 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.question-detail > div{
+    width: 50%;
+}
+
+.cursos{
+    margin-top: 30px;
+}
+
+.hide{
+    display: none;
 }

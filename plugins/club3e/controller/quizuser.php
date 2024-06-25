@@ -29,6 +29,7 @@ class quizuser extends fs_controller
 {
     
     public $quizuser;
+    public $quiz;
 
     public function __construct()
     {
@@ -36,8 +37,12 @@ class quizuser extends fs_controller
     }
 
     public function private_core()
-    {   
-
+    {
+        if( isset($_GET['quiz_id']) ){
+            $this->quiz = new quiz();
+            $this->quiz->reg = $_GET['quiz_id'];
+            $this->quiz = $this->quiz->get();
+        }
     }   
     
 }
