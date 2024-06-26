@@ -24,7 +24,7 @@ namespace FacturaScripts\model;
  *
  * @author Mario Lasluisa Castaño <mjlasluisa@gmail.com>
  */
-class quiz extends \fs_model
+class userquiz extends \fs_model
 {
     /*
      * Llave primaria
@@ -32,39 +32,39 @@ class quiz extends \fs_model
      */
     public $reg;
     /*
-     * quiz name
+     * user 
+     * @var int 
+     */
+    public $user_id;
+    /*
+     * commas
      * @var string
      */
-    public $name;
+    public $correct_questions;
+
     /*
-     * quiz introduction message 
+     * questions incorrects
      * @var string
      */
-    public $detail;
+    public $incorrect_questions;
 
     /*
-     * Time limit for quiz
-     * @var time
+     * question null
+     * @var string
      */
-    public $limit_time;
+    public $null_cuestions;
 
     /*
-     * question number
+     * Id quiz
      * @var int
      */
-    public $question_number;
+    public $quiz_id;
 
     /*
-     * question visible
+     * curse id
      * @var int
      */
-    public $question_visible;
-
-    /*
-     * number question pass quiz
-     * @var int
-     */
-    public $question_pass;
+    public $curse_id;
 
     /*
      * Fecha registro
@@ -82,26 +82,26 @@ class quiz extends \fs_model
     public function __construct($data = FALSE)
     {
         
-        parent::__construct('quizzes', $data); /// aquí indicamos el NOMBRE DE LA TABLA
+        parent::__construct('userquizzes', $data); /// aquí indicamos el NOMBRE DE LA TABLA
         if ($data) {
             $this->reg = $data['reg'];
-            $this->name = $data['name']??null;
-            $this->detail = $data['detail']??null;
-            $this->limit_time = $data['limit_time']??null;
-            $this->question_number = $data['question_number']??null;
-            $this->question_visible = $data['question_visible']??null;
-            $this->question_pass = $data['question_pass']??null;
+            $this->user_id = $data['user_id']??null;
+            $this->curse_id = $data['curse_id']??null;
+            $this->correct_questions = $data['correct_questions']??null;
+            $this->incorrect_questions = $data['incorrect_questions']??null;
+            $this->null_cuestions = $data['null_cuestions']??null;
+            $this->quiz_id = $data['quiz_id']??null;
             $this->ultmod = $data['ultmod']??null;
             $this->estado = $data['estado']??null;
             
         } else {
             $this->reg = null;
-            $this->name = null;
-            $this->detail = null;
-            $this->limit_time = null;
-            $this->question_number = null;
-            $this->question_visible = null;
-            $this->question_pass = null;
+            $this->user_id = null;
+            $this->curse_id = null;
+            $this->correct_questions = null;
+            $this->incorrect_questions = null;
+            $this->null_cuestions = null;
+            $this->quiz_id = null;
             $this->ultmod = date("Y-m-d h:i:s");
             $this->estado = 1;
         }
@@ -129,21 +129,7 @@ class quiz extends \fs_model
         $list = [];
         if ($data) {
             foreach ($data as $u) {
-                $list = new \quiz($u);
-            }
-        }
-
-        return $list;
-    }
-
-    public function get_name()
-    {
-        $sql = "SELECT * FROM " . $this->table_name . " WHERE name = " . $this->var2str($this->name) . " ORDER BY reg DESC LIMIT 1 ;";
-        $data = $this->db->select($sql);
-        $list = [];
-        if ($data) {
-            foreach ($data as $u) {
-                $list = new \quiz($u);
+                $list = new \userquiz($u);
             }
         }
 
@@ -158,7 +144,7 @@ class quiz extends \fs_model
         $list = [];
         if ($data) {
             foreach ($data as $u) {
-                $list[] = new \quiz($u);
+                $list[] = new \userquiz($u);
             }
         }
 
@@ -187,25 +173,25 @@ class quiz extends \fs_model
         if ($this->exists()) {
 
             $sql = "UPDATE " . $this->table_name 
-            . " SET name = " . $this->var2str($this->name)
-            . ", detail = " . $this->var2str($this->detail)
-            . ", limit_time = " . $this->var2str($this->limit_time)
-            . ", question_number = " . $this->var2str($this->question_number)
-            . ", question_visible = " . $this->var2str($this->question_visible)
-            . ", question_pass = " . $this->var2str($this->question_pass)
+            . " SET user_id = " . $this->var2str($this->user_id)
+            . ", correct_questions = " . $this->var2str($this->correct_questions)
+            . ", incorrect_questions = " . $this->var2str($this->incorrect_questions)
+            . ", null_cuestions = " . $this->var2str($this->null_cuestions)
+            . ", quiz_id = " . $this->var2str($this->quiz_id)
+            . ", curse_id = " . $this->var2str($this->curse_id)
             . ", ultmod = " . $this->var2str($this->ultmod)
             . ", estado = " . $this->var2str($this->estado)
             . "  WHERE reg = " . $this->var2str($this->reg) . ";";
 
         }else{
             $sql = "INSERT INTO " . $this->table_name . 
-            " (name,detail,limit_time,question_number,question_visible,question_pass,ultmod,estado) VALUES(" 
-            . $this->var2str($this->name)
-            . "," . $this->var2str($this->detail) 
-            . "," . $this->var2str($this->limit_time)
-            . "," . $this->var2str($this->question_number) 
-            . "," . $this->var2str($this->question_visible) 
-            . "," . $this->var2str($this->question_pass) 
+            " (user_id,correct_questions,incorrect_questions,null_cuestions,quiz_id,curse_id,ultmod,estado) VALUES(" 
+            . $this->var2str($this->user_id)
+            . "," . $this->var2str($this->correct_questions) 
+            . "," . $this->var2str($this->incorrect_questions)
+            . "," . $this->var2str($this->null_cuestions) 
+            . "," . $this->var2str($this->quiz_id) 
+            . "," . $this->var2str($this->curse_id) 
             . "," . $this->var2str($this->ultmod) 
             . "," . $this->var2str($this->estado) 
             .");";
@@ -236,7 +222,7 @@ class quiz extends \fs_model
      */
     private function clean_cache()
     {
-        $this->cache->delete('quiz');
+        $this->cache->delete('userquiz');
     }
 
     

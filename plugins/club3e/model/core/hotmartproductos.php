@@ -181,7 +181,7 @@ class hotmartproductos extends \fs_model
             $this->miscursos = false;
             $this->fecpubli_1 = date("Y-m-03");
             $this->view = null;
-            $this->limit_lessons = null;
+            $this->limit_lessons = 0;
         }
     }
 
@@ -594,7 +594,7 @@ class hotmartproductos extends \fs_model
                     . "," . $this->var2str($this->cursobaseclub3e)
                     . "," . $this->var2str($this->fechapublicacion)
                     . "," . $this->var2str($this->verencursos)
-                    . "," . ",UPPER('".$this->categoriacurso . "')"
+                    . "," . "UPPER('".$this->categoriacurso . "')"
                     . "," . $this->var2str($this->view)
                     . ",".$this->var2str($this->limit_lessons). " );";
                 }

@@ -64,7 +64,36 @@
 .cursos{
     margin-top: 30px;
 }
-
+.question-start{
+    margin-bottom: 100px;
+}
 .hide{
     display: none;
+}
+
+.answer-radios > input {
+    max-width: 30px;
+    max-height: 30px;
+    padding: 0px;
+    margin: 0px;
+}
+
+.answer-radios > label{ 
+    margin: 0px;
+}
+
+.answer-radios {
+    display: flex;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    align-items: center;
+}
+
+@media (max-width: 770px) {
+    .question-detail{
+        display: block;
+    }
+    .question-detail > div{
+        width: 100%;
+    }
 }

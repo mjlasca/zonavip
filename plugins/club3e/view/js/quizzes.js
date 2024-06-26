@@ -7,6 +7,8 @@ const questionNumberQuiz = document.getElementById("question_number");
 const questionVisibleQuiz = document.getElementById("question_visible");
 const questionPassQuiz = document.getElementById("question_pass");
 const regQuiz = document.getElementById("reg");
+let countQuestions = 0;
+
 
 function saveQuestion(question) {
   const questions = JSON.parse(localStorage.getItem("questions")) || [];
@@ -90,60 +92,63 @@ function confirmDelete(reg, url) {
   }
 }
 
-quizForm.addEventListener("submit", function (event) {
-  event.preventDefault();
-  let questions = { q: [], quiz: [] };
-
-  const questionDivs = document.querySelectorAll(".question");
-  let errors = 0;
-
-  questionDivs.forEach((questionDiv, index) => {
-    const questionInput = questionDiv.querySelector('input[name="question"]');
-    const answerInputs = questionDiv.querySelectorAll(".answer-input");
-    const correctInputs = questionDiv.querySelectorAll(".answer-select");
-
-    if (questionInput.classList.contains("error-input"))
-      questionInput.classList.remove("error-input");
-
-    if (!questionInput.value) {
-      //alert(`Question ${index + 1} is empty`);
-      errors++;
-      questionInput.classList.add("error-input");
-      return;
-    }
-
-    const answers = [];
-
-    answerInputs.forEach((input, i) => {
-      if (input.classList.contains("error-input"))
-        input.classList.remove("error-input");
-
-      if (!input.value) {
-        //alert(`Answer ${i + 1} in question ${index + 1} is empty`);
-        input.classList.add("error-input");
+if(quizForm){
+  quizForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    let questions = { q: [], quiz: [] };
+  
+    const questionDivs = document.querySelectorAll(".question");
+    let errors = 0;
+  
+    questionDivs.forEach((questionDiv, index) => {
+      const questionInput = questionDiv.querySelector('input[name="question"]');
+      const answerInputs = questionDiv.querySelectorAll(".answer-input");
+      const correctInputs = questionDiv.querySelectorAll(".answer-select");
+  
+      if (questionInput.classList.contains("error-input"))
+        questionInput.classList.remove("error-input");
+  
+      if (!questionInput.value) {
+        //alert(`Question ${index + 1} is empty`);
         errors++;
+        questionInput.classList.add("error-input");
         return;
       }
-      answers.push({ text: input.value });
+  
+      const answers = [];
+  
+      answerInputs.forEach((input, i) => {
+        if (input.classList.contains("error-input"))
+          input.classList.remove("error-input");
+  
+        if (!input.value) {
+          //alert(`Answer ${i + 1} in question ${index + 1} is empty`);
+          input.classList.add("error-input");
+          errors++;
+          return;
+        }
+        answers.push({ text: input.value });
+      });
+  
+      correctInputs.forEach((sele, i) => {
+        if (sele.value == "") errors++;
+        else {
+          questions.q.push({
+            question: questionInput.value,
+            answers,
+            correct: sele.value,
+          });
+        }
+      });
     });
-
-    correctInputs.forEach((sele, i) => {
-      if (sele.value == "") errors++;
-      else {
-        questions.q.push({
-          question: questionInput.value,
-          answers,
-          correct: sele.value,
-        });
-      }
-    });
+  
+    if (errors < 1) {
+      //localStorage.setItem('questions', JSON.stringify(questions));
+      sendQuestions(questions);
+    }
   });
+}
 
-  if (errors < 1) {
-    //localStorage.setItem('questions', JSON.stringify(questions));
-    sendQuestions(questions);
-  }
-});
 
 async function getQuiz(reg, quizuser = false) {
   const rawResponse = fetch("index.php?page=quizzes&reg_quiz=" + reg, {
@@ -168,12 +173,15 @@ function buildQuiz(json, quizuser = false) {
         questionPassQuiz.value = json.quiz.question_pass;
     }
   
-  if (questionsContainer) {
-    questionsContainer.innerHTML = "";
-  }
-  json.questions.forEach((element) => {
-    addQuestion(null, element);
-  });
+    if (questionsContainer) {
+      questionsContainer.innerHTML = "";
+    }
+    json.questions.forEach((element) => {
+      if(quizuser)
+        addQuestionUser(element);
+      else
+        addQuestion(null, element);
+    });
 }
 
 function resetInputs() {
@@ -217,13 +225,13 @@ async function sendQuestions(questions) {
   }
 }
 
-function questionStart() {
-    const startButton = document.querySelector('.start-btn');
+function questionStart(url) {
+  const questionStartContent = document.querySelector('.question-start');
+    questionStartContent.classList.remove('hide');  
+  const startButton = document.querySelector('.start-btn');
     startButton.classList.add('hide');
-    const questionStartContent = document.querySelector('.question-start');
-    questionStartContent.classList.remove('hide');
-    
-    getQuiz(getParam('quiz_id'),true);
+  
+    window.location.href = url+'&start=true';
 }
 
 
@@ -231,4 +239,37 @@ function getParam(parametro) {
     const url = new URL(window.location.href);
     const valorParametro = url.searchParams.get(parametro);
     return valorParametro;
+}
+
+
+function addQuestionUser(questions = null) {
+  const questionDiv = document.createElement("div");
+  questionDiv.className = "question";
+  const questionInput = document.createElement("h4");
+  questionInput.textContent = questions.q;
+
+  const answersDiv = document.createElement("div");
+  answersDiv.className = "answers";
+
+
+
+  for (let i = 0; i < 4; i++) {
+    const answerDiv = document.createElement("div");
+    answerDiv.className = 'answer-radios';
+    const answerInput = document.createElement("input");
+    answerInput.type = "radio";
+    answerInput.className = "answer-input";
+    answerInput.name = `answer${countQuestions}[]`;
+    const labelAnswer = document.createElement("label");
+    labelAnswer.textContent = questions.answer[i];
+    answerDiv.appendChild(answerInput);
+    answerDiv.appendChild(labelAnswer);
+    answersDiv.appendChild(answerDiv);
+  }
+  countQuestions++;
+  questionDiv.appendChild(questionInput);
+  questionDiv.appendChild(answersDiv);
+  questionsContainer.appendChild(questionDiv);
+  
+
 }

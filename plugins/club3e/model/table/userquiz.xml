@@ -8,33 +8,33 @@
         <defecto>nextval('idistro_reg_seq'::idclass)</defecto>
     </columna>
     <columna>
-        <nombre>name</nombre>
-        <tipo>VARCHAR(300)</tipo>
+        <nombre>user_id</nombre>
+        <tipo>INT(10)</tipo>
         <nulo>NO</nulo>
     </columna>
     <columna>
-        <nombre>detail</nombre>
-        <tipo>VARCHAR(500)</tipo>
-        <nulo>YES</nulo>
-    </columna>
-    <columna>
-        <nombre>limit_time</nombre>
-        <tipo>INT(3)</tipo>
+        <nombre>correct_questions</nombre>
+        <tipo>VARCHAR(100)</tipo>
         <nulo>NO</nulo>
     </columna>
     <columna>
-        <nombre>question_number</nombre>
-        <tipo>INT(2)</tipo>
+        <nombre>incorrect_questions</nombre>
+        <tipo>VARCHAR(100)</tipo>
         <nulo>NO</nulo>
     </columna>
     <columna>
-        <nombre>question_visible</nombre>
-        <tipo>INT(2)</tipo>
+        <nombre>null_cuestions</nombre>
+        <tipo>VARCHAR(100)</tipo>
         <nulo>NO</nulo>
     </columna>
     <columna>
-        <nombre>question_pass</nombre>
-        <tipo>INT(2)</tipo>
+        <nombre>quiz_id</nombre>
+        <tipo>INT(10)</tipo>
+        <nulo>NO</nulo>
+    </columna>
+    <columna>
+        <nombre>curse_id</nombre>
+        <tipo>INT(10)</tipo>
         <nulo>NO</nulo>
     </columna>
     <columna>
