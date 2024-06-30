@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+use FacturaScripts\model\hotmartproductos;
 use FacturaScripts\model\question;
 use FacturaScripts\model\quiz;
 
@@ -29,6 +30,7 @@ class quizzes extends fs_controller
 {
     
     public $quizzes;
+    public $products;
 
     public function __construct()
     {
@@ -38,7 +40,8 @@ class quizzes extends fs_controller
     public function private_core()
     {   
         $this->quizzes = new quiz();
-        
+        $this->products = new hotmartproductos();
+        $this->products = $this->products->all_cursos_quiz();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
@@ -66,9 +69,10 @@ class quizzes extends fs_controller
         $quiz->name = $quizData['name'];
         $quiz->limit_time = $quizData['time'];
         $quiz->detail = $quizData['detail'];
-        $quiz->question_number = $quizData['question_number'];
+        $quiz->question_number = count($questions["questions"]['q']) ?? null;
         $quiz->question_visible = $quizData['question_visible'];
         $quiz->question_pass = $quizData['question_pass'];
+        $quiz->product_id = $quizData['product_id'];
         if($quiz->save()){
             $quiz = $quiz->get_name();
             $question = new question();
@@ -93,7 +97,6 @@ class quizzes extends fs_controller
         }else{
             echo json_encode($questions);
         }
-
         header('Content-Type: application/json');
         echo json_encode($quiz);
         

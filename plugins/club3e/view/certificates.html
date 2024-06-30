@@ -65,6 +65,7 @@
                     <tr>
                         <th>Nombre</th>
                         <th>Cuerpo del certificado</th>
+                        <th>Curso</th>
                         <th>Fecha creacións</th>
                         <th>Acciones</th>
                     </tr>
@@ -74,9 +75,10 @@
                         <tr>
                             <td>{$value->name}</td>
                             <td>{$value->body}</td>
+                            <td>{$value->product_id}</td>
                             <td>{$value->ultmod}</td>
                             <td>
-                                <a onclick="editarregistro('{$value->reg}','{$value->name}', '{$value->body}','{$value->img_bg}')" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalCenter" href="#">
+                                <a onclick="editarregistro('{$value->reg}','{$value->name}', '{$value->body}','{$value->img_bg}','{$value->product_id}')" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalCenter" href="#">
                                     <span class="glyphicon glyphicon-edit"></span>
                                 </a>
                                 <a class="btn btn-sm btn-primary"  href="{$fsc->url()}&preview={$value->reg}">
@@ -112,6 +114,15 @@
                         <input class="form-control" type="text" name="name" id="name" required>
                     </div>
                     <div>
+                        <label for="">Seleccione el curso</label>
+                        <select class="form-control" name="product_id" id="product_id" required>
+                            <option value="">- Seleccione el curso -</option>
+                            {loop="$fsc->products"}
+                                <option value="{$value->reg}">{$value->nombre}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                    <div>
                         <label for="">Cuerpo del certificado</label>
                         <div id="editor"></div>
                     </div>
@@ -141,6 +152,7 @@
     const body_ = document.querySelector('#body');
     const ck = document.querySelector('.ck-content');
     const url_ = document.querySelector('#img_bg');
+    const curse = document.querySelector('#product_id');
 
 
     ClassicEditor
@@ -169,12 +181,13 @@
         return false;
     }
 
-    function editarregistro(reg,name,body,url) {
+    function editarregistro(reg,name,body,url,curso) {
         reg_.value = reg;
         name_.value = name;
         body_.value = body;
         editorInstance.setData(body);
         url_.value = url;
+        curse.value = curso;
     }
 
     function borrarformulario() {
@@ -183,6 +196,7 @@
         body_.value = "";
         editorInstance.setData('<p><br data-cke-filler="true"></p>');
         url_.value = "";
+        curse.value = "";
     }
 
     function eliminarregistro(reg,url) {

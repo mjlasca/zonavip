@@ -49,6 +49,12 @@ class certificate extends \fs_model
     public $img_bg;
 
     /*
+     * ID product
+     * @var int
+     */
+    public $product_id;
+
+    /*
      * Fecha registro
      * @var datetime
      */
@@ -72,6 +78,7 @@ class certificate extends \fs_model
             $this->img_bg = $data['img_bg']??null;
             $this->ultmod = $data['ultmod']??null;
             $this->estado = $data['estado']??null;
+            $this->product_id = $data['product_id']??null;
             
         } else {
             $this->reg = null;
@@ -79,6 +86,7 @@ class certificate extends \fs_model
             $this->img_bg = null;
             $this->ultmod = date("Y-m-d h:i:s");
             $this->estado = 1;
+            $this->product_id = null;
         }
     }
 
@@ -153,16 +161,18 @@ class certificate extends \fs_model
             . ", img_bg = " . $this->var2str($this->img_bg)
             . ", ultmod = " . $this->var2str($this->ultmod)
             . ", estado = " . $this->var2str($this->estado)
+            . ", product_id = " . $this->var2str($this->product_id)
             . "  WHERE reg = " . $this->var2str($this->reg) . ";";
 
         }else{
             $sql = "INSERT INTO " . $this->table_name . 
-            " (name,body,img_bg,ultmod,estado) VALUES(" 
+            " (name,body,img_bg,ultmod,estado,product_id) VALUES(" 
             . $this->var2str($this->name)
             . "," . $this->var2str($this->body) 
             . "," . $this->var2str($this->img_bg) 
             . "," . $this->var2str($this->ultmod) 
             . "," . $this->var2str($this->estado) 
+            . "," . $this->var2str($this->product_id) 
             .");";
         }
         

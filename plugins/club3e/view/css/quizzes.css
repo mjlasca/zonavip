@@ -89,6 +89,17 @@
     align-items: center;
 }
 
+.flex{
+    display: flex;
+}
+
+#errores{
+    margin-bottom: 10px;
+    margin-top: -18px;
+    color: red;
+    font-size: 12px;
+}
+
 @media (max-width: 770px) {
     .question-detail{
         display: block;

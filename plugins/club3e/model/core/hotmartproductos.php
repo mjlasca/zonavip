@@ -268,6 +268,60 @@ class hotmartproductos extends \fs_model
      * Devuelve un array con todos los hotmartproductos
      * @return \hotmartproductos
      */
+    public function all_cursos_certifcates()
+    {
+        $this->clean_cache();
+        /// leemos esta lista de la caché
+        $listaa = $this->cache->get_array('hotmartproductos');
+        if (empty($listaa)) {
+            
+            //approved, canceled, billet_printed, refunded, dispute, completed, blocked, chargeback, delayed, expired, wayting_payment
+            $sql = "SELECT hotmartproductos.* FROM " . $this->table_name . " LEFT JOIN certificate ON certificate.product_id IS NOT NULL AND (certificate.product_id != hotmartproductos.reg AND hotmartproductos.curso != '')";
+            
+            $data = $this->db->select($sql);
+            if ($data) {
+                foreach ($data as $a) {
+                    $listaa[] = new \hotmartproductos($a);
+                }
+            }
+            /// guardamos la lista en caché
+            $this->cache->set('hotmartproductos', $listaa);
+        }
+
+        return $listaa;
+    }
+
+    /**
+     * Devuelve un array con todos los hotmartproductos
+     * @return \hotmartproductos
+     */
+    public function all_cursos_quiz()
+    {
+        $this->clean_cache();
+        /// leemos esta lista de la caché
+        $listaa = $this->cache->get_array('hotmartproductos');
+        if (empty($listaa)) {
+            
+            //approved, canceled, billet_printed, refunded, dispute, completed, blocked, chargeback, delayed, expired, wayting_payment
+            $sql = "SELECT hotmartproductos.* FROM " . $this->table_name . " LEFT JOIN quizzes ON quizzes.product_id IS NOT NULL AND (quizzes.product_id != hotmartproductos.reg AND hotmartproductos.curso != '')";
+            
+            $data = $this->db->select($sql);
+            if ($data) {
+                foreach ($data as $a) {
+                    $listaa[] = new \hotmartproductos($a);
+                }
+            }
+            /// guardamos la lista en caché
+            $this->cache->set('hotmartproductos', $listaa);
+        }
+
+        return $listaa;
+    }
+
+    /**
+     * Devuelve un array con todos los hotmartproductos
+     * @return \hotmartproductos
+     */
     public function all()
     {
         $this->clean_cache();

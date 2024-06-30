@@ -27,6 +27,7 @@ class productoshotmart extends fs_controller
     
     public $registros;
     public $productos;
+    public $quizzes;
 
     public function __construct()
     {
@@ -35,6 +36,8 @@ class productoshotmart extends fs_controller
 
     public function private_core()
     {
+        $this->quizzes = new quiz();
+        $this->quizzes = $this->quizzes->get_all();
         $this->productos = new hotmartproductos();
         $test = new testcursos();
         $respuestas = new respuestastest();

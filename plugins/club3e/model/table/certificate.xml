@@ -23,6 +23,11 @@
         <nulo>NO</nulo>
     </columna>
     <columna>
+        <nombre>product_id</nombre>
+        <tipo>INT(10)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
         <nombre>ultmod</nombre>
         <tipo>DATETIME</tipo>
         <nulo>YES</nulo>

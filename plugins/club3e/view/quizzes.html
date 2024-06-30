@@ -1,5 +1,5 @@
 {include="header"}
-<link rel="stylesheet" href="plugins/club3e/view/css/quizzes.css?v=3">
+<link rel="stylesheet" href="plugins/club3e/view/css/quizzes.css?v=4">
 <div class="container-fluid" style="margin-bottom: 10px;">
     <div class="row">
         <div class="col-xs-12">
@@ -83,8 +83,23 @@
 
                     <div class="quiz-section">
                         <input class="form-control" type="hidden" name="reg"  id="reg" value="">
-                        <label for="">Nombre quiz</label>
-                        <input class="form-control" type="text" name="name"  id="name" required>
+                        <div class="">
+                            <div>
+                                <label for="">Nombre quiz</label>
+                                <input class="form-control" type="text" name="name"  id="name" required>    
+                            </div>
+                            <div>
+                                <label for="">Seleccione el curso</label>
+                                <select name="" class="form-control" id="product_id" id="product_id" required>
+                                    <option value="">- Seleccione el curso -</option>
+                                    {loop="$fsc->products"}
+                                        <option value="{$value->reg}">{$value->nombre}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        
+
                         <label for="">Detalle</label>
                         <textarea class="form-control" name="detail" id="detail" required>
                         </textarea>
@@ -92,10 +107,6 @@
                             <div>
                                 <label for="">Tiempo(minutos)</label><br>
                                 <input class="form-control" type="number" name="time" id="time" min="10" max="20" required>
-                            </div>
-                            <div>
-                                <label for="">#Preguntas</label><br>
-                                <input class="form-control" type="number" name="question_number" id="question_number"  min="3" max="10" id="" required>
                             </div>
                             <div>
                                 <label for="">#Visibles</label><br>
@@ -107,13 +118,13 @@
                             </div>
                         </div>
                     </div>
-
+                    <div id="errores">
+                    </div>
                     <div id="questionsContainer"></div>
                     <a href="#" class="question-plus" onclick="addQuestion(null)">+</a>
             </div>
             <div class="modal-footer">
-                <div id="errores">
-                </div>
+                
                 <div class="quiz-actions">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                     <input type="submit" value="Guardar" class="btn btn-primary">
@@ -125,4 +136,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="plugins/club3e/view/js/quizzes.js?v=3"></script>
+<script type="text/javascript" src="plugins/club3e/view/js/quizzes.js?v=7"></script>   

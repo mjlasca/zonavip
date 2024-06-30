@@ -31,6 +31,7 @@ class certificates extends fs_controller
     public $certificates;
     public $preview;
     public $prev;
+    public $products;
 
     public function __construct()
     {
@@ -39,6 +40,9 @@ class certificates extends fs_controller
 
     public function private_core()
     {   
+        $this->products = new hotmartproductos();
+        $this->products = $this->products->all_cursos_certifcates();
+
         $this->certificates = new certificate();
         $this->preview = 0;
         $this->prev = [
@@ -53,7 +57,7 @@ class certificates extends fs_controller
             $this->prev['body'] = $cer[0]->body;
         }
 
-        if( isset($_POST['name']) && isset($_POST['img_bg']) && $_POST['name'] && $_POST['img_bg']){
+        if( isset($_POST['name']) && isset($_POST['img_bg'])){
             $this->save();  
         }
 
@@ -71,8 +75,11 @@ class certificates extends fs_controller
         $certificate->name = $_POST['name'];
         $certificate->img_bg = $_POST['img_bg'];
         $certificate->body = $_POST['body'];
+        $certificate->product_id = $_POST['product_id'];
 
-        $certificate->save();
+        if($certificate->save()){
+            header("Location: ".$this->url());
+        }
     }
     
 }

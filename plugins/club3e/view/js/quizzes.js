@@ -3,11 +3,13 @@ const quizForm = document.getElementById("quizForm");
 const nameQuiz = document.getElementById("name");
 const detailQuiz = document.getElementById("detail");
 const timeQuiz = document.getElementById("time");
-const questionNumberQuiz = document.getElementById("question_number");
 const questionVisibleQuiz = document.getElementById("question_visible");
 const questionPassQuiz = document.getElementById("question_pass");
+const questionProduct = document.getElementById("product_id");
 const regQuiz = document.getElementById("reg");
+const errors = document.getElementById("errores");
 let countQuestions = 0;
+let countQuestionsAdmin = 0;
 
 
 function saveQuestion(question) {
@@ -15,9 +17,39 @@ function saveQuestion(question) {
   questions.push(question);
 }
 
+//validate pass question
+questionPassQuiz.addEventListener("input", function(event) {
+  errors.textContent = "";
+  if(questionVisibleQuiz.value == ""){
+    this.value = this.value.slice(0 , -1);
+    errors.textContent = "No puede asignar las preguntas a pasar si no ha puesto las preguntas visibles";
+  }
+
+  if (parseInt(this.value) > parseInt(questionVisibleQuiz.value)) {
+    errors.textContent = "Las preguntas para pasar la prueba no puede ser mayor a las visibles";
+    this.value = this.value.slice(0, -1);
+  }
+});
+
+//validate questions visible
+questionVisibleQuiz.addEventListener("input", function(event) {
+  errors.textContent = "";
+  if(countQuestionsAdmin > 0){
+    if(this.value > countQuestionsAdmin){
+      errors.textContent = "La cantidad de preguntas visibles no puede ser mayor a las preguntas que hay";
+      this.value = this.value.slice(0, -1);
+    }
+  }else{
+    errors.textContent = "No se ha agregado ninguna pregunta";
+    this.value = this.value.slice(0, -1);
+  }
+});
+
+
 questionsContainer.addEventListener("click", function (event) {
   if (event.target.classList.contains("question-remove")) {
     event.target.closest(".question").remove();
+    countQuestionsAdmin--;
   }
 });
 
@@ -75,7 +107,7 @@ function addQuestion(existingQuestion = null, questions = null) {
   questionDiv.appendChild(answerSelect);
 
   questionsContainer.appendChild(questionDiv);
-
+  countQuestionsAdmin++;
   if (!existingQuestion) {
     const newQuestion = {
       question: "",
@@ -168,9 +200,9 @@ function buildQuiz(json, quizuser = false) {
         nameQuiz.value = json.quiz.name;
         detailQuiz.value = json.quiz.detail;
         timeQuiz.value = json.quiz.limit_time;
-        questionNumberQuiz.value = json.quiz.question_number;
         questionVisibleQuiz.value = json.quiz.question_visible;
         questionPassQuiz.value = json.quiz.question_pass;
+        questionProduct.value = json.quiz.product_id;
     }
   
     if (questionsContainer) {
@@ -189,9 +221,9 @@ function resetInputs() {
   nameQuiz.value = "";
   detailQuiz.value = "";
   timeQuiz.value = "";
-  questionNumberQuiz.value = "";
   questionVisibleQuiz.value = "";
   questionPassQuiz.value = "";
+  questionProduct.value = "";
   if (questionsContainer) {
     questionsContainer.innerHTML = "";
   }
@@ -203,11 +235,11 @@ async function sendQuestions(questions) {
     name: nameQuiz.value,
     detail: detailQuiz.value,
     time: timeQuiz.value,
-    question_number: questionNumberQuiz.value,
     question_visible: questionVisibleQuiz.value,
     question_pass: questionPassQuiz.value,
+    product_id: questionProduct.value,
   };
-
+  
   const rawResponse = fetch("index.php?page=quizzes", {
     method: "POST",
     headers: {
@@ -222,6 +254,7 @@ async function sendQuestions(questions) {
 
   if (result) {
     regQuiz.value = result.reg;
+    window.location.href = "index.php?page=quizzes";
   }
 }
 

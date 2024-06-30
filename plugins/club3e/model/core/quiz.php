@@ -67,6 +67,12 @@ class quiz extends \fs_model
     public $question_pass;
 
     /*
+     * ID product
+     * @var int
+     */
+    public $product_id;
+
+    /*
      * Fecha registro
      * @var datetime
      */
@@ -93,6 +99,7 @@ class quiz extends \fs_model
             $this->question_pass = $data['question_pass']??null;
             $this->ultmod = $data['ultmod']??null;
             $this->estado = $data['estado']??null;
+            $this->product_id = $data['product_id']??null;
             
         } else {
             $this->reg = null;
@@ -104,6 +111,7 @@ class quiz extends \fs_model
             $this->question_pass = null;
             $this->ultmod = date("Y-m-d h:i:s");
             $this->estado = 1;
+            $this->product_id = null;
         }
     }
 
@@ -195,11 +203,12 @@ class quiz extends \fs_model
             . ", question_pass = " . $this->var2str($this->question_pass)
             . ", ultmod = " . $this->var2str($this->ultmod)
             . ", estado = " . $this->var2str($this->estado)
+            . ", product_id = " . $this->var2str($this->product_id)
             . "  WHERE reg = " . $this->var2str($this->reg) . ";";
 
         }else{
             $sql = "INSERT INTO " . $this->table_name . 
-            " (name,detail,limit_time,question_number,question_visible,question_pass,ultmod,estado) VALUES(" 
+            " (name,detail,limit_time,question_number,question_visible,question_pass,ultmod,estado,product_id) VALUES(" 
             . $this->var2str($this->name)
             . "," . $this->var2str($this->detail) 
             . "," . $this->var2str($this->limit_time)
@@ -208,6 +217,7 @@ class quiz extends \fs_model
             . "," . $this->var2str($this->question_pass) 
             . "," . $this->var2str($this->ultmod) 
             . "," . $this->var2str($this->estado) 
+            . "," . $this->var2str($this->product_id) 
             .");";
         }
         
