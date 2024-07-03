@@ -416,6 +416,34 @@ class hotmartproductos extends \fs_model
         return $listaa;
     }
 
+     /**
+     * Devuelve el listado de cursos con certificados
+     * @return \hotmartproductos
+     */
+    public function all_cursos_cetificate($user_ = "")
+    {
+        $this->clean_cache();
+        /// leemos esta lista de la caché
+        $listaa = $this->cache->get_array('hotmartproductos');
+        if (empty($listaa)) {
+            
+            
+            $sql = "SELECT t1.* FROM " . $this->table_name . " t1 WHERE t1.curso != '' AND t1.curso IS NOT NULL  ORDER BY t1.nombre ASC ";
+
+            $data = $this->db->select($sql);
+
+            if ($data) {
+                foreach ($data as $a) {
+                    $listaa[] = new \hotmartproductos($a);
+                }
+            }
+            /// guardamos la lista en caché
+            $this->cache->set('hotmartproductos', $listaa);
+        }
+
+        return $listaa;
+    }
+
 
     /**
      * Devuelve un array con todos los hotmartproductos

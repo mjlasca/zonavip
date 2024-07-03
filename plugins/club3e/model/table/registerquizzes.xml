@@ -8,44 +8,44 @@
         <defecto>nextval('idistro_reg_seq'::idclass)</defecto>
     </columna>
     <columna>
-        <nombre>name</nombre>
-        <tipo>VARCHAR(300)</tipo>
+        <nombre>curse_id</nombre>
+        <tipo>int(10)</tipo>
         <nulo>NO</nulo>
     </columna>
     <columna>
-        <nombre>detail</nombre>
-        <tipo>VARCHAR(500)</tipo>
-        <nulo>YES</nulo>
-    </columna>
-    <columna>
-        <nombre>product_id</nombre>
-        <tipo>INT(10)</tipo>
-        <nulo>YES</nulo>
-    </columna>
-    <columna>
-        <nombre>limit_time</nombre>
+        <nombre>correct_questions</nombre>
         <tipo>INT(3)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>incorrect_questions</nombre>
+        <tipo>INT(3)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>null_questions</nombre>
+        <tipo>INT(3)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>quiz_time</nombre>
+        <tipo>TIME</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>success</nombre>
+        <tipo>INT(1)</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>user_id</nombre>
+        <tipo>VARCHAR(150)</tipo>
         <nulo>NO</nulo>
     </columna>
     <columna>
-        <nombre>question_number</nombre>
-        <tipo>INT(2)</tipo>
-        <nulo>NO</nulo>
-    </columna>
-    <columna>
-        <nombre>question_visible</nombre>
-        <tipo>INT(2)</tipo>
-        <nulo>NO</nulo>
-    </columna>
-    <columna>
-        <nombre>question_pass</nombre>
-        <tipo>INT(2)</tipo>
-        <nulo>NO</nulo>
-    </columna>
-    <columna>
-        <nombre>repeat_quiz</nombre>
-        <tipo>INT(2)</tipo>
-        <nulo>NO</nulo>
+        <nombre>array_answer</nombre>
+        <tipo>VARCHAR(1500)</tipo>
+        <nulo>YES</nulo>
     </columna>
     <columna>
         <nombre>ultmod</nombre>
@@ -60,5 +60,9 @@
     <restriccion>
         <nombre>idistro_pkey</nombre>
         <consulta>PRIMARY KEY (reg)</consulta>
+    </restriccion>
+    <restriccion>
+        <nombre>curse_registerquiz</nombre>
+        <consulta>FOREIGN KEY (curse_id) REFERENCES hotmartproductos (reg) ON UPDATE CASCADE</consulta>
     </restriccion>
 </tabla>

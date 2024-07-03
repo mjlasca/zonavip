@@ -1,6 +1,6 @@
 {include="header2"}
 <link rel="stylesheet" href="plugins/club3e/view/css/cursos.css">
-<link rel="stylesheet" href="plugins/club3e/view/css/quizzes.css?v=7">
+<link rel="stylesheet" href="plugins/club3e/view/css/quizzes.css?v=10">
 
 <section id="post1" class="container">
     {if="$fsc->quiz"}
@@ -17,36 +17,64 @@
                 </p>
             </div>
         </div>
+    {else}
+        <div class="question-detail">
+            <h3>No hay resultados</h3>
+        </div>
     {/if}
 </section>
 
-<section class="cursos">
-    <div class="container ">
-        {if="$fsc->start == 0"}
-            <input type="submit" onclick="questionStart('{$fsc->url()}&quiz_id={$fsc->quiz->reg}')" value="Comenzar prueba" class="start-btn btn btn-primary">
-        {/if}
-       
-        <div   {if="$fsc->start == 0"} class="question-start hide" {else} class="question-start" {/if}>
-            <form action="" method="post">
-                <input type="hidden" name="reg_quiz" value="{$fsc->quiz->reg}">
-                {loop="$fsc->questions"}
-                    <div class="question">
-                        <h4>{$value1->question}</h4>
-                        {loop="$fsc->answers[$key1]"}
-                        <div class="answer-radios">
-                            <input type="radio" name="answer{$key1}" class="answer-input" value="{$key2+1}">
-                            <label for="">{$value2}</label>
-                        </div>
+{if="$fsc->quiz != false"}
+    <section class="cursos">
+        <div class="container ">
+            <div class="action-start">
+                {if="$fsc->start == 0"}
+                    <input type="submit" onclick="questionStart('{$fsc->url()}&quiz_id={$fsc->quiz->reg}')" value="Comenzar prueba" class="start-btn btn btn-primary">
+                {/if}
+            </div>
+            <div {if="$fsc->start == 0"} class="question-start hide" {else} class="question-start" {/if}>
+                <form id="form-question" action="{$fsc->url()}&quiz_id={$fsc->quiz->reg}" method="post" onsubmit="return false">
+                    <input type="hidden" name="quiz_id" value="{$fsc->quiz->reg}">
+                    {if="$fsc->questions"}
+                        {loop="$fsc->questions"}
+                            {if="$key1 == $fsc->question_number"}
+                                <div class="question">
+                                    <input type="hidden" name="question" value="{$value1->reg}">
+                                    <h4><span>({$key1 + 1}/{$fsc->question_total + 1}) </span>{$value1->question}</h4>
+                                    {loop="$fsc->answers[$value1->reg]"}
+                                    <div class="answer-radios">
+                                        <input type="radio" name="answer" class="answer-input" 
+                                            {if="$value2['reg'] == $fsc->array_answers[$value1->reg]"} checked {/if}
+                                        value="{$value2['reg']}">
+                                        <label for="">{$value2['answer']}</label>
+                                    </div>
+                                    {/loop}
+                                </div>
+                                <div class="nav-questions">
+                                    <input type="hidden" name="qnumber" id="qnumber" value="{$fsc->question_number}">
+                                    <input type="hidden" name="finish" id="finish" value="">
+                                    {if="$fsc->question_number > 0"}
+                                        <input class="btn btn-secondary submit" onclick="moreNumber(-1)" type="submit" value="Anterior">
+                                    {/if}
+                                    {if="$fsc->question_number < $fsc->question_total"}
+                                        <input class="btn btn-secondary submit" onclick="moreNumber(1)" type="submit" value="Siguiente">
+                                    {/if}   
+                                    {if="$fsc->question_number >= $fsc->question_total"}
+                                        <div class="quiz-actions">
+                                            <input type="submit" onclick="finish()" value="Terminé!" class="btn btn-primary submit">
+                                        </div>
+                                    {/if}
+                                </div>
+                            {/if}
                         {/loop}
-                    </div>
-                {/loop}
-                <div class="quiz-actions">
+                        
+                        
+                    {/if}
                     
-                    <input type="submit" value="Terminé!" class="btn btn-primary">
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
+{/if}
 <script type="text/javascript" src="plugins/club3e/view/js/cursos.js?v=1"></script>
-<script type="text/javascript" src="plugins/club3e/view/js/quizzes.js?v=10"></script>
+<script type="text/javascript" src="plugins/club3e/view/js/quizzes.js?v=15"></script>

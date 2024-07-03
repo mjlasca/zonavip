@@ -34,48 +34,114 @@ class quizuser extends fs_controller
     public $questions;
     public $answers;
     public $start;
-
+    public $question_number;
+    public $question_total;
+    public $array_questions;
+    public $array_answers;
+    
     public function __construct()
     {
         $this->start = 0;
+        $this->question_number = 0;
         parent::__construct(__CLASS__, 'Quiz', '', false, false);
     }
 
     public function private_core()
     {
-        
-        if( isset($_GET['quiz_id']) ){
+        $this->quizuser = new registerquiz();
+        $this->quizuser->user_id = $this->user->nick;
+
+        if( isset($_GET['quiz_id']) || isset($_GET['product_id']) ){
+
+            if( isset($_GET['qnumber']) ){
+                $this->question_number = $_GET['qnumber'];
+            }
+            $this->quizuser->curse_id = $_GET['product_id'] ?? null;
+            
+
             $this->quiz = new quiz();
-            $this->quiz->reg = $_GET['quiz_id'];
+            $this->quiz->reg = $_GET['quiz_id'] ?? null;
+            $this->quiz->product_id = $_GET['product_id'] ?? null;
             $this->quiz = $this->quiz->get();
+            if($this->quiz != false){
 
-            $this->questions = new question();
-            $this->questions->quiz_id = $this->quiz->reg;
-            $this->questions = $this->questions->get_quiz();
+                if(empty($this->quizuser->curse_id)){
+                    $this->quizuser->curse_id = $this->quiz->product_id;
+                }
+                
+                $this->questions = new question();
+                $this->questions->quiz_id = $this->quiz->reg;
+                $this->questions = $this->questions->get_quiz_user();
+    
+                $this->answers = [];
+                foreach ($this->questions as $key => $q) {
+                    
+                    $answer = new answer();
+                    $answer->question_id = $q->reg;
+                    $answer = $answer->get_question();
+                    $this->array_answers[$q->reg] = '';
+                    foreach ($answer as $k => $val) {
+                        $this->answers[$q->reg][] = [ 'reg' => $val->reg, 'answer' => $val->answer];
+                    }
+                }
+                $this->question_total = count($this->questions) - 1;
+            }
+            $quizuser = $this->quizuser->get_user_curse();
+            if( $quizuser != false && $quizuser->success == 0){
+                $this->start = 1;
+            }
+            
+        }
 
-            $this->answers = [];
-            foreach ($this->questions as $key => $q) {
-                $answer = new answer();
-                $answer->question_id = $q->reg;
-                $answer = $answer->get_question();
-                foreach ($answer as $k => $val) {
-                    $this->answers[$key][] = $val->answer;
+        if(isset($_POST['qnumber'])){
+            $this->question_number = $_POST['qnumber'];
+        }
+
+        if(isset($_POST['answer'])){
+            $this->save();
+        }
+
+        if(isset($_GET['start']) && $this->start != 1 ){
+            $this->start = 1;
+            $this->quizuser->save();
+        }
+
+        
+        $this->getArrayAnswer();
+        var_dump($this->array_answers);
+    }
+
+    private function getArrayAnswer() {
+        $this->quizuser = $this->quizuser->get_user_curse();
+        if($this->quizuser != false){
+            if($this->quizuser->array_answer != ''){
+                $arra = (array)json_decode($this->quizuser->array_answer);
+                foreach ($arra as $key => $value) {
+                    $this->array_answers[$key] = $value;
                 }
             }
-        }
-
-        if(isset($_POST['reg_quiz']) && $_POST['reg_quiz'] != ""){
-            $this->save($_POST['reg_quiz']);
-        }
-
-        if(isset($_GET['start'])){
-            $this->start = 1;
         }
     }
     
     
     private function save(){
+        $this->quizuser = $this->quizuser->get_user_curse();
         
+        if($this->quizuser != false){
+            if($this->quizuser->array_answer != ''){
+                $arra = (array)json_decode($this->quizuser->array_answer);
+                $arra[$_POST['question']] = $_POST['answer'];
+                $this->quizuser->array_answer = json_encode($arra);
+                $this->quizuser->save();
+            }
+            else{
+                $arra = [
+                    $_POST['question'] => $_POST['answer']
+                ];
+                $this->quizuser->array_answer = json_encode($arra);
+                $this->quizuser->save();
+            }
+        }
     }
     
 }

@@ -49,8 +49,6 @@ class cursos extends fs_controller
             $this->allow = 0;
         }
 
-        
-
         $this->productoshotmart = new hotmartuser();
         $this->productoshotmart->user = $this->user->nick;
        

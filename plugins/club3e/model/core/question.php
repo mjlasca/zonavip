@@ -108,10 +108,25 @@ class question extends \fs_model
         $sql = "SELECT * FROM " . $this->table_name . " WHERE quiz_id = " . $this->var2str($this->quiz_id) . ";";
         $data = $this->db->select($sql);
         $list = [];
-        if ($data) {
+        if ($data && empty($list)) {
             foreach ($data as $u) {
                 $list[] = new \question($u);
             }
+        }
+
+        return $list;
+    }
+
+    public function get_quiz_user()
+    {
+        $sql = "SELECT * FROM " . $this->table_name . " WHERE quiz_id = " . $this->var2str($this->quiz_id) . " ORDER BY RAND();";
+        $data = $this->db->select($sql);
+        $list = $this->cache->get_array('getquiz');
+        if ($data && empty($list)) {
+            foreach ($data as $u) {
+                $list[] = new \question($u);
+            }
+            $this->cache->set('getquiz', $list);
         }
 
         return $list;
@@ -189,6 +204,7 @@ class question extends \fs_model
         }
         
         if($this->db->exec($sql)){
+            $this->cache->delete('getquiz');
             return TRUE;
         }
 

@@ -73,6 +73,7 @@ class quizzes extends fs_controller
         $quiz->question_visible = $quizData['question_visible'];
         $quiz->question_pass = $quizData['question_pass'];
         $quiz->product_id = $quizData['product_id'];
+        $quiz->repeat_quiz = $quizData['repeat_quiz'];
         if($quiz->save()){
             $quiz = $quiz->get_name();
             $question = new question();
@@ -111,6 +112,7 @@ class quizzes extends fs_controller
         $question = new question();
         $question->quiz_id = $quiz->reg;
         $questions = $question->get_quiz();
+        
         $result['questions'] = [];
         foreach ($questions as $key => $q) {
             $result['questions'][$key]['q'] = $q->question;

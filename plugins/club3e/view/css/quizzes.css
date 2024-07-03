@@ -29,6 +29,9 @@
 }
 .question{
     margin: 20px 0;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
 }
 .question-remove {
     position: absolute;
@@ -55,6 +58,8 @@
     display: flex;
     align-items: center;
     gap: 20px;
+    border-radius: 10px;
+    border: 1px solid #000;
 }
 
 .question-detail > div{
@@ -66,6 +71,16 @@
 }
 .question-start{
     margin-bottom: 100px;
+}
+.question-start span{
+    text-align: center;
+    background-color: #1abc9c;
+    padding: 2px;
+    font-weight: lighter;
+    font-size: large;
+    border-radius: 10px;
+    color: #fff;
+    margin-right: 10px;
 }
 .hide{
     display: none;
@@ -79,7 +94,7 @@
 }
 
 .answer-radios > label{ 
-    margin: 0px;
+    margin-left: -30px;
 }
 
 .answer-radios {
@@ -87,6 +102,14 @@
     overflow: hidden;
     text-overflow: ellipsis;
     align-items: center;
+    margin-bottom: 10px;
+    background-color: #eeeeee60;
+}
+
+.answer-radios input {
+    width: auto;
+    max-width: auto;
+    margin-left: -20px;
 }
 
 .flex{
@@ -100,11 +123,31 @@
     font-size: 12px;
 }
 
+.action-start{
+    display: flex;
+    justify-content: center;
+}
+.action-start > input{
+    width: 50%;
+}
+
+.nav-questions{
+    display: flex;
+}
+
+.nav-questions .submit{
+    max-width: 200px;
+}
+
 @media (max-width: 770px) {
     .question-detail{
         display: block;
     }
     .question-detail > div{
         width: 100%;
+    }
+
+    .action-start > input{
+        width: 90%;
     }
 }
