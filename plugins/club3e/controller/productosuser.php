@@ -46,19 +46,19 @@ class productosuser extends fs_controller
         $this->quiz = new quiz();
 
         if(isset($_REQUEST["pdf"])){
-            if($this->productos->get_user_final()){
+            //if($this->productos->get_user_final()){
                 $this->generarCertificado($_REQUEST["pdf"]);
-            }
+            //}
             
         }
     }
     
     public function generarCertificado($grupo = "1125293"){
 
-        $historial = new historialvideos();
+        /*$historial = new historialvideos();
         $historial->user = $this->user->nick;
-        if(count($historial->certificado_producto($grupo)) > 9){
-            ob_clean();
+        if(count($historial->certificado_producto($grupo)) > 9){*/
+            //ob_clean();
             header('Content-type: application/pdf');
             header('Content-Disposition: inline; filename="Certificado3E.pdf"');
             header('Content-Transfer-Encoding: binary');
@@ -68,32 +68,32 @@ class productosuser extends fs_controller
     
             $mpdf = new \Mpdf\Mpdf(['format' => 'Letter', 'orientation' => 'L']);
             
-            $css = file_get_contents("plugins/zonavipeee/view/css/pdfstyle.css");
+            //$css = file_get_contents("plugins/zonavipeee/view/css/pdfstyle.css");
             $html = "<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>";
-            $fechainicia = $this->user->create_date;
+            /*$fechainicia = $this->user->create_date;
             if($fechainicia != ""){
                 $mes = date("m", strtotime( $fechainicia));
                 $arrmes = ["","ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO","JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIEMBRE"];
                 $fechainicia = "el ".date("j", strtotime( $fechainicia))." de ".$arrmes[$mes]." del ".date("Y", strtotime( $fechainicia));
                 $fechainicia = " desde ".$fechainicia;
-            }
+            }*/
             $html .= "<div class='nameuser'>".$this->user->nombre."</div>";
-            $html .= "<div class='datecertificate'><p>Por pertenecer al Club de Macros de <a href='https://especialistasenexcel.com/'>EpecialistasEnExcel.com</a>".$fechainicia.", cuyo contenido <br>potencia habilidades en el trabajo con<b> Macros en Excel con VBA</b> </p>";
+            $html .= "<div class='datecertificate'><p>Por pertenecer al Club de Macros de <a href='https://especialistasenexcel.com/'>EpecialistasEnExcel.com</a>, cuyo contenido <br>potencia habilidades en el trabajo con<b> Macros en Excel con VBA</b> </p>";
     
             $html .= "<br><br><br><br>";
             $html .= "Se certifica a los ".date("d")." días del mes de ".$month[intval(date("m"))]." del ".date("Y")."</div>";
     
     
-            $mpdf->SetDefaultBodyCSS('background', "url('plugins/zonavipeee/view/assets/img/certificados/1125293.jpg')");
-            $mpdf->WriteHTML($css, \Mpdf\HTMLParserMode::HEADER_CSS);
+            //$mpdf->SetDefaultBodyCSS('background', "url('plugins/zonavipeee/view/assets/img/certificados/1125293.jpg')");
+            //$mpdf->WriteHTML($css, \Mpdf\HTMLParserMode::HEADER_CSS);
             $mpdf->WriteHTML($html, \Mpdf\HTMLParserMode::HTML_BODY);
     
             
             $mpdf->Output();
-            ob_end_flush();
-        }else{
+            //ob_end_flush();
+        /*}else{
             $this->new_error_msg("No puede generar el certificado hasta ver un mínimo de 10 vídeos del Producto que intenta generar");
-        }
+        }*/
             
        
 

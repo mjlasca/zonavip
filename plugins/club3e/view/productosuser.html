@@ -35,7 +35,7 @@
               {if="!empty($value['regquiz'])"}
                 <td>
                   {if="$value['success'] == 0"}
-                    <a href="index.php?page=quizuser&product_id={$value['reg']}" class="btn btn-primary">OBTENER CERTIFICADO</a>
+                    <a href="index.php?page=quizuser&product_id={$value['reg']}" class="btn btn-secondary">OBTENER CERTIFICADO</a>
                   {else}
                     <a href="index.php?page=dcertificate&product_id={$value['reg']}&user_id={$fsc->user->nick}" class="btn btn-primary">DESCARGAR CERTIFICADO</a>
                   {/if}
@@ -43,7 +43,7 @@
               {else}
                 <td>
                   {if="$fsc->quiz->get_to_curse($value['reg']) != false"}
-                    <a href="index.php?page=quizuser&product_id={$value['reg']}" class="btn btn-primary">OBTENER CERTIFICADO</a>
+                    <a href="index.php?page=quizuser&product_id={$value['reg']}" class="btn btn-secondary">OBTENER CERTIFICADO</a>
                   {else}
                     SIN CERTIFICADO
                   {/if}

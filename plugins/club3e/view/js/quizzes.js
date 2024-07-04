@@ -9,6 +9,7 @@ const questionProduct = document.getElementById("product_id");
 const questionRepeat = document.getElementById("repeat_quiz");
 const regQuiz = document.getElementById("reg");
 const errors = document.getElementById("errores");
+const timer_quiz = document.getElementById('time_quiz');
 let countQuestions = 0;
 let countQuestionsAdmin = 0;
 
@@ -278,6 +279,29 @@ function questionStart(url) {
     window.location.href = url+'&start=true';
 }
 
+if(timer_quiz){
+  const limit_time_quiz = document.getElementById('limit_time');
+  const valorInicial = timer_quiz.innerText;
+  let [minutos, segundos] = valorInicial.split(':').map(Number);
+  const intervalo = setInterval(() => {
+      segundos++;
+      if (segundos === 60) {
+          segundos = 0;
+          minutos++;
+      }
+
+      // Formatear los minutos y segundos para que siempre tengan dos dígitos
+      const minutosFormateados = minutos.toString().padStart(2, '0');
+      const segundosFormateados = segundos.toString().padStart(2, '0');
+      if(minutosFormateados >= parseInt(limit_time_quiz.value)){
+        clearInterval(intervalo);
+        alert("El tiempo de la prueba ha terminado");
+        location.reload();
+      }
+      // Mostrar el tiempo en el cronómetro
+      timer_quiz.innerText = `${minutosFormateados}:${segundosFormateados}`;
+  }, 1000);
+}
 
 function getParam(parametro) {
     const url = new URL(window.location.href);

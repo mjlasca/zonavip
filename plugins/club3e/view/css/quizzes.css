@@ -139,6 +139,38 @@
     max-width: 200px;
 }
 
+.time-quiz{
+    background-color: #1abc9c;
+    color: #fff;
+    max-width: 150px;
+    text-align: center;
+}
+
+.quiz-result{
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.msg-pass{
+    background-color: #1abc9c;
+    padding: 5px;
+    margin: 20px 0;
+    color: #fff;
+    text-align: center;
+}
+
+.incorrect-answer{
+    color: red;
+}
+.correct-answer{
+    color:aqua ;
+}
+.question-recommendation{
+    background-color: beige;
+    font-style: italic;
+}
+
 @media (max-width: 770px) {
     .question-detail{
         display: block;

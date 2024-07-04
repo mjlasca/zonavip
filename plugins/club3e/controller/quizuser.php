@@ -38,11 +38,16 @@ class quizuser extends fs_controller
     public $question_total;
     public $array_questions;
     public $array_answers;
+    public $time_quiz;
+    public $finish;
+    public $result_detail;
     
     public function __construct()
     {
         $this->start = 0;
         $this->question_number = 0;
+        $this->time_quiz = NULL;
+        $this->finish = false;
         parent::__construct(__CLASS__, 'Quiz', '', false, false);
     }
 
@@ -71,9 +76,10 @@ class quizuser extends fs_controller
                 
                 $this->questions = new question();
                 $this->questions->quiz_id = $this->quiz->reg;
-                $this->questions = $this->questions->get_quiz_user();
+                $this->questions = $this->questions->get_quiz_user($this->quiz->question_visible);
     
                 $this->answers = [];
+                
                 foreach ($this->questions as $key => $q) {
                     
                     $answer = new answer();
@@ -84,44 +90,93 @@ class quizuser extends fs_controller
                         $this->answers[$q->reg][] = [ 'reg' => $val->reg, 'answer' => $val->answer];
                     }
                 }
+                
                 $this->question_total = count($this->questions) - 1;
             }
             $quizuser = $this->quizuser->get_user_curse();
-            if( $quizuser != false && $quizuser->success == 0){
+            if( $quizuser != false && $this->quizuser->success == 0){
+                $this->quizuser = $quizuser;
                 $this->start = 1;
             }
             
+        }
+        
+        $this->result_detail['correct_questions'] = 0;
+        $this->result_detail['incorrect_questions'] = 0;
+        $this->result_detail['total_questions'] = count($this->questions);
+        
+        if($this->quizuser != false && $this->quizuser->estado == 2){
+            $this->finish = true;
+            $this->time_quiz = -1;
+
         }
 
         if(isset($_POST['qnumber'])){
             $this->question_number = $_POST['qnumber'];
         }
 
-        if(isset($_POST['answer'])){
+        if(isset($_POST['answer']) && $this->quizuser->estado < 2){
             $this->save();
             if(isset($_POST['qnumber'])){
                 //condition if submit finish
                 if(count($this->questions) == $_POST['qnumber']){
                     $this->quizuser->success = 1;
+                    $this->quizuser->finish_date = date("Y-m-d h:i:s");
+                    $this->quizuser->estado = 2;
                     $this->quizuser->save();
-                    
+                    $this->finish = true;
+                    $this->time_quiz = -1;
                 }
             }
         }
 
         if(isset($_GET['start']) && $this->start != 1 ){
             $this->start = 1;
+            $this->time_quiz = 0;
+            $this->quizuser->init_date = date("Y-m-d h:i:s");
             $this->quizuser->save();
         }
 
-        
         $this->getArrayAnswer();
+        $this->getResult();
+        
+        if($this->finish == false){
+            if(!empty($this->quizuser->init_date)){
+                $fecha1 = new DateTime($this->quizuser->init_date);
+                $fecha2 = new DateTime(date("Y-m-d h:i:s"));
+                $diferencia = $fecha1->diff($fecha2);
+                $minutes = (($diferencia->days * 24 * 60) + ($diferencia->h * 60) + $diferencia->i);
+                $seconds = ($diferencia->days * 24 * 60 * 60) + ($diferencia->h * 60 * 60) + ($diferencia->i * 60) + $diferencia->s;
+                $stringMinutes = strlen($minutes) < 2 ? '0'.$minutes : $minutes ;
+                $stringSeconds = strlen($seconds % 60) < 2 ? '0'.($seconds % 60) : ($seconds % 60);
+                $this->time_quiz =  $stringMinutes  .':'. $stringSeconds;
+                if($minutes >= ($this->quiz->limit_time)){
+                    $this->quizuser->estado = 2;
+                    $this->quizuser->save();
+                    $this->time_quiz = -1;
+                    $this->finish = true;
+                }
+            }
+        }
+
+    }
+
+    private function getResult(){
+        
+        foreach ($this->questions as $key => $value) {
+            if($this->array_answers[$value->reg] == $value->correct_answer)
+                $this->result_detail['correct_questions']++;
+            else
+                $this->result_detail['incorrect_questions']++;
+        }
+
+        
     }
 
     private function getArrayAnswer() {
-        $this->quizuser = $this->quizuser->get_user_curse();
         if($this->quizuser != false){
-            if($this->quizuser->array_answer != ''){
+            $this->quizuser = $this->quizuser->get_user_curse();
+            if(!empty($this->quizuser->array_answer) && $this->quizuser->array_answer != ''){
                 $arra = (array)json_decode($this->quizuser->array_answer);
                 foreach ($arra as $key => $value) {
                     $this->array_answers[$key] = $value;

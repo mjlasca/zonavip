@@ -48,6 +48,16 @@
         <nulo>YES</nulo>
     </columna>
     <columna>
+        <nombre>init_date</nombre>
+        <tipo>DATETIME</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
+        <nombre>finish_date</nombre>
+        <tipo>DATETIME</tipo>
+        <nulo>YES</nulo>
+    </columna>
+    <columna>
         <nombre>ultmod</nombre>
         <tipo>DATETIME</tipo>
         <nulo>YES</nulo>

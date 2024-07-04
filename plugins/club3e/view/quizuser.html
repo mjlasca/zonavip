@@ -1,6 +1,6 @@
 {include="header2"}
 <link rel="stylesheet" href="plugins/club3e/view/css/cursos.css">
-<link rel="stylesheet" href="plugins/club3e/view/css/quizzes.css?v=10">
+<link rel="stylesheet" href="plugins/club3e/view/css/quizzes.css?v=13">
 
 <section id="post1" class="container">
     {if="$fsc->quiz"}
@@ -24,7 +24,7 @@
     {/if}
 </section>
 
-{if="$fsc->quiz != false"}
+{if="$fsc->quiz != false && $fsc->time_quiz != -1"}
     <section class="cursos">
         <div class="container ">
             <div class="action-start">
@@ -33,8 +33,12 @@
                 {/if}
             </div>
             <div {if="$fsc->start == 0"} class="question-start hide" {else} class="question-start" {/if}>
+                <div class="time-quiz">
+                    <h3 id="time_quiz">{$fsc->time_quiz}</h3>
+                </div>
                 <form id="form-question" action="{$fsc->url()}&quiz_id={$fsc->quiz->reg}" method="post">
                     <input type="hidden" name="quiz_id" value="{$fsc->quiz->reg}">
+                    <input type="hidden" name="limit_time" id="limit_time" value="{$fsc->quiz->limit_time}" >
                     {if="$fsc->questions"}
                         {loop="$fsc->questions"}
                             {if="$key1 == $fsc->question_number"}
@@ -44,8 +48,8 @@
                                     {loop="$fsc->answers[$value1->reg]"}
                                     <div class="answer-radios">
                                         <input type="radio" name="answer" class="answer-input" 
-                                            {if="$value2['reg'] == $fsc->array_answers[$value1->reg]"} checked {/if}
-                                        value="{$value2['reg']}">
+                                            {if="($key2 + 1) == $fsc->array_answers[$value1->reg]"} checked {/if}
+                                        value="{$key2 + 1}">
                                         <label for="">{$value2['answer']}</label>
                                     </div>
                                     {/loop}
@@ -73,5 +77,42 @@
         </div>
     </section>
 {/if}
+
+{if="$fsc->time_quiz == -1 || $fsc->finish"}
+    <div class="quiz-result">
+        <div>
+            <h3>Has terminado la prueba, tu resultado es <span>{$fsc->result_detail['correct_questions']}/{$fsc->result_detail['total_questions']}</span></h3>
+            <div>
+                {loop="$fsc->questions"}
+                    <p>
+                        Pregunta ({$key+1}) | Respuesta 
+                        {if="$value->correct_answer == $fsc->array_answers[$value->reg]"}
+                            <span class="correct-answer">CORRECTA</span> 
+                        {else}
+                            <span class="incorrect-answer">INCORRECTA</span>  
+                        {/if}
+                         <br>
+                        {$value->question} 
+                        {if="$value->correct_answer != $fsc->array_answers[$value->reg]"}
+                            <div class="question-recommendation">
+                                {$value->recommendation}
+                            </div><br> 
+                        {/if}
+                    </p>
+                {/loop}
+                <div class="msg-pass">
+                    <b>Necesitabas {$fsc->quiz->question_pass} preguntas correctas para obtener tu certificado</b>
+                </div>
+                {if="$fsc->quiz->question_pass <= $fsc->result_detail['correct_questions']"}
+                    <h4>¡Felicidades! has pasado la prueba</h4>
+                    <a href="index.php?page=productosuser" class="btn btn-primary">Ver mis certificados</a>
+                {else}
+                    <h4>Oops! vuélve a intentarlo en {$fsc->quiz->repeat_quiz} hora(s)</h4>
+                {/if}
+                
+            </div>
+        </div>
+    </div>
+{/if}
 <script type="text/javascript" src="plugins/club3e/view/js/cursos.js?v=1"></script>
-<script type="text/javascript" src="plugins/club3e/view/js/quizzes.js?v=15"></script>
+<script type="text/javascript" src="plugins/club3e/view/js/quizzes.js?v=16"></script>

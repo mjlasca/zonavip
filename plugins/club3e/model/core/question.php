@@ -117,9 +117,9 @@ class question extends \fs_model
         return $list;
     }
 
-    public function get_quiz_user()
+    public function get_quiz_user($limit_ = '')
     {
-        $sql = "SELECT * FROM " . $this->table_name . " WHERE quiz_id = " . $this->var2str($this->quiz_id) . " ORDER BY RAND();";
+        $sql = "SELECT * FROM " . $this->table_name . " WHERE quiz_id = " . $this->var2str($this->quiz_id) . " ORDER BY RAND() LIMIT $limit_;";
         $data = $this->db->select($sql);
         $list = $this->cache->get_array('getquiz');
         if ($data && empty($list)) {

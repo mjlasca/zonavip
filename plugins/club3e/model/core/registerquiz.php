@@ -62,6 +62,19 @@ class registerquiz extends \fs_model
      */
     public $quiz_time;
 
+
+    /**
+     * fecha y hora que inició la prueba
+     * @var datetime
+     */
+    public $init_date;
+
+    /**
+     * fecha y hora que finalizó la prueba la prueba
+     * @var datetime
+     */
+    public $finish_date;
+
     /**
      * pasó o no el quiz
      * @var bool
@@ -107,6 +120,8 @@ class registerquiz extends \fs_model
             $this->success = $data['success']??null;
             $this->user_id = $data['user_id']??null;
             $this->array_answer = $data['array_answer']??null;
+            $this->init_date = $data['init_date']??null;
+            $this->finish_date = $data['finish_date']??null;
             $this->ultmod = $data['ultmod']??null;
             $this->estado = $data['estado']??null;
             
@@ -122,6 +137,8 @@ class registerquiz extends \fs_model
             $this->estado = 1;
             $this->user_id = null;
             $this->array_answer = null;
+            $this->init_date = null;
+            $this->finish_date = null;
         }
     }
 
@@ -166,7 +183,6 @@ class registerquiz extends \fs_model
                 $list = new \registerquiz($u);
             }
         }
-
         return $list;
     }
 
@@ -218,11 +234,13 @@ class registerquiz extends \fs_model
             . ", estado = " . $this->var2str($this->estado)
             . ", user_id = " . $this->var2str($this->user_id)
             . ", array_answer = " . $this->var2str($this->array_answer)
+            . ", init_date = " . $this->var2str($this->init_date)
+            . ", finish_date = " . $this->var2str($this->finish_date)
             . "  WHERE reg = " . $this->var2str($this->reg) . ";";
 
         }else{
             $sql = "INSERT INTO " . $this->table_name . 
-            " (curse_id,correct_questions,incorrect_questions,null_questions,quiz_time,success,ultmod,estado,user_id,array_answer) VALUES(" 
+            " (curse_id,correct_questions,incorrect_questions,null_questions,quiz_time,success,ultmod,estado,user_id,array_answer,init_date,finish_date) VALUES(" 
             . $this->var2str($this->curse_id)
             . "," . $this->var2str($this->correct_questions) 
             . "," . $this->var2str($this->incorrect_questions)
@@ -233,6 +251,8 @@ class registerquiz extends \fs_model
             . "," . $this->var2str($this->estado) 
             . "," . $this->var2str($this->user_id)
             . "," . $this->var2str($this->array_answer)
+            . "," . $this->var2str($this->init_date)
+            . "," . $this->var2str($this->finish_date)
             .");";
         }
         
