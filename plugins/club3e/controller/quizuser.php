@@ -99,6 +99,14 @@ class quizuser extends fs_controller
 
         if(isset($_POST['answer'])){
             $this->save();
+            if(isset($_POST['qnumber'])){
+                //condition if submit finish
+                if(count($this->questions) == $_POST['qnumber']){
+                    $this->quizuser->success = 1;
+                    $this->quizuser->save();
+                    
+                }
+            }
         }
 
         if(isset($_GET['start']) && $this->start != 1 ){
@@ -108,7 +116,6 @@ class quizuser extends fs_controller
 
         
         $this->getArrayAnswer();
-        var_dump($this->array_answers);
     }
 
     private function getArrayAnswer() {

@@ -290,23 +290,6 @@ function moreNumber(s) {
   qnumber.value = parseInt(qnumber.value) + s; 
 }
 
-function finish() {
-  alert("holas");
-  const fin = document.querySelector('#finish');
-  fin.value = true;
-}
-
-function sendFormQuestion() {
-  const fin = document.querySelector('#finish');
-  console.log(fin);
-  if(fin && fin.value == true)
-  {
-    return confirm('¿Está segur@ de terminar la prueba?');
-  }
-  return false;
-}
-
-
 function addQuestionUser(questions = null) {
   const questionDiv = document.createElement("div");
   questionDiv.className = "question";

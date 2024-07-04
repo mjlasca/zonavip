@@ -33,7 +33,7 @@
                 {/if}
             </div>
             <div {if="$fsc->start == 0"} class="question-start hide" {else} class="question-start" {/if}>
-                <form id="form-question" action="{$fsc->url()}&quiz_id={$fsc->quiz->reg}" method="post" onsubmit="return false">
+                <form id="form-question" action="{$fsc->url()}&quiz_id={$fsc->quiz->reg}" method="post">
                     <input type="hidden" name="quiz_id" value="{$fsc->quiz->reg}">
                     {if="$fsc->questions"}
                         {loop="$fsc->questions"}
@@ -52,7 +52,6 @@
                                 </div>
                                 <div class="nav-questions">
                                     <input type="hidden" name="qnumber" id="qnumber" value="{$fsc->question_number}">
-                                    <input type="hidden" name="finish" id="finish" value="">
                                     {if="$fsc->question_number > 0"}
                                         <input class="btn btn-secondary submit" onclick="moreNumber(-1)" type="submit" value="Anterior">
                                     {/if}
@@ -60,9 +59,7 @@
                                         <input class="btn btn-secondary submit" onclick="moreNumber(1)" type="submit" value="Siguiente">
                                     {/if}   
                                     {if="$fsc->question_number >= $fsc->question_total"}
-                                        <div class="quiz-actions">
-                                            <input type="submit" onclick="finish()" value="Terminé!" class="btn btn-primary submit">
-                                        </div>
+                                        <input type="submit" onclick="moreNumber(1)" value="Terminé!" class="btn btn-primary submit">
                                     {/if}
                                 </div>
                             {/if}
