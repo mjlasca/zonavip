@@ -214,9 +214,11 @@ class hotmartproductos extends \fs_model
         
         $sql = "SELECT * FROM " . $this->table_name . " WHERE  reg = " . $this->var2str($reg);
         $data = $this->db->select($sql);
+        
         if ($data) {
             return new \hotmartproductos($data[0]);
         }
+        
         return FALSE;
         
     }

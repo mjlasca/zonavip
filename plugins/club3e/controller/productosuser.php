@@ -55,17 +55,21 @@ class productosuser extends fs_controller
         $certificate = new certificate();
         $certificate->product_id = $_GET['curse'];
         $certificate = $certificate->get_curse();
-        header('Content-Type: text/html; charset=UTF-8');
-        // Crear una instancia del PDF
-        $pdf = new PDF('L');
-        $pdf->AddPage();
-        $pdf->SetFont('Arial');
-        $pdf->image = $certificate->img_bg;
-        $html = str_replace('[user_name]', $this->user->nombre, $certificate->body);
-        $html =  iconv('UTF-8', 'windows-1252',$html);
-        $pdf->SetY(100);
-        $pdf->WriteHTML($html);
-        $pdf->Output('archivo.pdf', 'D');
+        if(!empty($certificate)){
+            header('Content-Type: text/html; charset=UTF-8');
+            // Crear una instancia del PDF
+            $pdf = new PDF('L');
+            $pdf->AddPage();
+            $pdf->SetFont('Arial');
+            $pdf->image = $certificate->img_bg;
+            $html = str_replace('[user_name]', $this->user->nombre, $certificate->body);
+            $html =  iconv('UTF-8', 'windows-1252',$html);
+            $pdf->SetY(100);
+            $pdf->WriteHTML($html);
+            $pdf->Output('archivo.pdf', 'D');
+        }else
+            $this->new_error_msg('No han generado el certicado, comunícate con el administrador');
+        
     }
 }
 

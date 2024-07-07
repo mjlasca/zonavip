@@ -32,6 +32,7 @@ class certificates extends fs_controller
     public $preview;
     public $prev;
     public $products;
+    public $curse;
 
     public function __construct()
     {
@@ -41,6 +42,7 @@ class certificates extends fs_controller
     public function private_core()
     {   
         $this->products = new hotmartproductos();
+        $this->curse = new hotmartproductos();
         $this->products = $this->products->all_cursos_certifcates();
 
         $this->certificates = new certificate();
