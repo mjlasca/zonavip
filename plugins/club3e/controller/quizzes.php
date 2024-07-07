@@ -84,7 +84,7 @@ class quizzes extends fs_controller
                 $question->quiz_id = $quiz->reg;
                 $question->question = $q['question'];
                 $question->correct_answer =  $q['correct'];
-                $question->recommendation = 'recomendación de prueba';
+                $question->recommendation = $q['recommendation'];
                 if($question->save()){
                     $question = $question->get_question();
                     foreach ($q['answers'] as $k => $a) {
@@ -116,6 +116,7 @@ class quizzes extends fs_controller
         $result['questions'] = [];
         foreach ($questions as $key => $q) {
             $result['questions'][$key]['q'] = $q->question;
+            $result['questions'][$key]['recommendation'] = $q->recommendation;
             $result['questions'][$key]['correct'] = $q->correct_answer;
             $answer = new answer();
             $answer->question_id = $q->reg;

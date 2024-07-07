@@ -77,6 +77,12 @@ function addQuestion(existingQuestion = null, questions = null) {
   questionInput.placeholder = "Ingrese la pregunta";
   if (questions != null) questionInput.value = questions.q;
 
+  const recommendationInput = document.createElement("input");
+  recommendationInput.type = "text";
+  recommendationInput.name = "recommendation";
+  recommendationInput.placeholder = "Escribe una recomendación para esta pregunta";
+  if (questions != null) recommendationInput.value = questions.recommendation;
+
   const answerSelect = document.createElement("select");
   answerSelect.name = "answer_select[]";
   const options = ["- Respuest correcta -", "1", "2", "3", "4"];
@@ -114,6 +120,7 @@ function addQuestion(existingQuestion = null, questions = null) {
   questionDiv.appendChild(questionInput);
   questionDiv.appendChild(answersDiv);
   questionDiv.appendChild(answerSelect);
+  questionDiv.appendChild(recommendationInput);
 
   questionsContainer.appendChild(questionDiv);
   countQuestionsAdmin++;
@@ -121,6 +128,7 @@ function addQuestion(existingQuestion = null, questions = null) {
     const newQuestion = {
       question: "",
       answers: [{ text: "" }, { text: "" }, { text: "" }, { text: "" }],
+      recommendation: "",
       correct: null,
     };
     saveQuestion(newQuestion);
@@ -143,6 +151,7 @@ if(quizForm){
   
     questionDivs.forEach((questionDiv, index) => {
       const questionInput = questionDiv.querySelector('input[name="question"]');
+      const recommendationInput = questionDiv.querySelectorAll('input[name="recommendation"]');
       const answerInputs = questionDiv.querySelectorAll(".answer-input");
       const correctInputs = questionDiv.querySelectorAll(".answer-select");
   
@@ -174,8 +183,10 @@ if(quizForm){
       correctInputs.forEach((sele, i) => {
         if (sele.value == "") errors++;
         else {
+          console.log(recommendationInput);
           questions.q.push({
             question: questionInput.value,
+            recommendation: recommendationInput[i].value,
             answers,
             correct: sele.value,
           });

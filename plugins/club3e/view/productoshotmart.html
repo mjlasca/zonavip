@@ -135,15 +135,6 @@
                     <option value="club">Sólo en el club</option>
                     <option value="todos">En ambos</option>
                 </select>
-
-                <br>
-                <label for="">Seleccione dónde quiere ver éste curso</label>
-                <select name="quiz_id" id="" class="form-control">
-                    <option value="">- Seleccione una prueba -</option>
-                    {loop="$fsc->quizzes"}
-                        <option value="{$value->reg}">{$value->name}</option>
-                    {/loop}
-                </select>
             </div>
             
             
