@@ -424,7 +424,7 @@
         });
     }
 
-    function editarregistro(reg, id, nombre, detalle, idyoutube, archivo, pdf, pago, idvimeo, grupo, categoria, urlminiatura, curso, modulocurso, leccioncurso, estado,numeroleccion,nombremodulo,upload,detalleupload) {
+    function editarregistro(reg, id, nombre, detalle, idyoutube, archivo, pdf, pago, idvimeo, grupo, categoria, urlminiatura, curso, modulocurso, leccioncurso, estado,numeroleccion,nombremodulo,upload,detalleupload,fechLimit) {
         document.getElementById("reg").value = reg;
         document.getElementById("id").value = id;
         document.getElementById("nombre").value = nombre;
@@ -442,7 +442,7 @@
         document.getElementById("leccioncurso").value = leccioncurso;
         document.getElementById("numeroleccion").value = numeroleccion;
         document.getElementById("nombremodulo").value = nombremodulo;
-        
+        document.getElementById("limit_date").value = fechLimit;
         document.getElementById("detalleupload").value = detalleupload;
         if(estado == 1)
             document.getElementById("publicar").checked = true;
@@ -475,6 +475,7 @@
         //document.getElementById("publicar").checked = false;
         document.getElementById("numeroleccion").value = "";
         document.getElementById("nombremodulo").value = "";
+        document.getElementById("limit_date").value = "";
         //document.getElementById("upload").checked = false;
         document.getElementById("detalleupload").value = "";
     }
