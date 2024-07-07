@@ -41,6 +41,7 @@ class quizuser extends fs_controller
     public $time_quiz;
     public $finish;
     public $result_detail;
+    public $fech_repeat;
     
     public function __construct()
     {
@@ -103,7 +104,7 @@ class quizuser extends fs_controller
         
         $this->result_detail['correct_questions'] = 0;
         $this->result_detail['incorrect_questions'] = 0;
-        $this->result_detail['total_questions'] = count($this->questions);
+        $this->result_detail['total_questions'] = !empty($this->questions) ? count($this->questions) : 0;
         
         if($this->quizuser != false && $this->quizuser->estado == 2){
             $this->finish = true;
@@ -159,6 +160,23 @@ class quizuser extends fs_controller
             }
         }
 
+        if(!empty($this->quizuser) && $this->quizuser->success == 2){
+            $f1 = new DateTime($this->quizuser->ultmod);
+            $f2 = new DateTime(date("Y-m-d h:i:s"));
+            $diferencia = $f1->diff($f2);
+            $minutes = (($diferencia->days * 24 * 60) + ($diferencia->h * 60) + $diferencia->i);
+            $hour =  $minutes / 60;
+            if($hour >= $this->quiz->repeat_quiz){
+                $this->quizuser->delete();
+                header('Location: '.$this->url().'&quiz_id='.$this->quiz->reg);
+            }else{
+                $this->fech_repeat = round( $this->quiz->repeat_quiz - $hour );
+            }
+            $this->finish = true;
+            $this->time_quiz = -1;
+            
+        }
+
     }
 
     private function getResult(){
@@ -169,6 +187,19 @@ class quizuser extends fs_controller
             else
                 $this->result_detail['incorrect_questions']++;
         }
+        
+        if( !empty( $this->quizuser) ){
+            if($this->result_detail['correct_questions'] >= $this->quiz->question_pass){
+                $this->quizuser->success = 1;
+                $this->quizuser->save();
+            }else{
+                $this->finish = true;
+                $this->time_quiz = -1;
+                $this->quizuser->success = 2;
+                $this->quizuser->save();
+            }
+        }
+        
 
         
     }

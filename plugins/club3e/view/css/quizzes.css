@@ -171,6 +171,16 @@
     font-style: italic;
 }
 
+.footer{
+    margin-top: 100px;
+}
+
+.footer-empty{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
 @media (max-width: 770px) {
     .question-detail{
         display: block;
@@ -181,5 +191,8 @@
 
     .action-start > input{
         width: 90%;
+    }
+    .quiz-result{
+        padding: 20px;
     }
 }

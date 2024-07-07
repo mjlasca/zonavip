@@ -257,6 +257,8 @@ class registerquiz extends \fs_model
         }
         
         if($this->db->exec($sql)){
+            if(!empty($this->finish_date))
+                $this->clean_cache();
             return TRUE;
         }
 
@@ -271,8 +273,8 @@ class registerquiz extends \fs_model
      */
     public function delete()
     {
-        $this->clean_cache();
         return $this->db->exec("DELETE FROM " . $this->table_name . " WHERE reg = " . $this->var2str($this->reg));
+        $this->clean_cache();
     }
 
 
@@ -282,6 +284,7 @@ class registerquiz extends \fs_model
     private function clean_cache()
     {
         $this->cache->delete('registerquiz');
+        $this->cache->delete('getquiz');
     }
 
     

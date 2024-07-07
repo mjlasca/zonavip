@@ -24,7 +24,8 @@
 
 use FacturaScripts\model\hotmartproductos;
 
-require 'vendor/autoload.php';
+//require 'vendor/autoload.php';
+require_once 'plugins/club3e/assets/fpdf/fpdf.php';
 
 class productosuser extends fs_controller
 {
@@ -46,57 +47,159 @@ class productosuser extends fs_controller
         $this->quiz = new quiz();
 
         if(isset($_REQUEST["pdf"])){
-            //if($this->productos->get_user_final()){
-                $this->generarCertificado($_REQUEST["pdf"]);
-            //}
-            
+            $this->generarCertificado();
         }
     }
-    
-    public function generarCertificado($grupo = "1125293"){
 
-        /*$historial = new historialvideos();
-        $historial->user = $this->user->nick;
-        if(count($historial->certificado_producto($grupo)) > 9){*/
-            //ob_clean();
-            header('Content-type: application/pdf');
-            header('Content-Disposition: inline; filename="Certificado3E.pdf"');
-            header('Content-Transfer-Encoding: binary');
-            header('Accept-Ranges: bytes');
-    
-            $month = array(1 => "Enero",2 => "Febrero",3 => "Marzo",4 => "Abril",5 => "Mayo",6 => "Jino",7 => "Julio",8 => "Agosto",9 => "Septiembre",10 => "Octubre",11 => "Noviembre",12 => "Diciembre");
-    
-            $mpdf = new \Mpdf\Mpdf(['format' => 'Letter', 'orientation' => 'L']);
-            
-            //$css = file_get_contents("plugins/zonavipeee/view/css/pdfstyle.css");
-            $html = "<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>";
-            /*$fechainicia = $this->user->create_date;
-            if($fechainicia != ""){
-                $mes = date("m", strtotime( $fechainicia));
-                $arrmes = ["","ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO","JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIEMBRE"];
-                $fechainicia = "el ".date("j", strtotime( $fechainicia))." de ".$arrmes[$mes]." del ".date("Y", strtotime( $fechainicia));
-                $fechainicia = " desde ".$fechainicia;
-            }*/
-            $html .= "<div class='nameuser'>".$this->user->nombre."</div>";
-            $html .= "<div class='datecertificate'><p>Por pertenecer al Club de Macros de <a href='https://especialistasenexcel.com/'>EpecialistasEnExcel.com</a>, cuyo contenido <br>potencia habilidades en el trabajo con<b> Macros en Excel con VBA</b> </p>";
-    
-            $html .= "<br><br><br><br>";
-            $html .= "Se certifica a los ".date("d")." días del mes de ".$month[intval(date("m"))]." del ".date("Y")."</div>";
-    
-    
-            //$mpdf->SetDefaultBodyCSS('background', "url('plugins/zonavipeee/view/assets/img/certificados/1125293.jpg')");
-            //$mpdf->WriteHTML($css, \Mpdf\HTMLParserMode::HEADER_CSS);
-            $mpdf->WriteHTML($html, \Mpdf\HTMLParserMode::HTML_BODY);
-    
-            
-            $mpdf->Output();
-            //ob_end_flush();
-        /*}else{
-            $this->new_error_msg("No puede generar el certificado hasta ver un mínimo de 10 vídeos del Producto que intenta generar");
-        }*/
-            
-       
+    public function generarCertificado(){
+        $certificate = new certificate();
+        $certificate->product_id = $_GET['curse'];
+        $certificate = $certificate->get_curse();
+        header('Content-Type: text/html; charset=UTF-8');
+        // Crear una instancia del PDF
+        $pdf = new PDF('L');
+        $pdf->AddPage();
+        $pdf->SetFont('Arial');
+        $pdf->image = $certificate->img_bg;
+        $html = str_replace('[user_name]', $this->user->nombre, $certificate->body);
+        $html =  iconv('UTF-8', 'windows-1252',$html);
+        $pdf->SetY(100);
+        $pdf->WriteHTML($html);
+        $pdf->Output('archivo.pdf', 'D');
+    }
+}
 
+class PDF extends FPDF
+{
+    public $image = 'https://zonavip.plataformaeducativa.online/img_zonavip/certificados%20macros%20v3.png';
+    // Método para escribir HTML
+    function WriteHTML($html)
+    {
+        // Intérprete de HTML
+        $html = str_replace("\n", ' ', $html);
+        $a = preg_split('/<(.*)>/U', $html, -1, PREG_SPLIT_DELIM_CAPTURE);
+        foreach ($a as $i => $e)
+        {
+            if ($i % 2 == 0)
+            {
+                // Texto
+                if(!empty($tag) && $tag != 'P')
+                    $this->Write(5, '   '.$e);
+                else
+                    $this->Write(5, '            '.$e);
+            }
+            else
+            {
+                // Etiqueta
+                if ($e[0] == '/')
+                {
+                    $this->CloseTag(strtoupper(substr($e, 1)));
+                }
+                else
+                {
+                    // Extraer atributos
+                    $a2 = explode(' ', $e);
+                    $tag = strtoupper(array_shift($a2));
+                    $attr = array();
+                    foreach ($a2 as $v)
+                    {
+                        if (preg_match('/([^=]*)=["\']?([^"\']*)/', $v, $a3))
+                        {
+                            $attr[strtoupper($a3[1])] = $a3[2];
+                        }
+                    }
+                    $this->OpenTag($tag, $attr);
+                }
+            }
+        }
         
+    }
+
+    function OpenTag($tag, $attr)
+    {
+        // Etiquetas de apertura
+        $this->SetStyle($tag, true);
+        if ($tag == 'A')
+        {
+            $this->HREF = $attr['HREF'];
+        }
+        $this->Ln(10);
+    }
+
+    function CloseTag($tag)
+    {
+        // Etiquetas de cierre
+        $this->SetStyle($tag, false);
+        if ( in_array($tag,['H1','H2','h3']))
+        {
+            $this->Ln(5);
+        }
+        if ($tag == 'A')
+        {
+            $this->HREF = '';
+        }
+    }
+
+    function SetStyle($tag, $enable)
+    {
+        // Establecer estilo y tamaño de fuente
+        if ($tag == 'B' || $tag == 'I' || $tag == 'U') {
+            $this->$tag += ($enable ? 1 : -1);
+            $style = '';
+            foreach (array('B', 'I', 'U') as $s) {
+                if ($this->$s > 0) {
+                    $style .= $s;
+                }
+            }
+            $this->SetFont('', $style);
+        }
+
+        // Establecer tamaño de fuente para encabezados
+        if ($enable) {
+            switch ($tag) {
+                case 'H1':
+                    $this->SetFontSize(54);
+                    break;
+                case 'H2':
+                    $this->SetFontSize(48);
+                    break;
+                case 'H3':
+                    $this->SetFontSize(28);
+                    break;
+                case 'H4':
+                    $this->SetFontSize(18);
+                    break;
+                case 'H5':
+                    $this->SetFontSize(16);
+                    break;
+                case 'H6':
+                    $this->SetFontSize(14);
+                    break;
+            }
+        } else {
+            // Restablecer tamaño de fuente estándar después de los encabezados
+            if (in_array($tag, array('H1', 'H2', 'H3', 'H4', 'H5', 'H6'))) {
+                $this->SetFontSize(12);
+            }
+        }
+
+    }
+
+    // Función para agregar una imagen de fondo
+    function Header()
+    {
+        // Carga la imagen
+        $this->Image($this->image, 0, 0, $this->GetPageWidth(), $this->GetPageHeight());
+    }
+    
+    // Función para agregar un pie de página (opcional)
+    function Footer()
+    {
+        // Posición a 1.5 cm del final
+        $this->SetY(-15);
+        // Arial italic 8
+        $this->SetFont('Arial', 'I', 8);
+        // Número de página
+        $this->Cell(0, 10, 'Page ' . $this->PageNo(), 0, 0, 'C');
     }
 }

@@ -1,6 +1,6 @@
 {include="header2"}
 <link rel="stylesheet" href="plugins/club3e/view/css/cursos.css">
-<link rel="stylesheet" href="plugins/club3e/view/css/quizzes.css?v=13">
+<link rel="stylesheet" href="plugins/club3e/view/css/quizzes.css?v=14">
 
 <section id="post1" class="container">
     {if="$fsc->quiz"}
@@ -89,7 +89,11 @@
                         {if="$value->correct_answer == $fsc->array_answers[$value->reg]"}
                             <span class="correct-answer">CORRECTA</span> 
                         {else}
-                            <span class="incorrect-answer">INCORRECTA</span>  
+                            {if="$fsc->array_answers[$value->reg] == ''"}
+                                <span class="incorrect-answer">SIN CONTESTAR</span>  
+                            {else}
+                                <span class="incorrect-answer">INCORRECTA</span>  
+                            {/if}
                         {/if}
                          <br>
                         {$value->question} 
@@ -107,12 +111,20 @@
                     <h4>¡Felicidades! has pasado la prueba</h4>
                     <a href="index.php?page=productosuser" class="btn btn-primary">Ver mis certificados</a>
                 {else}
-                    <h4>Oops! vuélve a intentarlo en {$fsc->quiz->repeat_quiz} hora(s)</h4>
+                    <h4>Oops! vuélve a intentarlo en {$fsc->fech_repeat} hora(s)</h4>
                 {/if}
                 
             </div>
         </div>
     </div>
 {/if}
+{if="$fsc->start == 0"}
+    <div class="footer-empty">
+{/if}
+{include="footerusu"}
+{if="$fsc->start == 0"}
+    </div>
+{/if}
 <script type="text/javascript" src="plugins/club3e/view/js/cursos.js?v=1"></script>
 <script type="text/javascript" src="plugins/club3e/view/js/quizzes.js?v=16"></script>
+

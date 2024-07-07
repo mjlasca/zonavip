@@ -105,6 +105,22 @@ class certificate extends \fs_model
         return 'reg';
     }
 
+
+    public function get_curse()
+    {
+        $sql = "SELECT * FROM " . $this->table_name . " WHERE product_id = " . $this->var2str($this->product_id) . ";";
+        $data = $this->db->select($sql);
+        $list = [];
+        if ($data) {
+            foreach ($data as $u) {
+                $list = new \certificate($u);
+            }
+        }
+
+        return $list;
+    }
+
+
     public function get()
     {
         $sql = "SELECT * FROM " . $this->table_name . " WHERE reg = " . $this->var2str($this->reg) . ";";
