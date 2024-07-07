@@ -180,28 +180,27 @@ class quizuser extends fs_controller
     }
 
     private function getResult(){
-        
-        foreach ($this->questions as $key => $value) {
-            if($this->array_answers[$value->reg] == $value->correct_answer)
-                $this->result_detail['correct_questions']++;
-            else
-                $this->result_detail['incorrect_questions']++;
-        }
-        
-        if( !empty( $this->quizuser) ){
-            if($this->result_detail['correct_questions'] >= $this->quiz->question_pass){
-                $this->quizuser->success = 1;
-                $this->quizuser->save();
-            }else{
-                $this->finish = true;
-                $this->time_quiz = -1;
-                $this->quizuser->success = 2;
-                $this->quizuser->save();
+
+        if($this->quizuser && !empty($this->quizuser->finish_date)){
+            foreach ($this->questions as $key => $value) {
+                if($this->array_answers[$value->reg] == $value->correct_answer)
+                    $this->result_detail['correct_questions']++;
+                else
+                    $this->result_detail['incorrect_questions']++;
+            }
+            
+            if( !empty( $this->quizuser) ){
+                if($this->result_detail['correct_questions'] >= $this->quiz->question_pass){
+                    $this->quizuser->success = 1;
+                    $this->quizuser->save();
+                }else{
+                    $this->finish = true;
+                    $this->time_quiz = -1;
+                    $this->quizuser->success = 2;
+                    $this->quizuser->save();
+                }
             }
         }
-        
-
-        
     }
 
     private function getArrayAnswer() {
