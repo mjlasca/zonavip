@@ -189,7 +189,7 @@ class zonavipdb extends \fs_model
             $this->idyoutube = null;
             $this->useredit = null;
             $this->ultmod = null;
-            $this->codestado = null;
+            $this->codestado = 1;
             $this->pago = null;
             $this->idvimeo = null;
             $this->grupo = null;
