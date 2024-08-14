@@ -575,16 +575,13 @@ class hotmartuser extends \fs_model
      */
     public function all_user_cursos()
     {
-        $sql = "SELECT hotmartproductos.reg, hotmartproductos.idproducto, hotmartproductos.nombre, registerquizzes.reg as regquiz, registerquizzes.success FROM " . $this->table_name . " INNER JOIN hotmartproductos LEFT JOIN registerquizzes ON hotmartproductos.reg = hotmartuser.idproducto AND hotmartproductos.idproducto = registerquizzes.curse_id  WHERE hotmartuser.user = '".$this->user."' AND (hotmartuser.fechacaducidad >= NOW()) AND (hotmartuser.estado = 'approved' OR  hotmartuser.estado = 'completed' ) AND hotmartproductos.curso != '' ";
-        
+        $sql = "SELECT hotmartproductos.reg, hotmartproductos.idproducto, hotmartproductos.nombre, registerquizzes.reg as regquiz, registerquizzes.success FROM " . $this->table_name . " INNER JOIN hotmartproductos LEFT JOIN registerquizzes ON hotmartproductos.idproducto = hotmartuser.idproducto AND hotmartuser.user = registerquizzes.user_id  WHERE  hotmartuser.fechacaducidad >= NOW() AND (hotmartuser.estado = 'approved' OR hotmartuser.estado = 'completed' ) AND hotmartuser.user = '".$this->user."' AND hotmartproductos.curso != '' GROUP BY hotmartproductos.reg ";
         $fec = date("Y-m-d");
-
         $sql1 = "SELECT fecha_expira,fecha_inicia FROM coreclub3e WHERE estado = 1 AND fecha_inicia <= '".$fec."' AND fecha_expira >= '".$fec."' AND  usuario = ". $this->var2str($this->user)." ORDER BY nombre DESC ";
         $cclub = $this->db->select($sql1);
         if($cclub){
-            $sql = "SELECT hotmartproductos.reg,hotmartproductos.idproducto,hotmartproductos.nombre, registerquizzes.reg as regquiz, registerquizzes.success FROM hotmartproductos LEFT JOIN  registerquizzes ON hotmartproductos.reg = registerquizzes.curse_id   WHERE ( ( date(hotmartproductos.fechapublicacion) <= date('".$cclub[0]["fecha_expira"]."') AND  date(hotmartproductos.fechapublicacion) >= date('".$cclub[0]["fecha_inicia"]."') ) OR hotmartproductos.cursobaseclub3e = 1 ) AND hotmartproductos.curso != '' ";
+            $sql = "SELECT hotmartproductos.reg,hotmartproductos.idproducto,hotmartproductos.nombre, registerquizzes.reg as regquiz, registerquizzes.success FROM hotmartproductos LEFT JOIN  registerquizzes ON hotmartproductos.reg = registerquizzes.curse_id   WHERE ( ( date(hotmartproductos.fechapublicacion) <= date('".$cclub[0]["fecha_expira"]."') AND  date(hotmartproductos.fechapublicacion) >= date('".$cclub[0]["fecha_inicia"]."') ) OR hotmartproductos.cursobaseclub3e = 1 ) AND hotmartproductos.curso != '' GROUP BY hotmartproductos.reg";
         }
-
         return $this->db->select($sql);
     }
 

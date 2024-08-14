@@ -55,6 +55,7 @@ class quizuser extends fs_controller
     public function private_core()
     {
         $this->quizuser = new registerquiz();
+        
         $this->quizuser->user_id = $this->user->nick;
 
         if( isset($_GET['quiz_id']) || isset($_GET['product_id']) ){
@@ -134,6 +135,8 @@ class quizuser extends fs_controller
         if(isset($_GET['start']) && $this->start != 1 ){
             $this->start = 1;
             $this->time_quiz = 0;
+            $question_ = new question();
+            $question_->clean_cache();
             $this->quizuser->init_date = date("Y-m-d h:i:s");
             $this->quizuser->save();
         }

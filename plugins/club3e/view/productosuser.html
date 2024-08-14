@@ -14,11 +14,12 @@
         </thead>
         <tbody>
           {loop="$fsc->productos->all_user_cursos($fsc->user->nick)"}
+            {if="!empty($value['regquiz'])"}
             <tr>
               <td>
                 <a href="index.php?page=contenidocurso&curso={$value['idproducto']}">{$value['nombre']}</a>
               </td>
-              {if="!empty($value['regquiz'])"}
+            
                 <td>
                   {if="$value['success'] == 0 || $value['success'] == 2"}
                     <a href="index.php?page=quizuser&product_id={$value['reg']}" class="btn btn-secondary">OBTENER CERTIFICADO</a>
@@ -26,17 +27,8 @@
                     <a href="{$fsc->url()}&pdf=true&curse={$value['reg']}" class="btn btn-primary">DESCARGAR CERTIFICADO</a>
                   {/if}
                 </td>
-              {else}
-                <td>
-                  {if="$fsc->quiz->get_to_curse($value['reg']) != false"}
-                    <a href="index.php?page=quizuser&product_id={$value['reg']}" class="btn btn-secondary">OBTENER CERTIFICADO</a>
-                  {else}
-                    SIN CERTIFICADO
-                  {/if}
-                </td>
-              {/if}
-              
             </tr>
+            {/if}
           {/loop}
         </tbody>
       </table>

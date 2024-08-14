@@ -121,14 +121,13 @@ class question extends \fs_model
     {
         $sql = "SELECT * FROM " . $this->table_name . " WHERE quiz_id = " . $this->var2str($this->quiz_id) . " ORDER BY RAND() LIMIT $limit_;";
         $data = $this->db->select($sql);
-        $list = $this->cache->get_array('getquiz');
+        $list = isset($_COOKIE["getquiz".$this->quiz_id]) ? json_decode($_COOKIE["getquiz".$this->quiz_id]) : null;
         if ($data && empty($list)) {
             foreach ($data as $u) {
                 $list[] = new \question($u);
             }
-            $this->cache->set('getquiz', $list);
+            setcookie("getquiz".$this->quiz_id, json_encode($list), time() + 3600, "/");
         }
-
         return $list;
     }
 
@@ -204,7 +203,6 @@ class question extends \fs_model
         }
         
         if($this->db->exec($sql)){
-            $this->cache->delete('getquiz');
             return TRUE;
         }
 
@@ -234,9 +232,10 @@ class question extends \fs_model
     /**
      * Limpiamos la caché
      */
-    private function clean_cache()
+    public function clean_cache($param = "")
     {
-        $this->cache->delete('question');
+        setcookie("getquiz".$this->quiz_id, "", time() - 3600, "/");
+        //$this->cache->delete('question');
     }
 
     
