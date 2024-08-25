@@ -43,7 +43,6 @@ class productosuser extends fs_controller
     {
         $this->productos  = new hotmartuser();
         $this->productos->user = $this->user->nick;
-
         $this->quiz = new quiz();
 
         if(isset($_REQUEST["pdf"])){
@@ -75,7 +74,7 @@ class productosuser extends fs_controller
 
 class PDF extends FPDF
 {
-    public $image = 'https://zonavip.plataformaeducativa.online/img_zonavip/certificados%20macros%20v3.png';
+    public $image = '/img_zonavip/certificados%20macros%20v3.png';
     // Método para escribir HTML
     function WriteHTML($html)
     {

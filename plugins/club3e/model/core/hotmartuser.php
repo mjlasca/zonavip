@@ -575,7 +575,9 @@ class hotmartuser extends \fs_model
      */
     public function all_user_cursos()
     {
-        $sql = "SELECT hotmartproductos.reg, hotmartproductos.idproducto, hotmartproductos.nombre, registerquizzes.reg as regquiz, registerquizzes.success FROM " . $this->table_name . " INNER JOIN hotmartproductos LEFT JOIN registerquizzes ON hotmartproductos.idproducto = hotmartuser.idproducto AND hotmartuser.user = registerquizzes.user_id  WHERE  hotmartuser.fechacaducidad >= NOW() AND (hotmartuser.estado = 'approved' OR hotmartuser.estado = 'completed' ) AND hotmartuser.user = '".$this->user."' AND hotmartproductos.curso != '' GROUP BY hotmartproductos.reg ";
+
+        $sql = "SELECT hotmartproductos.reg, hotmartproductos.idproducto, hotmartproductos.nombre, hotmartproductos.idproducto as regquiz, registerquizzes.success FROM hotmartuser LEFT JOIN hotmartproductos ON hotmartuser.idproducto = hotmartproductos.idproducto LEFT JOIN registerquizzes ON hotmartuser.user = registerquizzes.user_id AND hotmartproductos.idproducto = registerquizzes.curse_id WHERE hotmartuser.fechacaducidad >= NOW() AND (hotmartuser.estado = 'approved' OR hotmartuser.estado = 'completed') AND hotmartuser.user = '".$this->user."' AND hotmartproductos.curso != '' GROUP BY hotmartproductos.reg;";
+
         $fec = date("Y-m-d");
         $sql1 = "SELECT fecha_expira,fecha_inicia FROM coreclub3e WHERE estado = 1 AND fecha_inicia <= '".$fec."' AND fecha_expira >= '".$fec."' AND  usuario = ". $this->var2str($this->user)." ORDER BY nombre DESC ";
         $cclub = $this->db->select($sql1);
