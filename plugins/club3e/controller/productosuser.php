@@ -74,7 +74,7 @@ class productosuser extends fs_controller
 
 class PDF extends FPDF
 {
-    public $image = '/img_zonavip/certificados%20macros%20v3.png';
+    public $image = 'https://zonavip.plataformaeducativa.online/img_zonavip/certificados%20macros%20v3.png';
     // Método para escribir HTML
     function WriteHTML($html)
     {
