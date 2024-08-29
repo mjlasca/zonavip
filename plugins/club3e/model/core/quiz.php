@@ -186,16 +186,8 @@ class quiz extends \fs_model
 
     public function get_all()
     {
-        $sql = "SELECT * FROM " . $this->table_name . "";
-        $data = $this->db->select($sql);
-        $list = [];
-        if ($data) {
-            foreach ($data as $u) {
-                $list[] = new \quiz($u);
-            }
-        }
-
-        return $list;
+        $sql = "SELECT " . $this->table_name . ".*, hotmartproductos.nombre as curso FROM " . $this->table_name . " LEFT JOIN hotmartproductos ON " . $this->table_name . ".product_id = hotmartproductos.reg ";
+        return $this->db->select($sql);
     }
 
     /**
