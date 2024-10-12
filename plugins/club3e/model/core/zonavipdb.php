@@ -432,6 +432,21 @@ class zonavipdb extends \fs_model
         return TRUE;
     }
 
+    private function autoModuleLeccion(){
+        if( !empty($this->curso) && empty($this->modulocurso)){
+            $sql = "SELECT MAX(modulocurso) as maxmod FROM zonavipdb WHERE curso = '$this->curso'";
+            $res = $this->db->select($sql);
+            if($res){
+                $this->modulocurso = $res[0]['maxmod'];
+                $sql = "SELECT MAX(numeroleccion) as maxlecc FROM zonavipdb WHERE curso = '$this->curso' AND modulocurso = '$this->modulocurso'";
+                $res1 = $this->db->select($sql);
+                if($res1){
+                    $this->numeroleccion  = ($res1[0]['maxlecc'] + 2);
+                }
+            }
+        }
+    }
+
     /**
      * Guarda los datos en la base de datos
      * @return boolean
@@ -440,6 +455,7 @@ class zonavipdb extends \fs_model
     {
         if ($this->test()) {
             $this->clean_cache();
+            $this->autoModuleLeccion();
             if ($this->exists()) {
                 $sql = "UPDATE " . $this->table_name 
                     . " SET nombrevideo = " . $this->var2str($this->nombrevideo)
@@ -488,7 +504,6 @@ class zonavipdb extends \fs_model
                       . "," . $this->var2str($this->detalleupload) 
                     . "," . $this->var2str($this->limit_date) . ");";
             }
-
 
             if($this->db->exec($sql)){
                 $this->update_nombre_modulo();
