@@ -59,6 +59,10 @@ class adminzonavip extends fs_controller
             $this->registros->grupoFiltro = $_POST["grupofiltro"];
         }
 
+        if(isset($_POST["curso"])){
+            $this->registros->grupoFiltro = $_POST["curso"];
+        }
+
         if(isset($_POST["paga"]) && isset($_POST["gratis"])){
             $this->registros->pagoFiltro = "";
         }
