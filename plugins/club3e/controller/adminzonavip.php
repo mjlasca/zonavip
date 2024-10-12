@@ -114,13 +114,13 @@ class adminzonavip extends fs_controller
 
 
         if(isset($_POST["grupo"]))
-            $registro->grupo =  $_POST["grupo"];
-        $registro->categoria =  $_POST["categoria"];
-        $registro->curso =  $_POST["curso"];
-        $registro->modulocurso =  $_POST["modulocurso"];
-        $registro->leccioncurso =  $_POST["leccioncurso"];
-        $registro->numeroleccion =  $_POST["numeroleccion"];
-        $registro->nombremodulo =  $_POST["nombremodulo"];
+            $registro->grupo =  $_POST["grupo"] ?? '';
+        $registro->categoria =  $_POST["categoria"] ?? '';
+        $registro->curso =  $_POST["curso"] ?? '';
+        $registro->modulocurso =  $_POST["modulocurso"] ?? '';
+        $registro->leccioncurso =  $_POST["leccioncurso"] ?? '';
+        $registro->numeroleccion =  $_POST["numeroleccion"] ?? '';
+        $registro->nombremodulo =  $_POST["nombremodulo"] ?? '';
         if(isset($_POST["detalle"]))
             $registro->detalle = str_replace("\n","" ,$_POST["detalle"]);
 

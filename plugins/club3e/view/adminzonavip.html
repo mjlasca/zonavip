@@ -59,11 +59,15 @@
                 </div>
                 <div class="col-sm-2">
                     <div class="form-group">
-                        <label for="">Producto</label>
+                        <label for="">Producto </label>
                         <select class="form-control" name="grupofiltro" id="grupofiltro">
                             <option value="">---</option>
                             {loop="$fsc->productos->all()"}
-                            <option value="{$value->idproducto}">{$value->nombre}</option>
+                                {if="$fsc->registros->grupoFiltro == $value->idproducto"}
+                                    <option value="{$value->idproducto}" selected>{$value->nombre}</option>
+                                {else}
+                                    <option value="{$value->idproducto}">{$value->nombre}</option>
+                                {/if}
                             {/loop}
                         </select>
                     </div>
@@ -171,7 +175,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="">¿Contenido de pago?</label>
-                                <select class="form-control" name="pago" id="pago">
+                                <select class="form-control" name="pago" id="pago" required>
                                     <option value="NO">NO</option>
                                     <option value="SI">SI</option>
                                 </select>
