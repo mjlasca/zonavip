@@ -139,7 +139,7 @@ class zonavip extends fs_controller
         if($this->user->nombre == "" && $this->usuarioactivomailerlite == "SI"){
             $usu = new fs_user();
             $usu = $usu->get($this->user->nick);
-            $this->user->nombre = revisarusermail($this->user->nick,true)["name"];
+            $this->user->nombre = revisarusermail($this->user->nick,true)["name"] ?? '';
             $usu->nombre = $this->user->nombre;
             $usu->save();
         }
