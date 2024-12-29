@@ -374,17 +374,13 @@ class contenidocurso extends fs_controller
     }
 
     public function accessscontent(){
-
-        $limit_lesson = ($this->curso->limit_lessons == 1 && $this->post->limit_date != null);
-        
-        if(  $this->accesoclub3e($limit_lesson) == 1 )
-            return 1;
-        
-        
+        $result = 0;
+        $limit_lesson = (bool)($this->curso->limit_lessons == 1 && $this->post->limit_date != null);
+        if(  $this->accesoclub3e($limit_lesson) === 1 )
+            $result = 1;
         if( $this->post->pago == 'SI' && $this->allow != 0  || $this->aprobaracceso($this->post->grupo,$limit_lesson) )
-            return 1;
-            
-        return 0;
+            $result = 1;
+        return $result;
     }
 
 
