@@ -220,9 +220,9 @@ class admin_user extends fs_controller
                 $userhtomart->nombreproducto = $hotmartproductos->get_curso($userhtomart->idproducto)->nombre;
                 $userhtomart->estado = "completed";
                 $userhtomart->periocidad = 30;
-                $userhtomart->fechagarantia = date("Y-m-d H:i:s");
-                $userhtomart->fechacaducidad = $_POST["fechacaducidad"]." ".date("H:i:s");
-                $userhtomart->ultmod = date("Y-m-d H:i:s");
+                $userhtomart->fechagarantia = date("Y-m-d h:i:s");
+                $userhtomart->fechacaducidad = $_POST["fechacaducidad"]." ".date("h:i:s");
+                $userhtomart->ultmod = date("Y-m-d 00:00:01");
 
                 $userhtomart->save();
             }
