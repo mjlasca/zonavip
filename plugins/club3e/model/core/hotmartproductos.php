@@ -583,11 +583,11 @@ class hotmartproductos extends \fs_model
                 }
             }
             
-            $sql = "SELECT t1.* FROM " . $this->table_name . " t1 WHERE ".$sql_add." t1.curso != '' AND t1.cursobaseclub3e = 1 AND t1.curso IS NOT NULL  ORDER BY t1.nombre ASC ";
+            $sql = "SELECT t1.* FROM " . $this->table_name . " t1 WHERE ".$sql_add." t1.curso != '' AND t1.cursobaseclub3e = 1 AND t1.curso IS NOT NULL  ORDER BY t1.ultmod DESC ";
 
             if($this->miscursos)
                 $sql = "SELECT t1.* FROM " . $this->table_name . " t1 INNER JOIN hotmartuser t2 ON t1.idproducto = t2.idproducto WHERE ".
-                " ".$sql_add." t2.user LIKE '".$user_."' AND t2.fechacaducidad >= NOW() AND t1.curso != '' AND t1.cursobaseclub3e = 1 AND t1.curso IS NOT NULL  ORDER BY nombre ";
+                " ".$sql_add." t2.user LIKE '".$user_."' AND t2.fechacaducidad >= NOW() AND t1.curso != '' AND t1.cursobaseclub3e = 1 AND t1.curso IS NOT NULL  ORDER BY t1.ultmod DESC ";
             
             $data = $this->db->select($sql);
 
