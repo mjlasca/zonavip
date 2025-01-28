@@ -33,7 +33,7 @@
                 <label for="">Cursos</label>
                 <select name="curso" id="curso" class="form-control">
                     <option value=""></option>
-                    {loop="$fsc->cursos->all_carrusel()"}
+                    {loop="$fsc->cursos->all_prod_escuela()"}
                         {if="$value->idproducto == $fsc->curso_se"}
                             <option value="{$value->idproducto}" selected> {$value->nombre}</option>
                         {else}

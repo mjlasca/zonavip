@@ -446,6 +446,36 @@ class hotmartproductos extends \fs_model
         return $listaa;
     }
 
+    /**
+     * Devuelve un array con todos los hotmartproductos
+     * @return \hotmartproductos
+     */
+    public function all_prod_escuela($user_ = "")
+    {
+        $this->clean_cache();
+        /// leemos esta lista de la caché
+        $listaa = $this->cache->get_array('hotmartprodescuela');
+        if (empty($listaa)) {
+            
+            $sql = "SELECT t1.* FROM " . $this->table_name . " t1 WHERE  t1.curso != '' AND t1.curso IS NOT NULL ORDER BY t1.ultmod DESC ";
+            if($this->miscursos)
+                $sql = "SELECT t1.* FROM " . $this->table_name . " t1 INNER JOIN hotmartuser t2 ON t1.idproducto = t2.idproducto WHERE ".
+                " t2.user LIKE '".$user_."' AND t2.fechacaducidad >= NOW() AND t1.curso != '' AND t1.curso IS NOT NULL ORDER BY t1.ultmod DESC ";
+            
+            $data = $this->db->select($sql);
+            echo "<br><br><br><br>SQL $sql";
+            if ($data) {
+                foreach ($data as $a) {
+                    $listaa[] = new \hotmartproductos($a);
+                }
+            }
+            /// guardamos la lista en caché
+            $this->cache->set('hotmartprodescuela', $listaa);
+        }
+
+        return $listaa;
+    }
+
 
     /**
      * Devuelve un array con todos los hotmartproductos
@@ -482,7 +512,7 @@ class hotmartproductos extends \fs_model
                 " ".$sql_add." t2.user LIKE '".$user_."' AND t2.fechacaducidad >= NOW() AND t1.curso != '' AND t1.curso IS NOT NULL AND (view = 'cursos' || view = 'todos')  ORDER BY t1.ultmod DESC ";
             
             $data = $this->db->select($sql);
-
+            echo "<br><br><br><br>SQL $sql";
             if ($data) {
                 foreach ($data as $a) {
                     $listaa[] = new \hotmartproductos($a);
