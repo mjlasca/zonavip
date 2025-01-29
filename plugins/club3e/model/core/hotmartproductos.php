@@ -511,7 +511,6 @@ class hotmartproductos extends \fs_model
                 " ".$sql_add." t2.user LIKE '".$user_."' AND t2.fechacaducidad >= NOW() AND t1.curso != '' AND t1.curso IS NOT NULL AND (view = 'cursos' || view = 'todos')  ORDER BY t1.ultmod DESC ";
             
             $data = $this->db->select($sql);
-            echo "<br><br><br><br>SQL $sql";
             if ($data) {
                 foreach ($data as $a) {
                     $listaa[] = new \hotmartproductos($a);
