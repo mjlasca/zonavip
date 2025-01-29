@@ -50,12 +50,11 @@
         <div class="col-sm-6">
             <h3 class="">{$fsc->curso->nombre}</h3>
         </div>
-        {if="$fsc->estudiantes->all_estudiante()"}
+        
         <div class="col-sm-12">
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Estudiante</th>
                         <th>Correo</th>
                         {loop="$fsc->actividades->get_actividades_cursos($fsc->curso->idproducto)"}
                             <th width="100">
@@ -67,20 +66,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                {loop="$fsc->estudiantes->all_estudiante()"}
-                <tr>
-                    <td>{$value1[nombre]}</td>
-                    <td>{$value1[user]}</td>
-                    {loop="$fsc->actividades->get_actividades_cursos($fsc->curso->idproducto)"}
-                        <td>{$fsc->activitysearch($value2['curso'].'-'.$value2['reg'],$value1[user],$value2['detalleupload'])}</td>
+                    {loop="$fsc->files_user"}
+                    <tr>
+                        <td>{$key1}</td>
+                        {loop="$value1"}
+                            <td><a class="btn btn-primary" href="{$fsc->url()}&download={$value2}" target="_blank" title="Descargar archivo">Descargar</a></td>
+                        {/loop}
+                    </tr>    
                     {/loop}
-                </tr>
-                {/loop}
                 </tbody>
             </table>
         </div>
-        {/if}
-        
     </div>
 
 </div>

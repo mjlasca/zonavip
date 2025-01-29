@@ -31,6 +31,7 @@ class escuela_cursos extends fs_controller
     public $estudiantes;
     public $actividades;
     public $curso_se;
+    public $files_user;
 
     public function __construct()
     {
@@ -44,7 +45,10 @@ class escuela_cursos extends fs_controller
         $this->estudiantes = new hotmartuser();
         $this->actividades = new zonavipdb();
 
+        $this->files_user = [];
         $this->curso_se = "";
+
+        
 
         if(isset($_POST["curso"])){
             $this->curso->idproducto = $_POST["curso"];
@@ -56,7 +60,33 @@ class escuela_cursos extends fs_controller
         if(isset($_GET['download'])){
             $this->downloadFile($_GET['download']);
         }
+        $leccionesUpload = $this->actividades->get_actividades_cursos($this->curso->idproducto);
+        $this->files_user = [];
+        foreach ($leccionesUpload as $key => $value) {
+            echo "<br>";
+            $listFiles = $this->get_names_files($this->curso->idproducto,$value["reg"]);
+            foreach ($listFiles as $k => $v) {
+                $mail = explode('.',$v);
+                $this->files_user[$mail[0]][$value['reg']] = $this->curso->idproducto."-".$value["reg"]."/".$v;
+            }
+        }
+    }
 
+    /**
+     * Get list files
+     */
+    public function get_names_files($idcurso,$class){
+        $path = 'plugins/zonavipeee/view/assets/file/' .$idcurso ."-".$class;
+        $files = [];
+        if (file_exists($path)){
+            $archivos = scandir($path);
+            foreach ($archivos as $archivo) {
+                if ($archivo !== '.' && $archivo !== '..') {
+                    $files[] = $archivo;
+                }
+            }
+        }
+        return $files;
     }
 
     public function activitysearch(string $lab, string $user_, string $exten)
