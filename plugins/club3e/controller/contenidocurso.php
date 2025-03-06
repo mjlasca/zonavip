@@ -94,8 +94,8 @@ class contenidocurso extends fs_controller
 
                 $zona = new zonavipdb();
                 $zona->categoriaFiltro = $this->post->categoria;
-                $this->previewpost = $zona->get_preview_curso($this->post->numeroleccion,$this->post->curso);
-                $this->nextpost = $zona->get_next_curso($this->post->numeroleccion,$this->post->curso);
+                $this->previewpost = $zona->get_preview_curso($this->post->numeroleccion,$this->post->curso,$this->post->modulocurso);
+                $this->nextpost = $zona->get_next_curso($this->post->numeroleccion,$this->post->curso,$this->post->modulocurso);
 
             }
             

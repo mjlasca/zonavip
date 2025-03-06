@@ -326,15 +326,17 @@ class zonavipdb extends \fs_model
      * Devolverse de video a video en la misma categoría
      * @return \zonavipdb|boolean
      */
-    public function get_preview_curso($leccion,$curso)
+    public function get_preview_curso($leccion,$curso, $moducurso)
     {
         
-        $sql = "SELECT * FROM " . $this->table_name . " WHERE codestado=1  AND  lower(curso) = lower('".$curso."')  AND   numeroleccion < '".$leccion."' ORDER BY numeroleccion DESC limit 1;";
+        $sql = "SELECT * FROM " . $this->table_name . " WHERE  modulocurso = '".$moducurso."' AND codestado=1  AND  lower(curso) = lower('".$curso."')  AND   numeroleccion < '".$leccion."' ORDER BY numeroleccion DESC limit 1;";
         $data = $this->db->select($sql);
-
         
         if ($data) {
             return $data[0];
+        }else{
+            $sql = "SELECT * FROM " . $this->table_name . " WHERE modulocurso < '".$moducurso."' AND codestado=1  AND  lower(curso) = lower('".$curso."')   ORDER BY numeroleccion DESC limit 1;";
+            return  $this->db->select($sql)[0] ?? FALSE;
         }
         return FALSE;
         
@@ -344,14 +346,16 @@ class zonavipdb extends \fs_model
      * Pasar de video a video en la misma categoría
      * @return \zonavipdb|boolean
      */
-    public function get_next_curso($leccion,$curso)
+    public function get_next_curso($leccion,$curso, $moducurso)
     {
         
-        $sql = "SELECT * FROM " . $this->table_name . " WHERE codestado=1  AND  lower(curso) = lower('".$curso."')  AND   numeroleccion > '".$leccion."' ORDER BY numeroleccion ASC limit 1;";
+        $sql = "SELECT * FROM " . $this->table_name . " WHERE  modulocurso = '".$moducurso."' AND  codestado=1  AND  lower(curso) = lower('".$curso."')  AND   numeroleccion > '".$leccion."' ORDER BY numeroleccion ASC limit 1;";
         $data = $this->db->select($sql);
-        
         if ($data) {
             return $data[0];
+        }else{
+            $sql = "SELECT * FROM " . $this->table_name . " WHERE modulocurso > '".$moducurso."' AND codestado=1  AND  lower(curso) = lower('".$curso."')   ORDER BY numeroleccion ASC limit 1;";
+            return  $this->db->select($sql)[0] ?? FALSE;
         }
         return FALSE;
         
