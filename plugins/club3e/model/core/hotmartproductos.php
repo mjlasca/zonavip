@@ -554,11 +554,11 @@ class hotmartproductos extends \fs_model
                 $sql_add .= " ( UPPER(t1.nombre) LIKE UPPER('%".$this->nombre."%') ) AND ";
             }
             if($this->fecpubli_1 != ""){
-                $sql_add .= " ( t1.fechapublicacion >= '".$this->fecpubli_1."' ) AND ";
+                $sql_add .= " ( t1.fechapublicacion >= '".$this->fecpubli_1."' || t1.limit_lessons = 1 ) AND ";
             }
 
             if($this->fecpubli_2 != ""){
-                $sql_add .= " ( t1.fechapublicacion <= '".$this->fecpubli_2."' ) AND ";
+                $sql_add .= " ( t1.fechapublicacion <= '".$this->fecpubli_2."' || t1.limit_lessons = 1 ) AND ";
             }
             
             $sql = "SELECT t1.* FROM " . $this->table_name . " t1 WHERE ".$sql_add." t1.curso != '' AND t1.curso IS NOT NULL  AND t1.cursobaseclub3e = 0 AND (t1.view = 'club' || t1.view = 'todos' )  ORDER BY t1.ultmod DESC ";
