@@ -66,8 +66,6 @@ class cursos extends fs_controller
             }
         }
 
-        var_dump($this->chselected);
-
         if(count($vec)>0){
             $this->cursos->categoriacurso = $vec;
         }
