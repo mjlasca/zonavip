@@ -46,7 +46,7 @@ if (!function_exists('api_compracompletada')) {
                 $data["exito"] = true;
                 $data["error"] = "Se ha creado el registro en club3e para el usuario ".$email;
                 http_response_code(202);
-                comprobarusuarioMailerLite($email,$nombre,112070678);
+                comprobarusuarioMailerLite($email,$nombre,88271826450384225 );
                 echo json_encode($data);
                 return true;
             }else{
@@ -113,7 +113,7 @@ if (!function_exists('api_compraaprobada')) {
                 $data["exito"] = true;
                 $data["error"] = "Se ha creado el registro en club3e para el usuario ".$email;
                 http_response_code(202);
-                comprobarusuarioMailerLite($email,$nombre,112070678);
+                comprobarusuarioMailerLite($email,$nombre,88271826450384225 );
                 echo json_encode($data);
                 return true;
             }else{
