@@ -141,6 +141,7 @@ class fs_controller extends fs_app
      */
     public function __construct($name = __CLASS__, $title = 'home', $folder = '', $admin = FALSE, $shmenu = TRUE, $important = FALSE)
     {
+        date_default_timezone_set('America/Bogota');
         parent::__construct($name);
         $this->class_name = $name;
         $this->db = new fs_db2();
